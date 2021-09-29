@@ -1,0 +1,78 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          time_zone: UTC
+    show-sql: true
+    open-in-view: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/ehealicords?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true
+    # url: jdbc:mysql://heydoctor.chfxeyho7yn8.ap-southeast-1.rds.amazonaws.com:3306/heydoctor_new?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false
+    username: root
+    password: root
+    # password: Zxcvb,12345
+    hikari:
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      minimum-idle: 10
+      maximum-pool-size: 50
+      connection-timeout: 500000
+  cache:
+    type: caffeine
+    cache-names: provinces, districts, wards, medical-specialities, branches, auth-codes, service-types, appointment-list
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=60s
+logging:
+  level:
+    com:
+      app:
+        ehealicords: DEBUG
+    org:
+      hibernate:
+        SQL: WARN
+        type: WARN
+springdoc:
+  swagger-ui:
+    path: /api/public/docs
+  api-docs:
+    path: /api/public/api-docs
+server:
+  forward-headers-strategy: native
+  port: 8443
+  ssl:
+    key-store: classpath:ehealicords.jks
+    key-store-password: Zxcvb,12345
+    key-store-type: JKS
+jwt:
+  secret: disuf83y8y4oiu3498ufijdjf948378yfgsa
+  validTime: 31536000000
+aws:
+  s3:
+    #    Anhvan bucket
+    #    bucket-name: heydoctor-storage
+    #    access-key-id: AKIAYSINEZGPVCIAIZFT
+    #    secret-access-key: 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
+    bucket-name: heydoctor-me
+    access-key-id: AKIAY2WG6TD76LY7OQXT
+    secret-access-key: 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
+  ses:
+    source-email: "\"Hey Doctor\" <noreply@heydoctor.me>"
+    access-key-id: AKIAYSINEZGP4VK7HUM5
+    secret-access-key: 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
+sms:
+  enable: false
+  sid: AC69d2c8bda57fa58643009755d46f2c64
+  token: e5f74dd5b1567807984e69f42d7334fe
+  source-number: +13479472621
+zalo-pay:
+  app-id: 2553
+  key1: PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL
+  key2: kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz
+  create-order-url: https://sb-openapi.zalopay.vn/v2/create
+  validate-url: https://sb-openapi.zalopay.vn/v2/query
+firebase:
+  default-conf: true
+  private-credentials-path: firebasePrivate.json
+  default-conf-path: firebasePrivate.json
