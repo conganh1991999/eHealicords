@@ -17,7 +17,7 @@ public class SubAdminResponse {
         return SubAdminResponse.builder()
                 .id(staffEntity.getId())
                 .email(staffEntity.getEmail())
-                .fullName(staffEntity.getFullname())
+                .fullName(staffEntity.getFullName())
                 .status(staffEntity.getStatus())
                 .build();
     }

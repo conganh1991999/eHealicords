@@ -17,8 +17,7 @@ public class AppointmentChannel {
 
     @MessageMapping("/signaling/{id}")
     @SendTo("/topic/signaling/{id}")
-    public Map<String, Object> handle(
-            @PathVariable @DestinationVariable String id, @Payload Map<String, Object> data) {
+    public Map<String, Object> handle(@PathVariable @DestinationVariable String id, @Payload Map<String, Object> data) {
         LOGGER.info("Receive message from channel signaling-{}: type={}", id, data.get("type"));
         return data;
     }

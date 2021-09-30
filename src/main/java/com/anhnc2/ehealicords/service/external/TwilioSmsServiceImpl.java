@@ -25,7 +25,7 @@ public class TwilioSmsServiceImpl implements SmsService {
 
     @Override
     public void send(String phoneNumber, String content) {
-        LOGGER.info("Send sms message to phoneNUmber={}, content={}", phoneNumber, content);
+        LOGGER.info("Send sms message to phoneNumber={}, content={}", phoneNumber, content);
 
         if (smsConfig.isEnable()) {
             Message.creator(
@@ -33,7 +33,7 @@ public class TwilioSmsServiceImpl implements SmsService {
                     new PhoneNumber(smsConfig.getSourceNumber()),
                     content)
                     .create(twilioRestClient);
-            LOGGER.info("Send messsage successfully: message={}", content);
+            LOGGER.info("Send message successfully: message={}", content);
         } else {
             LOGGER.info("Twilio is disabled to save money: message={}", content);
         }

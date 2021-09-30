@@ -10,6 +10,6 @@ public class Specialist {
     private String name;
 
     public static Specialist fromDAO(SpecialistEntity specialistEntity) {
-        return Specialist.builder().name(specialistEntity.getFullname()).build();
+        return Specialist.builder().name(specialistEntity.getFullName()).build();
     }
 }
