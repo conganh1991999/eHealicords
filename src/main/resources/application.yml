@@ -19,11 +19,11 @@ spring:
       minimum-idle: 10
       maximum-pool-size: 50
       connection-timeout: 500000
-  cache:
-    type: caffeine
-    cache-names: provinces, districts, wards, medical-specialities, branches, auth-codes, service-types, appointment-list
-    caffeine:
-      spec: maximumSize=500,expireAfterWrite=60s
+#  cache:
+#    type: caffeine
+#    cache-names: provinces, districts, wards, medical-specialities, branches, auth-codes, service-types, appointment-list
+#    caffeine:
+#      spec: maximumSize=500,expireAfterWrite=60s
 logging:
   level:
     com:
