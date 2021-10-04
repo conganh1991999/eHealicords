@@ -14,11 +14,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "branches")
+@Table(name = "branch")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @JsonInclude(Include.NON_NULL)
 public class BranchEntity {
     @Id
@@ -26,6 +26,17 @@ public class BranchEntity {
     private Integer id;
 
     private String name;
+
+    private String fullAddress;
+
+    private String address;
+
+    private String email;
+
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private BranchStatus status;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,30 +62,15 @@ public class BranchEntity {
     @Column(name = "ward_id")
     private Integer wardId;
 
-    @Enumerated(EnumType.STRING)
-    private BranchStatus status;
-
-    private String fullAddress;
-
-    private String address;
-
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_hours_id", insertable = false, updatable = false)
-    BusinessHourEntity businessHourEntity;
+    BusinessHoursEntity businessHoursEntity;
 
     @Column(name = "business_hours_id")
-    private Integer businessHourId;
+    private Integer businessHoursId;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "branchEntity", fetch = FetchType.LAZY)
-    private List<StaffEntity> staffEntities;
-
-    private Integer minutePerShift;
-
-    private Integer minuteDeposit;
-
-    private Long feeAppointment;
-
-    private Long feeConsulting;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "branchEntity")
+    private List<AccountEntity> accountEntities;
 }

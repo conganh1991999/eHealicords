@@ -22,11 +22,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
-@Table(name = "roles")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "role")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleEntity {
     @Id
@@ -39,7 +39,7 @@ public class RoleEntity {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleEntities")
-    private List<StaffEntity> users;
+    private List<AccountEntity> accounts;
 
     @JsonIgnore
     public GrantedAuthority getAuthority() {

@@ -1,26 +1,33 @@
 package com.anhnc2.ehealicords.data.entity;
 
-import com.anhnc2.ehealicords.constant.UserStatus;
-import com.anhnc2.ehealicords.data.auth.AuthUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.anhnc2.ehealicords.constant.AcademicRank;
+import com.anhnc2.ehealicords.constant.Degree;
+import com.anhnc2.ehealicords.constant.Gender;
+import com.anhnc2.ehealicords.constant.SpecialistDegree;
+import com.anhnc2.ehealicords.constant.StaffType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "staffs")
-@Getter
-@Setter
+@Table(name = "staff")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StaffEntity implements AuthUser {
+public class StaffEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,39 +36,38 @@ public class StaffEntity implements AuthUser {
 
     private String fullName;
 
-    @JsonIgnore
-    private String password;
+    private String phoneNumber;
+
+    private String avatarKey;
+
+    private LocalDate dateOfBirth;
+
+    private LocalDate dateOfStartingWork;
+
+    private Long createdTime;
+
+    private Long updatedTime;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    private StaffType staffType;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "staff_roles",
-            joinColumns = @JoinColumn(name = "staff_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<RoleEntity> roleEntities;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "branch_id")
-    private BranchEntity branchEntity;
+    @Enumerated(EnumType.STRING)
+    private AcademicRank academicRank;
 
-    @JsonIgnore
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
+    @Enumerated(EnumType.STRING)
+    private Degree degree;
 
-    @JsonIgnore
-    @Override
-    public String[] getListStringOfRoles() {
-        return this.roleEntities.stream().map(roleEntity -> roleEntity.getType().name()).toArray(String[]::new);
-    }
+    @Enumerated(EnumType.STRING)
+    private SpecialistDegree degreeOfSpecialist;
 
-    @JsonIgnore
-    @Override
-    public Collection<GrantedAuthority> getAuthority() {
-        return this.roleEntities.stream().map(RoleEntity::getAuthority).collect(Collectors.toList());
-    }
+    private Integer medialSpecialtyId;
+
+    private Integer roomId;
+
+    private Long accountId;
+
+    private Integer branchId;
 }

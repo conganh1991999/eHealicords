@@ -6,9 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "provinces")
-@Getter
-@Setter
+@Table(name = "province")
+@Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,4 +20,6 @@ public class ProvinceEntity {
     private String name;
 
     private String code;
+
+    private String prefix;
 }

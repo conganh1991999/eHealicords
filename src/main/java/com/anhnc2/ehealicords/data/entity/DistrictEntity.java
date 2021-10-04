@@ -6,9 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "districts")
-@Getter
-@Setter
+@Table(name = "district")
+@Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor

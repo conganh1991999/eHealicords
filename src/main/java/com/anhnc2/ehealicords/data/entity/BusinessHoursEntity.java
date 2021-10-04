@@ -24,11 +24,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "business_hours")
 @Data
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
 @JsonInclude(Include.NON_NULL)
-public class BusinessHourEntity {
+public class BusinessHoursEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

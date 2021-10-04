@@ -6,9 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "wards")
-@Getter
-@Setter
+@Table(name = "ward")
+@Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,9 +20,6 @@ public class WardEntity {
     private String name;
 
     private String prefix;
-
-    @Column(name = "province_id")
-    private Integer provinceId;
 
     @Column(name = "district_id")
     private Integer districtId;
