@@ -14,10 +14,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SpecialistInfoResponse {
-    private Long specialistId;
+public class StaffInfoResponse {
     private Long staffId;
-    private Integer specialtyId;
+    private Long accountId;
+    private Integer medicalSpecialtyId;
     private Integer branchId;
 
     private String fullName;
@@ -29,10 +29,10 @@ public class SpecialistInfoResponse {
 
     private String avatarName;
 
-    public SpecialistInfoResponse(StaffEntity staffEntity, SpecialistEntity specialistEntity) {
-        this.specialistId = specialistEntity.getId();
-        this.staffId = staffEntity.getId();
-        this.specialtyId = specialistEntity.getSpecialtyId();
+    public StaffInfoResponse(StaffEntity staffEntity, SpecialistEntity specialistEntity) {
+        this.staffId = specialistEntity.getId();
+        this.accountId = staffEntity.getId();
+        this.medicalSpecialtyId = specialistEntity.getMedialSpecialtyId();
         this.branchId = specialistEntity.getBranchId();
         this.fullName = specialistEntity.getFullName();
         this.email = staffEntity.getEmail();

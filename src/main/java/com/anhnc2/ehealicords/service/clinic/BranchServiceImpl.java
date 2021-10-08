@@ -3,7 +3,7 @@ package com.anhnc2.ehealicords.service.clinic;
 import com.anhnc2.ehealicords.constant.BranchStatus;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
-import com.anhnc2.ehealicords.data.entity.BusinessHourEntity;
+import com.anhnc2.ehealicords.data.entity.BusinessHoursEntity;
 import com.anhnc2.ehealicords.data.request.BranchRequest;
 import com.anhnc2.ehealicords.data.request.BranchSettingsAdvance;
 import com.anhnc2.ehealicords.exception.BranchException;
@@ -42,7 +42,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     @Transactional
     public void createBranch(BranchRequest branch) {
-        BusinessHourEntity businessHour = BusinessHourEntity.builder()
+        BusinessHoursEntity businessHour = BusinessHoursEntity.builder()
                 .morningOpen(branch.getMorningOpen())
                 .morningClose(branch.getMorningClose())
                 .afternoonOpen(branch.getAfternoonOpen())
@@ -63,11 +63,7 @@ public class BranchServiceImpl implements BranchService {
                 .address(branch.getAddress())
                 .fullAddress(branch.getFullAddress())
                 .status(BranchStatus.ACTIVE)
-                .businessHourId(businessHour.getId())
-                .minutePerShift(60)
-                .minuteDeposit(5)
-                .feeAppointment(100000L)
-                .feeConsulting(5000L)
+                .businessHoursId(businessHour.getId())
                 .build();
 
         LOGGER.debug("Create BranchEntity: {}", branchDAO);
@@ -84,7 +80,7 @@ public class BranchServiceImpl implements BranchService {
                         .findById(branch.getId())
                         .orElseThrow(() -> new BranchException(StatusCode.BRANCH_NOT_EXISTED));
 
-        BusinessHourEntity businessHourOfBranch = branchDAOCurrent.getBusinessHourEntity();
+        BusinessHoursEntity businessHourOfBranch = branchDAOCurrent.getBusinessHoursEntity();
 
         // Update branch information
         branchDAOCurrent.setName(branch.getName());
@@ -111,21 +107,17 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public int getMinutePerShiftByBranchId(int branchId) {
-        return branchRepository.findById(branchId).get().getMinutePerShift();
+        return 0;
     }
 
     @Override
     public int getMinuteDepositByBranchId(int branchId) {
-        return branchRepository.findById(branchId).get().getMinuteDeposit();
+        return 0;
     }
 
     @Override
     public void updateAdvanceSettings(int branchId, BranchSettingsAdvance settings) {
         BranchEntity branchDAO = branchRepository.findById(branchId).get();
-        branchDAO.setMinuteDeposit(settings.getMinuteDeposit());
-        branchDAO.setMinutePerShift(settings.getMinutePerShift());
-        branchDAO.setFeeAppointment(settings.getFeeAppointment());
-        branchDAO.setFeeConsulting(settings.getFeeConsulting());
 
         branchRepository.saveAndFlush(branchDAO);
     }

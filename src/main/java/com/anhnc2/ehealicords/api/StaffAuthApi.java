@@ -7,7 +7,6 @@ import com.anhnc2.ehealicords.data.request.LoginRequest;
 import com.anhnc2.ehealicords.data.response.AuthResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.staff.StaffAuthService;
 import com.anhnc2.ehealicords.service.staff.StaffService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,7 +24,6 @@ import javax.validation.Valid;
 public class StaffAuthApi {
 
     private final StaffService staffService;
-    private final StaffAuthService staffAuthService;
 
     @PostMapping("/login")
     public HttpResponse<AuthResponse> login(@RequestBody LoginRequest loginRequest) {

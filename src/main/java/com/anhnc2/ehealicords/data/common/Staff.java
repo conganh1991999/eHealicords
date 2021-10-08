@@ -1,6 +1,6 @@
 package com.anhnc2.ehealicords.data.common;
 
-import com.anhnc2.ehealicords.data.entity.StaffEntity;
+import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
 public class Staff {
     private String name;
 
-    public static Staff fromDAO(StaffEntity staffEntity) {
-        return Staff.builder().name(staffEntity.getFullName()).build();
+    public static Staff fromDAO(SpecialistEntity specialistEntity) {
+        return Staff.builder().name(specialistEntity.getFullName()).build();
     }
 }

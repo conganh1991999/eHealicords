@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LiteSpecialist {
+public class LiteStaff {
     private Long id;
     private String name;
 
-    public static LiteSpecialist fromDAO(SpecialistEntity specialist) {
-        return LiteSpecialist.builder().id(specialist.getId()).name(specialist.getFullName()).build();
+    public static LiteStaff fromDAO(SpecialistEntity staff) {
+        return LiteStaff.builder().id(staff.getId()).name(staff.getFullName()).build();
     }
 }

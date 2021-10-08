@@ -7,7 +7,6 @@ import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 import com.anhnc2.ehealicords.service.common.AppUserService;
-import com.anhnc2.ehealicords.service.staff.StaffAuthService;
 import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.service.subadmin.SubAdminService;
 import lombok.AllArgsConstructor;
@@ -37,12 +36,6 @@ public class SubAdminApi {
         return HttpResponseImpl.success(subAdminService.create(request));
     }
 
-    @PostMapping("/change-password")
-    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
-        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
-        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
-    }
-
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<List<SubAdminResponse>> getAll(){
@@ -68,5 +61,11 @@ public class SubAdminApi {
     public HttpResponse<Object> activate(@PathVariable long id, @RequestBody @Valid SaveSubAdminRequest request){
         subAdminService.update(id, request);
         return HttpResponseImpl.success("OK");
+    }
+
+    @PostMapping("/change-password")
+    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
+        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
+        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
     }
 }

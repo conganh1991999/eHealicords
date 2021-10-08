@@ -49,21 +49,18 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public String checkPassword(String email, String password) {
-        AuthUser authUser =
-                staffRepository
-                        .findByEmail(email)
-                        .orElseThrow(() -> new AuthException(StatusCode.AUTHENTICATION_FAILED, null));
+        AuthUser authUser
+                = staffRepository.findByEmail(email)
+                .orElseThrow(() -> new AuthException(StatusCode.AUTHENTICATION_FAILED, null));
 
-        if(authUser.getStatus() == UserStatus.DISABLED){
+        if (authUser.getStatus() == UserStatus.DISABLED) {
             throw new AuthException(StatusCode.AUTHENTICATION_FAILED, null);
         }
 
         if (passwordEncoder.matches(password, authUser.getPassword())) {
-
-            if(authUser.getStatus() == UserStatus.WAITING_CHANGE_PASSWORD){
+            if (authUser.getStatus() == UserStatus.WAITING_CHANGE_PASSWORD) {
                 throw new WaitingChangePasswordException();
             }
-
             return jwtService.generate(authUser);
         }
 

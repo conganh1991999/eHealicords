@@ -15,7 +15,7 @@ public interface SpecialistRepository extends JpaRepository<SpecialistEntity, Lo
     @Query(nativeQuery = true, value = "SELECT * FROM specialists WHERE branch_id = ?1")
     List<SpecialistEntity> findAllSpecialistOfBranch(int branchId);
 
-    List<SpecialistEntity> findAlBySpecialtyIdAndBranchId(Integer specialtyId, Integer branchId);
+//    List<SpecialistEntity> findAlBySpecialtyIdAndBranchId(Integer specialtyId, Integer branchId);
 
     Page<SpecialistEntity> findAllByBranchId(Integer branchId, Pageable pageable);
 }
