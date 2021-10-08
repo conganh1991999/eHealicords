@@ -20,7 +20,7 @@ CREATE TABLE branch(
                          province_id integer,
                          district_id integer,
                          ward_id integer,
-                         business_hours_id int,
+                         business_hours_id int
 );
 
 CREATE TABLE district(
