@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "api/public/auth")
 @AllArgsConstructor
-public class SpecialistAuthApi {
+public class StaffAuthApi {
 
     private final StaffService staffService;
     private final StaffAuthService staffAuthService;
