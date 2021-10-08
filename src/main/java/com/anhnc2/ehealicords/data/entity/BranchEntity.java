@@ -65,7 +65,7 @@ public class BranchEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_hours_id", insertable = false, updatable = false)
-    BusinessHoursEntity businessHoursEntity;
+    private BusinessHoursEntity businessHoursEntity;
 
     @Column(name = "business_hours_id")
     private Integer businessHoursId;
