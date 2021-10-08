@@ -53,8 +53,8 @@ public class StaffEntity implements AuthUser {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "account_roles",
-            joinColumns = @JoinColumn(name = "account_id"),
+            name = "staff_roles",
+            joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roleEntities;
