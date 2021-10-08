@@ -39,7 +39,7 @@ public class RoleEntity {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleEntities")
-    private List<StaffEntity> staffs;
+    private List<StaffEntity> users;
 
     @JsonIgnore
     public GrantedAuthority getAuthority() {
