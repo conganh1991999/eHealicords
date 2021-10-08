@@ -34,5 +34,5 @@ public class MedicalSpecialtyEntity {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "medialSpecialtyId")
-    private List<StaffEntity> staffEntities;
+    private List<SpecialistEntity> specialistEntities;
 }
