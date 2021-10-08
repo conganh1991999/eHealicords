@@ -72,5 +72,5 @@ public class BranchEntity {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "branchEntity")
-    private List<AccountEntity> accountEntities;
+    private List<StaffEntity> staffs;
 }

@@ -38,5 +38,5 @@ public class RoomEntity {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomId")
-    private List<StaffEntity> staffEntities;
+    private List<SpecialistEntity> specialistEntities;
 }
