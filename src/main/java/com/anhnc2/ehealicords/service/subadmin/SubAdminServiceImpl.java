@@ -2,46 +2,43 @@ package com.anhnc2.ehealicords.service.subadmin;
 
 import com.anhnc2.ehealicords.constant.RoleType;
 import com.anhnc2.ehealicords.constant.UserStatus;
-import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
+import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.RoleRepository;
 import com.anhnc2.ehealicords.repository.StaffRepository;
 import com.anhnc2.ehealicords.service.external.MailService;
-import com.anhnc2.ehealicords.util.PasswordGenerate;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.anhnc2.ehealicords.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Log4j2
 @Service
 @AllArgsConstructor
 public class SubAdminServiceImpl implements SubAdminService {
 
+    private final BranchRepository branchRepository;
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
 
-    @PersistenceContext
-    private final EntityManager entityManager;
-
     @Override
     @Transactional
     public long create(SaveSubAdminRequest request) {
-        String password = PasswordGenerate.random();
+        String password = PasswordGenerator.random();
         StaffEntity subAdmin = createStaffWithRoleAdminAndSubAdmin(request, password);
 
         notifyToSubAdminOverEmail(request, password);
@@ -83,7 +80,7 @@ public class SubAdminServiceImpl implements SubAdminService {
                 .collect(Collectors.toList());
 
         if (roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-            String password = PasswordGenerate.random();
+            String password = PasswordGenerator.random();
             staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
             staff.setPassword(passwordEncoder.encode(password));
 
@@ -109,7 +106,7 @@ public class SubAdminServiceImpl implements SubAdminService {
         staff.setFullName(request.getFullName());
 
         if(!request.getEmail().equals(staff.getEmail())){
-            String password = PasswordGenerate.random();
+            String password = PasswordGenerator.random();
             staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
             staff.setPassword(passwordEncoder.encode(password));
 
@@ -136,7 +133,7 @@ public class SubAdminServiceImpl implements SubAdminService {
                         .roleEntities(roleEntities)
                         .password(encodedPassword)
                         .status(UserStatus.WAITING_CHANGE_PASSWORD)
-                        .branchEntity(entityManager.getReference(BranchEntity.class, 0))
+                        .branchEntity(branchRepository.getById(request.getBranchId()))
                         .build();
 
         return staffRepository.saveAndFlush(staff);
