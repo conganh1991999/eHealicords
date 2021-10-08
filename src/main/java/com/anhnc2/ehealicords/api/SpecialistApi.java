@@ -2,7 +2,7 @@ package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.PresignResult;
-import com.anhnc2.ehealicords.data.common.Specialist;
+import com.anhnc2.ehealicords.data.common.Staff;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.CreateDoctorRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
@@ -12,12 +12,10 @@ import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.data.response.LiteSpecialist;
+import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
-import com.anhnc2.ehealicords.service.clinic.SpecialistService;
-import java.util.List;
-import javax.validation.Valid;
+import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
+import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/protected/specialists")
@@ -51,7 +52,7 @@ public class SpecialistApi {
     }
 
     @GetMapping("/query")
-    public HttpResponse<List<LiteSpecialist>> getSpecialistInBranch(
+    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(
             @RequestParam("branchId") Integer branchId,
             @RequestParam("specialtyId") Integer specialtyId) {
         return HttpResponseImpl.success(
@@ -59,23 +60,23 @@ public class SpecialistApi {
     }
 
     @GetMapping("branches/{branchId}")
-    public HttpResponse<List<LiteSpecialist>> getSpecialistInBranch(@PathVariable int branchId) {
+    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@PathVariable int branchId) {
         return HttpResponseImpl.success(specialistService.findAllSpecialistsOfBranch(branchId));
     }
 
     @GetMapping("/{id}")
-    public HttpResponse<Specialist> getDoctorInfo(@PathVariable long id) {
+    public HttpResponse<Staff> getDoctorInfo(@PathVariable long id) {
         return HttpResponseImpl.success(specialistService.findById(id));
     }
 
     @PostMapping("/doctors") // create
-    public HttpResponse<SpecialistInfoResponse> createSpecialist(
+    public HttpResponse<StaffInfoResponse> createSpecialist(
             @Valid SpecialistInfoRequest specialist, @RequestParam MultipartFile avatar) {
         LOGGER.debug("Specialist creation request: {}", specialist);
 
-        SpecialistInfoResponse responseData = specialistService.createSpecialist(specialist, avatar);
+        StaffInfoResponse responseData = specialistService.createSpecialist(specialist, avatar);
 
-        return HttpResponseImpl.<SpecialistInfoResponse>builder()
+        return HttpResponseImpl.<StaffInfoResponse>builder()
                 .code(StatusCode.SUCCESS)
                 .data(responseData)
                 .build();

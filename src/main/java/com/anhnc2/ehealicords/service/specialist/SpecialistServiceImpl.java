@@ -1,10 +1,10 @@
-package com.anhnc2.ehealicords.service.clinic;
+package com.anhnc2.ehealicords.service.specialist;
 
 import com.anhnc2.ehealicords.constant.RoleType;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.constant.UserStatus;
 import com.anhnc2.ehealicords.data.common.PresignResult;
-import com.anhnc2.ehealicords.data.common.Specialist;
+import com.anhnc2.ehealicords.data.common.Staff;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
@@ -15,19 +15,21 @@ import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
 import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
-import com.anhnc2.ehealicords.data.response.LiteSpecialist;
+import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
+import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
 import com.anhnc2.ehealicords.repository.RoleRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
 import com.anhnc2.ehealicords.repository.StaffRepository;
+import com.anhnc2.ehealicords.service.clinic.BranchService;
 import com.anhnc2.ehealicords.service.common.AppUserService;
 import com.anhnc2.ehealicords.service.external.MailService;
 import com.anhnc2.ehealicords.service.external.StorageService;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.util.FileUtil;
-import com.anhnc2.ehealicords.util.PasswordGenerate;
+import com.anhnc2.ehealicords.util.PasswordGenerator;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     @Transactional
-    public SpecialistInfoResponse createSpecialist(
+    public StaffInfoResponse createSpecialist(
             SpecialistInfoRequest specialist, MultipartFile avatar) {
         StaffEntity createdStaff = createSpecialistAccount(specialist);
 
@@ -74,7 +76,7 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
 
-        return new SpecialistInfoResponse(createdStaff, createdSpecialist);
+        return new StaffInfoResponse(createdStaff, createdSpecialist);
     }
 
     private StaffEntity createSpecialistAccount(SpecialistInfoRequest specialist) {
@@ -91,7 +93,7 @@ public class SpecialistServiceImpl implements SpecialistService {
                         .gender(specialist.getGender())
                         .academicRank(specialist.getAcademicRank())
                         .degreeOfSpecialist(specialist.getDegreeOfSpecialist())
-                        .specialtyId(specialist.getSpecialtyId())
+                        .medialSpecialtyId(specialist.getSpecialtyId())
                         .updatedTime(System.currentTimeMillis())
                         .branchId(specialist.getBranchId())
                         .build();
@@ -142,7 +144,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         currentSpecialist.setGender(specialist.getGender());
         currentSpecialist.setAcademicRank(specialist.getAcademicRank());
         currentSpecialist.setDegreeOfSpecialist(specialist.getDegreeOfSpecialist());
-        currentSpecialist.setSpecialtyId(specialist.getSpecialtyId());
+        currentSpecialist.setMedialSpecialtyId(specialist.getSpecialtyId());
         currentSpecialist.setBranchId(specialist.getBranchId());
 
         specialistRepository.save(currentSpecialist);
@@ -196,24 +198,25 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public Specialist findById(long id) {
-        return Specialist.fromDAO(specialistRepository.findById(id).get());
+    public Staff findById(long id) {
+        return Staff.fromDAO(specialistRepository.findById(id).get());
     }
 
     @Override
-    public List<LiteSpecialist> findAllSpecialistsOfBranch(int branchId) {
+    public List<LiteStaff> findAllSpecialistsOfBranch(int branchId) {
         List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
 
-        return specialists.stream().map(LiteSpecialist::fromDAO).collect(Collectors.toList());
+        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
     }
 
     @Override
-    public List<LiteSpecialist> findAllSpecialistBySpecialityIdAndBranchId(
+    public List<LiteStaff> findAllSpecialistBySpecialityIdAndBranchId(
             int branchId, int specialtyId) {
-        List<SpecialistEntity> specialists =
-                specialistRepository.findAlBySpecialtyIdAndBranchId(specialtyId, branchId);
-
-        return specialists.stream().map(LiteSpecialist::fromDAO).collect(Collectors.toList());
+//        List<SpecialistEntity> specialists =
+//                specialistRepository.findAlBySpecialtyIdAndBranchId(specialtyId, branchId);
+//
+//        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -231,7 +234,7 @@ public class SpecialistServiceImpl implements SpecialistService {
     @Transactional
     public void createDoctor(CreateDoctorRequest request) {
 
-        String password = PasswordGenerate.random();
+        String password = PasswordGenerator.random();
 
         StaffEntity savedStaff = createStaffWithRoleDoctor(request, password);
 
@@ -240,7 +243,7 @@ public class SpecialistServiceImpl implements SpecialistService {
                         .fullName(request.getFullName())
                         .avatarKey(request.getAvatarKey())
                         .academicRank(request.getAcademicRank())
-                        .specialtyId(request.getSpecialtyId())
+                        .medialSpecialtyId(request.getSpecialtyId())
                         .branchId(request.getBranchId())
                         .degreeOfSpecialist(request.getDegree())
                         .gender(request.getGender())
@@ -294,7 +297,7 @@ public class SpecialistServiceImpl implements SpecialistService {
                 .avatarKey(specialist.getAvatarKey())
                 .phoneNumber(specialist.getPhoneNumber())
                 .gender(specialist.getGender())
-                .specialtyId(specialist.getSpecialtyId())
+                .specialtyId(specialist.getMedialSpecialtyId())
                 .specialtyName(getSpecialtyName(specialist))
                 .branchId(specialist.getBranchId())
                 .branchName(staff.getBranchEntity().getName())
@@ -306,7 +309,7 @@ public class SpecialistServiceImpl implements SpecialistService {
     public void resetPassword(long doctorId) {
         SpecialistEntity specialist = specialistRepository.findById(doctorId).get();
         StaffEntity staff = staffRepository.findById(specialist.getStaffId()).get();
-        String password = PasswordGenerate.random();
+        String password = PasswordGenerator.random();
         String encodedPassword = passwordEncoder.encode(password);
         staff.setPassword(encodedPassword);
         staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
@@ -345,7 +348,7 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     private String getSpecialtyName(SpecialistEntity specialist) {
-        return medicalSpecialtyRepository.findById(specialist.getSpecialtyId()).get().getName();
+        return medicalSpecialtyRepository.findById(specialist.getMedialSpecialtyId()).get().getName();
     }
 
     private StaffEntity createStaffWithRoleDoctor(CreateDoctorRequest request, String password) {

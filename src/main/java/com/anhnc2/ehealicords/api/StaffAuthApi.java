@@ -7,7 +7,7 @@ import com.anhnc2.ehealicords.data.request.LoginRequest;
 import com.anhnc2.ehealicords.data.response.AuthResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.clinic.StaffService;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.service.staff.StaffAuthService;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,13 @@
 package com.anhnc2.ehealicords.api;
 
+import com.anhnc2.ehealicords.constant.StatusCode;
+import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
+import com.anhnc2.ehealicords.service.common.AppUserService;
+import com.anhnc2.ehealicords.service.staff.StaffAuthService;
 import com.anhnc2.ehealicords.service.subadmin.SubAdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +27,19 @@ import java.util.List;
 @RequestMapping(path = "api/protected/sub-admins")
 public class SubAdminApi {
     private final SubAdminService subAdminService;
+    private final StaffAuthService staffAuthService;
+    private final AppUserService appUserService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<Object> createSubAdmin(@RequestBody @Valid SaveSubAdminRequest request){
         return HttpResponseImpl.success(subAdminService.create(request));
+    }
+
+    @PostMapping("/change-password")
+    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
+        staffAuthService.updateLoginInformation(appUserService.getCurrentUserId(), request);
+        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
     }
 
     @GetMapping

@@ -1,18 +1,18 @@
-package com.anhnc2.ehealicords.service.clinic;
+package com.anhnc2.ehealicords.service.specialist;
 
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.CreateDoctorRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
-import com.anhnc2.ehealicords.data.common.Specialist;
+import com.anhnc2.ehealicords.data.common.Staff;
 
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
 import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
-import com.anhnc2.ehealicords.data.response.LiteSpecialist;
+import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
+import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public interface SpecialistService {
     List<SpecialistEntity> getAllSpecialists();
 
-    SpecialistInfoResponse createSpecialist(SpecialistInfoRequest doctor, MultipartFile avatar);
+    StaffInfoResponse createSpecialist(SpecialistInfoRequest doctor, MultipartFile avatar);
 
     void updateSpecialistInfo(SpecialistInfoRequest specialist);
 
@@ -36,11 +36,11 @@ public interface SpecialistService {
 
     SpecialistEntity getBySpecialistId(long specialistId);
 
-    Specialist findById(long id);
+    Staff findById(long id);
 
-    List<LiteSpecialist> findAllSpecialistsOfBranch(int branchId);
+    List<LiteStaff> findAllSpecialistsOfBranch(int branchId);
 
-    List<LiteSpecialist> findAllSpecialistBySpecialityIdAndBranchId(int branchId, int specialtyId);
+    List<LiteStaff> findAllSpecialistBySpecialityIdAndBranchId(int branchId, int specialtyId);
 
     PresignResult getPresignUrl(String filename, String filetype);
 

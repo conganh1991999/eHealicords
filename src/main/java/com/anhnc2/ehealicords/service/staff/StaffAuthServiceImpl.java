@@ -8,7 +8,7 @@ import com.anhnc2.ehealicords.exception.PasswordNotMatchException;
 import com.anhnc2.ehealicords.exception.TheSameOldPasswordException;
 import com.anhnc2.ehealicords.repository.StaffRepository;
 import com.anhnc2.ehealicords.service.external.MailService;
-import com.anhnc2.ehealicords.util.PasswordGenerate;
+import com.anhnc2.ehealicords.util.PasswordGenerator;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class StaffAuthServiceImpl implements StaffAuthService {
     @Override
     public void resetPasswordByEmail(String email) {
         StaffEntity staff = staffRepository.findByEmail(email).get();
-        String password = PasswordGenerate.random();
+        String password = PasswordGenerator.random();
         String encodedPassword = passwordEncoder.encode(password);
         staff.setPassword(encodedPassword);
         staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);

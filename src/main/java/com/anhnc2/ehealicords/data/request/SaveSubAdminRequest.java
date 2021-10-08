@@ -9,12 +9,13 @@ import lombok.Data;
 @Data
 @Builder
 public class SaveSubAdminRequest {
-
-    @NotNull(message = "email must not null")
-    @Email(message = "email wrong format")
+    @NotNull(message = "email must not be null")
+    @Email(message = "email have wrong format")
     String email;
 
-    @NotNull(message = "full name must not null")
-    @NotBlank(message = "full name mus not blank")
+    @NotNull(message = "full name must not be null")
+    @NotBlank(message = "full name mus not be blank")
     String fullName;
+
+    Integer branchId;
 }

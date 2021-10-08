@@ -1,4 +1,4 @@
-package com.anhnc2.ehealicords.service.clinic;
+package com.anhnc2.ehealicords.service.staff;
 
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
