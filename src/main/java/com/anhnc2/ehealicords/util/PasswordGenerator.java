@@ -2,8 +2,8 @@ package com.anhnc2.ehealicords.util;
 
 import java.security.SecureRandom;
 
-public class PasswordGenerate {
-    private PasswordGenerate() {}
+public class PasswordGenerator {
+    private PasswordGenerator() {}
 
     public static String random() {
         int maxSize = 8;
