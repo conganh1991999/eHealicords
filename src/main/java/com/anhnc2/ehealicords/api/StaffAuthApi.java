@@ -7,15 +7,16 @@ import com.anhnc2.ehealicords.data.request.LoginRequest;
 import com.anhnc2.ehealicords.data.response.AuthResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.service.staff.StaffAuthService;
-import javax.validation.Valid;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @Log4j2
 @RestController
@@ -40,7 +41,7 @@ public class StaffAuthApi {
     @PostMapping("/force-change-password")
     public HttpResponse<Object> forceChangePassword(
             @Valid @RequestBody ForceChangePasswordRequest request) {
-        staffAuthService.forceChangePassword(request);
+        staffService.forceChangePassword(request);
 
         return HttpResponseImpl.builder()
                 .code(StatusCode.SUCCESS)
@@ -51,7 +52,7 @@ public class StaffAuthApi {
     @PostMapping("/forget")
     public HttpResponse<Object> forgetPassword(@RequestBody @Valid ForgetPasswordRequest request) {
 
-        staffAuthService.resetPasswordByEmail(request.getEmail());
+        staffService.resetPasswordByEmail(request.getEmail());
 
         return HttpResponseImpl.builder()
                 .code(StatusCode.SUCCESS)

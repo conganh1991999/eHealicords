@@ -8,6 +8,7 @@ import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 import com.anhnc2.ehealicords.service.common.AppUserService;
 import com.anhnc2.ehealicords.service.staff.StaffAuthService;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.service.subadmin.SubAdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,7 @@ import java.util.List;
 @RequestMapping(path = "api/protected/sub-admins")
 public class SubAdminApi {
     private final SubAdminService subAdminService;
-    private final StaffAuthService staffAuthService;
+    private final StaffService staffService;
     private final AppUserService appUserService;
 
     @PostMapping
@@ -38,7 +39,7 @@ public class SubAdminApi {
 
     @PostMapping("/change-password")
     public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
-        staffAuthService.updateLoginInformation(appUserService.getCurrentUserId(), request);
+        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
         return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
     }
 

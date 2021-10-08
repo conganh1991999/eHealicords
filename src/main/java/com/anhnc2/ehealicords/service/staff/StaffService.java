@@ -1,6 +1,8 @@
 package com.anhnc2.ehealicords.service.staff;
 
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
+import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
+import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 
@@ -14,4 +16,8 @@ public interface StaffService {
     void updatePassword(Long staffId, PasswordUpdateRequest request);
 
     StaffEntity getStaffById(Long id);
+
+    void updateLoginInformation(long staffId, ChangeLoginInfoRequest loginInfo);
+    void forceChangePassword(ForceChangePasswordRequest request);
+    void resetPasswordByEmail(String email);
 }
