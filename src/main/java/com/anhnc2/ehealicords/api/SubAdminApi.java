@@ -30,7 +30,7 @@ public class SubAdminApi {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Object> createSubAdmin(@RequestBody @Valid SaveSubAdminRequest request){
+    public HttpResponse<Object> createSubAdmin(@RequestBody @Valid SaveSubAdminRequest request) {
         return HttpResponseImpl.success(subAdminService.create(request));
     }
 

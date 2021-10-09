@@ -41,6 +41,25 @@ public class SpecialistApi {
 
     private final SpecialistService specialistService;
 
+    @PostMapping("/doctors") // create (1)
+    public HttpResponse<StaffInfoResponse> createSpecialist(
+            @Valid SpecialistInfoRequest specialist, @RequestParam MultipartFile avatar) {
+        LOGGER.debug("Specialist creation request: {}", specialist);
+
+        StaffInfoResponse responseData = specialistService.createSpecialist(specialist, avatar);
+
+        return HttpResponseImpl.<StaffInfoResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .data(responseData)
+                .build();
+    }
+
+    @PostMapping("/create-doctor") // create (1)
+    public HttpResponse<Object> createDoctor(@RequestBody CreateDoctorRequest request) {
+        specialistService.createDoctor(request);
+        return HttpResponseImpl.success("OK");
+    }
+
     @GetMapping("")
     @Transactional
     public HttpResponse<List<SpecialistEntity>> getAllSpecialists() {
@@ -67,19 +86,6 @@ public class SpecialistApi {
     @GetMapping("/{id}")
     public HttpResponse<Staff> getDoctorInfo(@PathVariable long id) {
         return HttpResponseImpl.success(specialistService.findById(id));
-    }
-
-    @PostMapping("/doctors") // create
-    public HttpResponse<StaffInfoResponse> createSpecialist(
-            @Valid SpecialistInfoRequest specialist, @RequestParam MultipartFile avatar) {
-        LOGGER.debug("Specialist creation request: {}", specialist);
-
-        StaffInfoResponse responseData = specialistService.createSpecialist(specialist, avatar);
-
-        return HttpResponseImpl.<StaffInfoResponse>builder()
-                .code(StatusCode.SUCCESS)
-                .data(responseData)
-                .build();
     }
 
     @PostMapping("/update")
@@ -125,12 +131,6 @@ public class SpecialistApi {
                 .code(StatusCode.SUCCESS)
                 .data(presignResult)
                 .build();
-    }
-
-    @PostMapping("/create-doctor")
-    public HttpResponse<Object> createDoctor(@RequestBody CreateDoctorRequest request) {
-        specialistService.createDoctor(request);
-        return HttpResponseImpl.success("OK");
     }
 
     @GetMapping("/all-doctor")

@@ -40,11 +40,11 @@ public class SubAdminServiceImpl implements SubAdminService {
     @Transactional
     public long create(SaveSubAdminRequest request) {
         String password = PasswordGenerator.random();
-        StaffEntity subAdmin = staffService.createStaffWithRoleAdminAndSubAdmin(request, password);
+        StaffEntity staff = staffService.createStaffWithRoleAdminAndSubAdmin(request, password);
 
-        notifyToSubAdminOverEmail(request, password);
+        // notifyToSubAdminOverEmail(request, password);
 
-        return subAdmin.getId();
+        return staff.getId();
     }
 
     @Override
@@ -74,14 +74,14 @@ public class SubAdminServiceImpl implements SubAdminService {
         staffService.update(staffId, request);
     }
 
-    private void notifyToSubAdminOverEmail(SaveSubAdminRequest request, String password) {
-        String to = request.getEmail();
-        String subject = "HeyDoctor: Tạo Tài Khoản Admin Thành Công!";
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("adminName", request.getFullName());
-        params.put("email", to);
-        params.put("password", password);
-        mailService.sendEmail(to, subject, "create-subadmin", params);
-    }
+//    private void notifyToSubAdminOverEmail(SaveSubAdminRequest request, String password) {
+//        String to = request.getEmail();
+//        String subject = "HeyDoctor: Tạo Tài Khoản Admin Thành Công!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("adminName", request.getFullName());
+//        params.put("email", to);
+//        params.put("password", password);
+//        mailService.sendEmail(to, subject, "create-subadmin", params);
+//    }
 }

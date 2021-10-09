@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HttpResponseImpl<T> implements HttpResponse<T> {
     private final StatusCode code;
     private final String message;

@@ -99,21 +99,18 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffEntity createStaffWithRoleAdminAndSubAdmin(SaveSubAdminRequest request, String password) {
         Set<RoleEntity> roleEntities =
-                roleRepository.findAllIn(
-                        Collections.singletonList(RoleType.ROLE_SUB_ADMIN.name())
-                );
+                roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_SUB_ADMIN.name()));
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        StaffEntity staff =
-                StaffEntity.builder()
-                        .email(request.getEmail())
-                        .fullName(request.getFullName())
-                        .roleEntities(roleEntities)
-                        .password(encodedPassword)
-                        .status(UserStatus.WAITING_CHANGE_PASSWORD)
-                        .branchEntity(branchRepository.getById(request.getBranchId()))
-                        .build();
+        StaffEntity staff = StaffEntity.builder()
+                .email(request.getEmail())
+                .fullName(request.getFullName())
+                .roleEntities(roleEntities)
+                .password(encodedPassword)
+                .status(UserStatus.WAITING_CHANGE_PASSWORD)
+                .branchEntity(branchRepository.getById(request.getBranchId()))
+                .build();
 
         return staffRepository.saveAndFlush(staff);
     }
