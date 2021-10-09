@@ -1,5 +1,5 @@
 CREATE TABLE business_hours(
-                               id int not null primary key,
+                               id int not null primary key auto_increment,
                                morning_open time,
                                morning_close time,
                                afternoon_open time,
@@ -10,7 +10,7 @@ CREATE TABLE business_hours(
 );
 
 CREATE TABLE branch(
-                         id int not null primary key,
+                         id int not null primary key auto_increment,
                          name varchar(255),
                          full_address varchar(255),
                          address varchar(255),
@@ -24,32 +24,32 @@ CREATE TABLE branch(
 );
 
 CREATE TABLE district(
-                          id int not null primary key,
+                          id int not null primary key auto_increment,
                           name varchar(255),
                           prefix varchar(255),
                           province_id int
 );
 
 CREATE TABLE medical_specialty(
-                                    id int not null primary key,
+                                    id int not null primary key auto_increment,
                                     name varchar(255),
                                     description varchar(255)
 );
 
 CREATE TABLE province(
-                          id int not null primary key,
+                          id int not null primary key auto_increment,
                           name varchar(255),
                           prefix varchar(255),
                           code varchar(50)
 );
 
 CREATE TABLE role(
-                      id bigint not null primary key,
+                      id bigint not null primary key auto_increment,
                       type varchar(15)
 );
 
 CREATE TABLE ward(
-                      id int not null primary key,
+                      id int not null primary key auto_increment,
                       name varchar(255),
                       prefix varchar(255),
                       district_id int
@@ -87,7 +87,7 @@ CREATE TABLE ward(
 -- );
 
 CREATE TABLE specialist(
-                            id bigint not null primary key,
+                            id bigint not null primary key auto_increment,
                             email varchar(100),
                             full_name varchar(255),
                             phone_number varchar(15),
@@ -108,7 +108,7 @@ CREATE TABLE specialist(
 );
 
 CREATE TABLE staff(
-                       id bigint not null primary key,
+                       id bigint not null primary key auto_increment,
                        email varchar(100),
                        full_name varchar(255),
                        password varchar(255),
@@ -124,7 +124,7 @@ CREATE TABLE staff_roles(
 );
 
 CREATE TABLE room(
-                     id int not null primary key,
+                     id int not null primary key auto_increment,
                      name varchar(255),
                      description varchar(255),
                      room_type_id int,
@@ -132,7 +132,7 @@ CREATE TABLE room(
 );
 
 CREATE TABLE room_type(
-                          id int not null primary key,
+                          id int not null primary key auto_increment,
                           name varchar(255),
                           description varchar(255),
                           branch_id int
