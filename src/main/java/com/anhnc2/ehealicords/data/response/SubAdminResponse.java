@@ -8,10 +8,11 @@ import lombok.Data;
 @Data
 @Builder
 public class SubAdminResponse {
-    long id;
+    Long id;
     String email;
     String fullName;
     UserStatus status;
+    Integer branchId;
 
     public static SubAdminResponse fromStaff(StaffEntity staffEntity){
         return SubAdminResponse.builder()
@@ -19,6 +20,7 @@ public class SubAdminResponse {
                 .email(staffEntity.getEmail())
                 .fullName(staffEntity.getFullName())
                 .status(staffEntity.getStatus())
+                .branchId(staffEntity.getBranchEntity().getId())
                 .build();
     }
 }

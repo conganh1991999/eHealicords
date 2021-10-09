@@ -10,7 +10,11 @@ import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 public interface StaffService {
     String checkPassword(String username, String password);
 
+    void forceChangePassword(ForceChangePasswordRequest request);
+
     StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password);
+
+    void updateLoginInformation(ChangeLoginInfoRequest request);
 
     StaffEntity createStaff(SpecialistInfoRequest staff);
 
@@ -26,7 +30,5 @@ public interface StaffService {
 
     void update(long staffId, SaveSubAdminRequest request);
 
-//    void updateLoginInformation(long staffId, ChangeLoginInfoRequest loginInfo);
-//    void forceChangePassword(ForceChangePasswordRequest request);
 //    void resetPasswordByEmail(String email);
 }

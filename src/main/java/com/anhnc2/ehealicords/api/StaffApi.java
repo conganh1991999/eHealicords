@@ -37,23 +37,16 @@ public class StaffApi {
                 .build();
     }
 
-//    @PostMapping("/change-password")
-//    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
-//        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
-//        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
-//    }
-//
-//    @PostMapping("/force-change-password")
-//    public HttpResponse<Object> forceChangePassword(
-//            @Valid @RequestBody ForceChangePasswordRequest request) {
-//        staffService.forceChangePassword(request);
-//
-//        return HttpResponseImpl.builder()
-//                .code(StatusCode.SUCCESS)
-//                .message("Change password successfully")
-//                .build();
-//    }
-//
+    @PostMapping("/force-change-password")
+    public HttpResponse<Object> forceChangePassword(@Valid @RequestBody ForceChangePasswordRequest request) {
+        staffService.forceChangePassword(request);
+
+        return HttpResponseImpl.builder()
+                .code(StatusCode.SUCCESS)
+                .message("Change password successfully")
+                .build();
+    }
+
 //    @PostMapping("/forget")
 //    public HttpResponse<Object> forgetPassword(@RequestBody @Valid ForgetPasswordRequest request) {
 //

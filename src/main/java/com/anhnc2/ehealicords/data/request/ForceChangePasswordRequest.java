@@ -9,16 +9,16 @@ import lombok.Data;
 @Data
 public class ForceChangePasswordRequest {
 
-    @NotNull(message = "email must be a not null")
-    @Email(message = "email wrong format")
+    @NotNull(message = "email must not be null")
+    @Email(message = "email have a wrong format")
     String email;
 
-    @Size(min = 6, max = 20, message = "password must allow length 6 - 20")
-    @NotNull(message = "password must be a not null")
-    @NotBlank(message = "password must be not blank")
-    String password;
+    @Size(min = 6, max = 20, message = "new password must be 6 - 20 characters in length")
+    @NotNull(message = "new password must not be null")
+    @NotBlank(message = "new password must not be blank")
+    String newPassword;
 
-    @NotNull(message = "old password must be a not null")
-    @NotBlank(message = "old password must be not blank")
+    @NotNull(message = "old password must not be null")
+    @NotBlank(message = "old password must not be blank")
     String oldPassword;
 }

@@ -41,7 +41,7 @@ public class SpecialistApi {
 
     private final SpecialistService specialistService;
 
-    @PostMapping("/doctors") // create (1)
+    @PostMapping("/doctors")
     public HttpResponse<StaffInfoResponse> createSpecialist(
             @Valid SpecialistInfoRequest specialist, @RequestParam MultipartFile avatar) {
         LOGGER.debug("Specialist creation request: {}", specialist);

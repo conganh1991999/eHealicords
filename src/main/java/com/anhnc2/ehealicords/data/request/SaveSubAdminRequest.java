@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class SaveSubAdminRequest {
     @NotNull(message = "email must not be null")
-    @Email(message = "email have wrong format")
+    @Email(message = "email have a wrong format")
     String email;
 
     @NotNull(message = "full name must not be null")

@@ -2,6 +2,7 @@ package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
+import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
@@ -29,17 +30,24 @@ public class SubAdminApi {
 
     private final SubAdminService subAdminService;
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Object> createSubAdmin(@RequestBody @Valid SaveSubAdminRequest request) {
+    public HttpResponse<Object> createSubAdmin(@Valid @RequestBody SaveSubAdminRequest request) {
         return HttpResponseImpl.success(subAdminService.createSubAdmin(request));
     }
 
-//    @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public HttpResponse<List<SubAdminResponse>> getAll(){
-//        return HttpResponseImpl.success(subAdminService.getAll());
-//    }
+    @PostMapping("/change-password")
+    public HttpResponse<Object> changeSubAdminPassword(@Valid @RequestBody ChangeLoginInfoRequest request) {
+        subAdminService.changeSubAdminPassword(request);
+        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public HttpResponse<List<SubAdminResponse>> getAllSubAdmin(){
+        return HttpResponseImpl.success(subAdminService.getAllSubAdmin());
+    }
+
 //
 //    @PostMapping("/{id}/deactivate")
 //    @PreAuthorize("hasRole('ADMIN')")
