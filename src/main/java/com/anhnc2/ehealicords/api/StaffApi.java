@@ -1,6 +1,7 @@
 package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
+import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.ForgetPasswordRequest;
 import com.anhnc2.ehealicords.data.request.LoginRequest;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(path = "api/public/auth")
 @AllArgsConstructor
-public class StaffAuthApi {
+public class StaffApi {
 
     private final StaffService staffService;
 
@@ -36,6 +37,12 @@ public class StaffAuthApi {
                 .build();
     }
 
+//    @PostMapping("/change-password")
+//    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
+//        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
+//        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
+//    }
+//
 //    @PostMapping("/force-change-password")
 //    public HttpResponse<Object> forceChangePassword(
 //            @Valid @RequestBody ForceChangePasswordRequest request) {

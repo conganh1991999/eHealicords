@@ -27,8 +27,6 @@ import java.util.List;
 @RequestMapping(path = "api/protected/sub-admins")
 public class SubAdminApi {
     private final SubAdminService subAdminService;
-    private final StaffService staffService;
-    private final AppUserService appUserService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -61,11 +59,5 @@ public class SubAdminApi {
     public HttpResponse<Object> activate(@PathVariable long id, @RequestBody @Valid SaveSubAdminRequest request){
         subAdminService.update(id, request);
         return HttpResponseImpl.success("OK");
-    }
-
-    @PostMapping("/change-password")
-    public HttpResponse<Object> changePassword(@Valid @RequestBody ChangeLoginInfoRequest request){
-        staffService.updateLoginInformation(appUserService.getCurrentUserId(), request);
-        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
     }
 }
