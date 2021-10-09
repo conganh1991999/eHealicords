@@ -6,7 +6,7 @@ import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 import java.util.List;
 
 public interface SubAdminService {
-    long create(SaveSubAdminRequest request);
+    long createSubAdmin(SaveSubAdminRequest request);
     List<SubAdminResponse> getAll();
     void deactivate(long staffId);
     void activate(long staffId);

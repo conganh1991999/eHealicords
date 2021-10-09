@@ -10,9 +10,9 @@ import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 public interface StaffService {
     String checkPassword(String username, String password);
 
-    StaffEntity createStaff(SpecialistInfoRequest staff);
-
     StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password);
+
+    StaffEntity createStaff(SpecialistInfoRequest staff);
 
     void updateStaff(Long staffId, String fullName, Integer branchId);
 

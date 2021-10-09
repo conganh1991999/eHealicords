@@ -26,38 +26,39 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(path = "api/protected/sub-admins")
 public class SubAdminApi {
+
     private final SubAdminService subAdminService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<Object> createSubAdmin(@RequestBody @Valid SaveSubAdminRequest request) {
-        return HttpResponseImpl.success(subAdminService.create(request));
+        return HttpResponseImpl.success(subAdminService.createSubAdmin(request));
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<List<SubAdminResponse>> getAll(){
-        return HttpResponseImpl.success(subAdminService.getAll());
-    }
-
-    @PostMapping("/{id}/deactivate")
-    @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Object> deactivate(@PathVariable long id){
-        subAdminService.deactivate(id);
-        return HttpResponseImpl.success("OK");
-    }
-
-    @PostMapping("/{id}/activate")
-    @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Object> activate(@PathVariable long id){
-        subAdminService.activate(id);
-        return HttpResponseImpl.success("OK");
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Object> activate(@PathVariable long id, @RequestBody @Valid SaveSubAdminRequest request){
-        subAdminService.update(id, request);
-        return HttpResponseImpl.success("OK");
-    }
+//    @GetMapping
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public HttpResponse<List<SubAdminResponse>> getAll(){
+//        return HttpResponseImpl.success(subAdminService.getAll());
+//    }
+//
+//    @PostMapping("/{id}/deactivate")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public HttpResponse<Object> deactivate(@PathVariable long id){
+//        subAdminService.deactivate(id);
+//        return HttpResponseImpl.success("OK");
+//    }
+//
+//    @PostMapping("/{id}/activate")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public HttpResponse<Object> activate(@PathVariable long id){
+//        subAdminService.activate(id);
+//        return HttpResponseImpl.success("OK");
+//    }
+//
+//    @PutMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public HttpResponse<Object> activate(@PathVariable long id, @RequestBody @Valid SaveSubAdminRequest request){
+//        subAdminService.update(id, request);
+//        return HttpResponseImpl.success("OK");
+//    }
 }

@@ -38,9 +38,9 @@ public class SubAdminServiceImpl implements SubAdminService {
 
     @Override
     @Transactional
-    public long create(SaveSubAdminRequest request) {
+    public long createSubAdmin(SaveSubAdminRequest request) {
         String password = PasswordGenerator.random();
-        StaffEntity staff = staffService.createStaffWithRoleAdminAndSubAdmin(request, password);
+        StaffEntity staff = staffService.createStaffForSubAdmin(request, password);
 
         // notifyToSubAdminOverEmail(request, password);
 
