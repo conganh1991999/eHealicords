@@ -12,7 +12,7 @@ public interface StaffService {
 
     StaffEntity createStaff(SpecialistInfoRequest staff);
 
-    StaffEntity createStaffWithRoleAdminAndSubAdmin(SaveSubAdminRequest request, String password);
+    StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password);
 
     void updateStaff(Long staffId, String fullName, Integer branchId);
 

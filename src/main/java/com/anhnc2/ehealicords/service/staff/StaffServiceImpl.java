@@ -41,21 +41,21 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
+
+    private final BranchRepository branchRepository;
+    private final RoleRepository roleRepository;
+    private final StaffRepository staffRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
-
-    private final BranchRepository branchRepository;
-
-    private final RoleRepository roleRepository;
-    private final StaffRepository staffRepository;
 
     private final MailService mailService;
 
     @Override
     public String checkPassword(String email, String password) {
-        AuthUser authUser
-                = staffRepository.findByEmail(email)
+        AuthUser authUser = staffRepository
+                .findByEmail(email)
                 .orElseThrow(() -> new AuthException(StatusCode.AUTHENTICATION_FAILED, null));
 
         if (authUser.getStatus() == UserStatus.DISABLED) {
@@ -97,7 +97,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffEntity createStaffWithRoleAdminAndSubAdmin(SaveSubAdminRequest request, String password) {
+    public StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password) {
         Set<RoleEntity> roleEntities =
                 roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_SUB_ADMIN.name()));
 
@@ -196,7 +196,7 @@ public class StaffServiceImpl implements StaffService {
             staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
             staff.setPassword(passwordEncoder.encode(password));
 
-            createStaffWithRoleAdminAndSubAdmin(request, password);
+            createStaffForSubAdmin(request, password);
         }
 
         staffRepository.saveAndFlush(staff);
