@@ -17,11 +17,9 @@ public class FileUtil {
 
     public static String appendCurrentTimeMillisToName(String fileName) {
         int dotIndex = fileName.lastIndexOf(".");
-        return new StringBuffer()
-                .append(fileName, 0, dotIndex)
-                .append("_")
-                .append(System.currentTimeMillis())
-                .append(fileName.substring(dotIndex))
-                .toString();
+        return fileName.substring(0, dotIndex) +
+                "_" +
+                System.currentTimeMillis() +
+                fileName.substring(dotIndex);
     }
 }

@@ -2,9 +2,8 @@ package com.anhnc2.ehealicords.service.specialist;
 
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
-import com.anhnc2.ehealicords.data.request.CreateDoctorRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
-import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 import com.anhnc2.ehealicords.data.common.Staff;
 
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
@@ -20,9 +19,7 @@ import java.util.List;
 public interface SpecialistService {
     List<SpecialistEntity> getAllSpecialists();
 
-    StaffInfoResponse createSpecialist(SpecialistInfoRequest doctor, MultipartFile avatar);
-
-    void updateSpecialistInfo(SpecialistInfoRequest specialist);
+    StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
 
     PresignResult getAvatarUpdateUrl(String fileName);
 
@@ -44,8 +41,6 @@ public interface SpecialistService {
 
     PresignResult getPresignUrl(String filename, String filetype);
 
-    void createDoctor(CreateDoctorRequest request);
-
     PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(int branchId, int page, int pageSize);
 
     DoctorDetailsResponse getDetailDoctor(long doctorId);
@@ -53,4 +48,6 @@ public interface SpecialistService {
     void resetPassword(long doctorId);
 
     void  updateDoctor(long doctorId, UpdateDoctorRequest updateDoctorRequest);
+
+    // void updateSpecialistInfo(SpecialistInfoRequest specialist);
 }

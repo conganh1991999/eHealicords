@@ -11,7 +11,8 @@ import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
-import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
+import com.anhnc2.ehealicords.data.request.StaffCreationRequest;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.BranchException;
 import com.anhnc2.ehealicords.exception.PasswordNotMatchException;
@@ -117,43 +118,33 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password) {
+    public StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest) {
         Set<RoleEntity> roleEntities =
                 roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_SUB_ADMIN.name()));
 
-        String encodedPassword = passwordEncoder.encode(password);
-
-        StaffEntity staff = StaffEntity.builder()
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .roleEntities(roleEntities)
-                .password(encodedPassword)
-                .status(UserStatus.WAITING_CHANGE_PASSWORD)
-                .branchEntity(branchRepository.getById(request.getBranchId()))
-                .build();
-
-        return staffRepository.saveAndFlush(staff);
+        return createStaff(new StaffCreationRequest(subAdminRequest, roleEntities));
     }
 
     @Override
-    public StaffEntity createStaff(SpecialistInfoRequest staff) {
+    public StaffEntity createStaffForSpecialist(SpecialistCreationRequest specialistRequest) {
         Set<RoleEntity> roleEntities =
                 roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_DOCTOR.name()));
 
-        BranchEntity branch = branchRepository
-                .findById(staff.getBranchId())
-                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_NOT_EXISTED));
+        return createStaff(new StaffCreationRequest(specialistRequest, roleEntities));
+    }
 
-        String encodedPassword = passwordEncoder.encode(staff.getEmail());
+    private StaffEntity createStaff(StaffCreationRequest request) {
+        String password = PasswordGenerator.random();
+        String encodedPassword = passwordEncoder.encode(password);
 
         StaffEntity newStaff =
                 StaffEntity.builder()
-                        .email(staff.getEmail())
-                        .fullName(staff.getFullName())
-                        .roleEntities(roleEntities)
+                        .email(request.getEmail())
+                        .fullName(request.getFullName())
+                        .roleEntities(request.getRoleEntities())
                         .password(encodedPassword)
-                        .status(UserStatus.ACTIVE)
-                        .branchEntity(branch)
+                        .status(UserStatus.WAITING_CHANGE_PASSWORD)
+                        .branchEntity(branchRepository.getById(request.getBranchId()))
                         .build();
 
         return staffRepository.saveAndFlush(newStaff);
@@ -187,83 +178,40 @@ public class StaffServiceImpl implements StaffService {
         return staffRepository.findById(id).get();
     }
 
-    @Override
-    public void deactivate(long staffId) {
-        StaffEntity staff = staffRepository.findById(staffId).get();
-
-        List<RoleType> roles = staff.getRoleEntities().stream()
-                .map(RoleEntity::getType)
-                .collect(Collectors.toList());
-
-        if (roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-            staff.setStatus(UserStatus.DISABLED);
-            staffRepository.saveAndFlush(staff);
-            notifyDeactivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName());
-        }
-    }
-
-    @Override
-    public void activate(long staffId) {
-        StaffEntity staff = staffRepository.findById(staffId).get();
-
-        List<RoleType> roles = staff.getRoleEntities().stream()
-                .map(RoleEntity::getType)
-                .collect(Collectors.toList());
-
-        if (roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-            String password = PasswordGenerator.random();
-            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-            staff.setPassword(passwordEncoder.encode(password));
-
-            staffRepository.saveAndFlush(staff);
-
-            notifyActivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName(), password);
-        }
-    }
-
-    @Override
-    public void update(long staffId, SaveSubAdminRequest request) {
-        StaffEntity staff = staffRepository.findById(staffId).get();
-
-        List<RoleType> roles = staff.getRoleEntities().stream()
-                .map(RoleEntity::getType)
-                .collect(Collectors.toList());
-
-        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-            return;
-        }
-
-        staff.setFullName(request.getFullName());
-
-        if(!request.getEmail().equals(staff.getEmail())){
-            String password = PasswordGenerator.random();
-            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-            staff.setPassword(passwordEncoder.encode(password));
-
-            createStaffForSubAdmin(request, password);
-        }
-
-        staffRepository.saveAndFlush(staff);
-    }
-
-    private void notifyActivateToSubAdminOverEmail(String to, String fullName, String password) {
-        String subject = "HeyDoctor: Tài Khoản Được Kích Hoạt Trở lại!";
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("adminName", fullName);
-        params.put("email", to);
-        params.put("password", password);
-        mailService.sendEmail(to, subject, "activate-subadmin", params);
-    }
-
-    private void notifyDeactivateToSubAdminOverEmail(String to, String fullName) {
-        String subject = "HeyDoctor: Tài Khoản Bị Vô Hiệu Hóa!";
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("adminName", fullName);
-        mailService.sendEmail(to, subject, "deactivate-subadmin", params);
-    }
-
+//    @Override
+//    public void deactivate(long staffId) {
+//        StaffEntity staff = staffRepository.findById(staffId).get();
+//
+//        List<RoleType> roles = staff.getRoleEntities().stream()
+//                .map(RoleEntity::getType)
+//                .collect(Collectors.toList());
+//
+//        if (roles.contains(RoleType.ROLE_SUB_ADMIN)) {
+//            staff.setStatus(UserStatus.DISABLED);
+//            staffRepository.saveAndFlush(staff);
+//            notifyDeactivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName());
+//        }
+//    }
+//
+//    @Override
+//    public void activate(long staffId) {
+//        StaffEntity staff = staffRepository.findById(staffId).get();
+//
+//        List<RoleType> roles = staff.getRoleEntities().stream()
+//                .map(RoleEntity::getType)
+//                .collect(Collectors.toList());
+//
+//        if (roles.contains(RoleType.ROLE_SUB_ADMIN)) {
+//            String password = PasswordGenerator.random();
+//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+//            staff.setPassword(passwordEncoder.encode(password));
+//
+//            staffRepository.saveAndFlush(staff);
+//
+//            notifyActivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName(), password);
+//        }
+//    }
+//
 //    @Override
 //    public void resetPasswordByEmail(String email) {
 //        StaffEntity staff = staffRepository.findByEmail(email).get();
@@ -274,6 +222,49 @@ public class StaffServiceImpl implements StaffService {
 //
 //        staffRepository.saveAndFlush(staff);
 //        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
+//    }
+//
+//    @Override
+//    public void update(long staffId, SaveSubAdminRequest request) {
+//        StaffEntity staff = staffRepository.findById(staffId).get();
+//
+//        List<RoleType> roles = staff.getRoleEntities().stream()
+//                .map(RoleEntity::getType)
+//                .collect(Collectors.toList());
+//
+//        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
+//            return;
+//        }
+//
+//        staff.setFullName(request.getFullName());
+//
+//        if(!request.getEmail().equals(staff.getEmail())){
+//            String password = PasswordGenerator.random();
+//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+//            staff.setPassword(passwordEncoder.encode(password));
+//
+//            createStaffForSubAdmin(request, password);
+//        }
+//
+//        staffRepository.saveAndFlush(staff);
+//    }
+//
+//    private void notifyActivateToSubAdminOverEmail(String to, String fullName, String password) {
+//        String subject = "HeyDoctor: Tài Khoản Được Kích Hoạt Trở lại!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("adminName", fullName);
+//        params.put("email", to);
+//        params.put("password", password);
+//        mailService.sendEmail(to, subject, "activate-subadmin", params);
+//    }
+//
+//    private void notifyDeactivateToSubAdminOverEmail(String to, String fullName) {
+//        String subject = "HeyDoctor: Tài Khoản Bị Vô Hiệu Hóa!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("adminName", fullName);
+//        mailService.sendEmail(to, subject, "deactivate-subadmin", params);
 //    }
 //
 //    private void notifyResetPasswordToDoctorOverEmail(String to, String name, String password) {

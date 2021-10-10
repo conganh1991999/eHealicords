@@ -5,18 +5,18 @@ import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
-import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 
 public interface StaffService {
     String checkPassword(String username, String password);
 
     void forceChangePassword(ForceChangePasswordRequest request);
 
-    StaffEntity createStaffForSubAdmin(SaveSubAdminRequest request, String password);
+    StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest);
 
     void updateLoginInformation(ChangeLoginInfoRequest request);
 
-    StaffEntity createStaff(SpecialistInfoRequest staff);
+    StaffEntity createStaffForSpecialist(SpecialistCreationRequest specialistRequest);
 
     void updateStaff(Long staffId, String fullName, Integer branchId);
 
@@ -24,11 +24,11 @@ public interface StaffService {
 
     StaffEntity getStaffById(Long id);
 
-    void deactivate(long staffId);
-
-    void activate(long staffId);
-
-    void update(long staffId, SaveSubAdminRequest request);
-
+//    void deactivate(long staffId);
+//
+//    void activate(long staffId);
+//
+//    void update(long staffId, SaveSubAdminRequest request);
+//
 //    void resetPasswordByEmail(String email);
 }

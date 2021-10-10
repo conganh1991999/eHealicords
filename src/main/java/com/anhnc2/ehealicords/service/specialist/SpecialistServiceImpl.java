@@ -1,6 +1,11 @@
 package com.anhnc2.ehealicords.service.specialist;
 
+import com.anhnc2.ehealicords.constant.AcademicRank;
+import com.anhnc2.ehealicords.constant.Degree;
+import com.anhnc2.ehealicords.constant.Gender;
 import com.anhnc2.ehealicords.constant.RoleType;
+import com.anhnc2.ehealicords.constant.SpecialistDegree;
+import com.anhnc2.ehealicords.constant.SpecialistType;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.constant.UserStatus;
 import com.anhnc2.ehealicords.data.common.PresignResult;
@@ -9,9 +14,8 @@ import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
-import com.anhnc2.ehealicords.data.request.CreateDoctorRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
-import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
 import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
@@ -31,6 +35,7 @@ import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.util.FileUtil;
 import com.anhnc2.ehealicords.util.PasswordGenerator;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,14 +53,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @AllArgsConstructor
 public class SpecialistServiceImpl implements SpecialistService {
+
     private static final String SPECIALIST_KEY_PREFIX = "specialists";
+    private static final String AVATAR = "avatar";
 
     private final StaffService staffService;
     private final StorageService storageService;
     private final MailService mailService;
     private final AppUserService userService;
-    private final RoleRepository roleRepository;
-    private final BranchService branchService;
     private final SpecialistRepository specialistRepository;
     private final PasswordEncoder passwordEncoder;
     private final StaffRepository staffRepository;
@@ -68,45 +73,56 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     @Transactional
-    public StaffInfoResponse createSpecialist(
-            SpecialistInfoRequest specialist, MultipartFile avatar) {
-        StaffEntity createdStaff = createSpecialistAccount(specialist);
+    public StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar) {
+        StaffEntity createdStaff = staffService.createStaffForSpecialist(specialist);
 
-        SpecialistEntity createdSpecialist = createSpecialistInfo(specialist, avatar, createdStaff);
+        SpecialistEntity createdSpecialist = createSpecialistProfile(specialist, avatar, createdStaff);
 
-        sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
+        // sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
+        // notifyToDoctorOverEmail(request, password);
 
         return new StaffInfoResponse(createdStaff, createdSpecialist);
     }
 
-    private StaffEntity createSpecialistAccount(SpecialistInfoRequest specialist) {
-        return staffService.createStaff(specialist);
-    }
-
-    private SpecialistEntity createSpecialistInfo(
-            SpecialistInfoRequest specialist, MultipartFile avatar, StaffEntity createdStaff) {
+    private SpecialistEntity createSpecialistProfile(SpecialistCreationRequest specialist,
+                                                     MultipartFile avatar, StaffEntity createdStaff) {
         SpecialistEntity newSpecialist =
                 SpecialistEntity.builder()
-                        .staffId(createdStaff.getId())
+                        .email(specialist.getEmail())
                         .fullName(specialist.getFullName())
                         .phoneNumber(specialist.getPhoneNumber())
-                        .gender(specialist.getGender())
-                        .academicRank(specialist.getAcademicRank())
-                        .degreeOfSpecialist(specialist.getDegreeOfSpecialist())
-                        .medialSpecialtyId(specialist.getSpecialtyId())
-                        .updatedTime(System.currentTimeMillis())
+                        .avatarKey(specialist.getAvatarKey())
+                        .dateOfBirth(LocalDate.parse(specialist.getDateOfBirth()))
+                        .dateOfStartingWork(LocalDate.parse(specialist.getDateOfStartingWork()))
+                        .gender((specialist.getGender()))
+                        .specialistType((specialist.getType()))
+                        .academicRank((specialist.getAcademicRank()))
+                        .degree((specialist.getDegree()))
+                        .degreeOfSpecialist((specialist.getDegreeOfSpecialist()))
+                        .medialSpecialtyId(specialist.getMedialSpecialtyId())
+                        .roomId(specialist.getRoomId())
+                        .staffId(createdStaff.getId())
                         .branchId(specialist.getBranchId())
+                        .updatedTime(System.currentTimeMillis())
                         .build();
 
         newSpecialist = specialistRepository.saveAndFlush(newSpecialist);
 
+        if (avatar == null) {
+            return newSpecialist;
+        }
+
+        String avatarFileName = avatar.getOriginalFilename();
         String avatarKey =
                 String.join(
                         "/",
                         SPECIALIST_KEY_PREFIX,
                         String.valueOf(newSpecialist.getId()),
-                        "avatar",
-                        FileUtil.appendCurrentTimeMillisToName(avatar.getOriginalFilename()));
+                        AVATAR,
+                        FileUtil.appendCurrentTimeMillisToName(
+                                avatarFileName == null ? AVATAR : avatarFileName
+                        )
+                );
 
         try {
             storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(avatar));
@@ -116,38 +132,6 @@ public class SpecialistServiceImpl implements SpecialistService {
         } catch (IOException e) {
             throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
         }
-    }
-
-    private void sendSuccessEmailToSpecialist(
-            StaffEntity createdStaff, SpecialistEntity createdSpecialist) {
-        String to = createdStaff.getEmail();
-        String subject = "HeyDoctor: Đăng ký tài khoản bác sĩ thành công!";
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("doctorName", createdSpecialist.getFullName());
-        params.put("email", createdStaff.getEmail());
-        params.put("password", createdStaff.getEmail());
-
-        mailService.sendEmail(to, subject, "create-doctor", params);
-    }
-
-    @Override
-    public void updateSpecialistInfo(SpecialistInfoRequest specialist) {
-        long staffId = userService.getCurrentUserId();
-
-        SpecialistEntity currentSpecialist = getByStaffId(staffId);
-
-        staffService.updateStaff(staffId, specialist.getFullName(), specialist.getBranchId());
-
-        currentSpecialist.setFullName(specialist.getFullName());
-        currentSpecialist.setPhoneNumber(specialist.getPhoneNumber());
-        currentSpecialist.setGender(specialist.getGender());
-        currentSpecialist.setAcademicRank(specialist.getAcademicRank());
-        currentSpecialist.setDegreeOfSpecialist(specialist.getDegreeOfSpecialist());
-        currentSpecialist.setMedialSpecialtyId(specialist.getSpecialtyId());
-        currentSpecialist.setBranchId(specialist.getBranchId());
-
-        specialistRepository.save(currentSpecialist);
     }
 
     @Override
@@ -229,35 +213,6 @@ public class SpecialistServiceImpl implements SpecialistService {
                 .build();
     }
 
-    // Author Duc Vo
-    @Override
-    @Transactional
-    public void createDoctor(CreateDoctorRequest request) {
-
-        String password = PasswordGenerator.random();
-
-        StaffEntity savedStaff = createStaffWithRoleDoctor(request, password);
-
-        SpecialistEntity specialist =
-                SpecialistEntity.builder()
-                        .fullName(request.getFullName())
-                        .avatarKey(request.getAvatarKey())
-                        .academicRank(request.getAcademicRank())
-                        .medialSpecialtyId(request.getSpecialtyId())
-                        .branchId(request.getBranchId())
-                        .degreeOfSpecialist(request.getDegree())
-                        .gender(request.getGender())
-                        .staffId(savedStaff.getId())
-                        .phoneNumber(request.getPhoneNumber())
-                        .updatedTime(System.currentTimeMillis())
-                        .build();
-
-        specialistRepository.saveAndFlush(specialist);
-
-        notifyToDoctorOverEmail(request, password);
-    }
-
-    // Author Duc Vo
     @Override
     public PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(
             int branchId, int page, int pageSize) {
@@ -315,7 +270,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
 
         staffRepository.saveAndFlush(staff);
-        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
+        // notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
     }
 
     @Override
@@ -351,47 +306,55 @@ public class SpecialistServiceImpl implements SpecialistService {
         return medicalSpecialtyRepository.findById(specialist.getMedialSpecialtyId()).get().getName();
     }
 
-    private StaffEntity createStaffWithRoleDoctor(CreateDoctorRequest request, String password) {
-        Set<RoleEntity> roleEntities =
-                roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_DOCTOR.name()));
-
-        BranchEntity branch = branchService.getBranchById(request.getBranchId());
-
-        String encodedPassword = passwordEncoder.encode(password);
-
-        StaffEntity staff =
-                StaffEntity.builder()
-                        .email(request.getEmail())
-                        .fullName(request.getFullName())
-                        .roleEntities(roleEntities)
-                        .password(encodedPassword)
-                        .status(UserStatus.WAITING_CHANGE_PASSWORD)
-                        .branchEntity(branch)
-                        .build();
-
-        return staffRepository.saveAndFlush(staff);
-    }
-
-    // Author Duc Vo
-    private void notifyToDoctorOverEmail(CreateDoctorRequest request, String password) {
-        String to = request.getEmail();
-        String subject = "HeyDoctor: Tạo Tài Khoản Bác Sĩ Thành Công!";
-        Map<String, Object> params = new HashMap<String, Object>();
-
-        params.put("doctorName", request.getFullName());
-        params.put("email", to);
-        params.put("password", password);
-        mailService.sendEmail(to, subject, "create-doctor", params);
-    }
-
-    // Author Duc Vo
-    private void notifyResetPasswordToDoctorOverEmail(String to, String name, String password) {
-        String subject = "HeyDoctor: Đặt Mật Khẩu Tài Khoản Bác Sĩ Thành Công!";
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("doctorName", name);
-        params.put("email", to);
-        params.put("password", password);
-        mailService.sendEmail(to, subject, "doctor-reset-password", params);
-    }
+//    @Override
+//    public void updateSpecialistInfo(SpecialistInfoRequest specialist) {
+//        long staffId = userService.getCurrentUserId();
+//
+//        SpecialistEntity currentSpecialist = getByStaffId(staffId);
+//
+//        staffService.updateStaff(staffId, specialist.getFullName(), specialist.getBranchId());
+//
+//        currentSpecialist.setFullName(specialist.getFullName());
+//        currentSpecialist.setPhoneNumber(specialist.getPhoneNumber());
+//        currentSpecialist.setGender(specialist.getGender());
+//        currentSpecialist.setAcademicRank(specialist.getAcademicRank());
+//        currentSpecialist.setDegreeOfSpecialist(specialist.getDegreeOfSpecialist());
+//        currentSpecialist.setMedialSpecialtyId(specialist.getSpecialtyId());
+//        currentSpecialist.setBranchId(specialist.getBranchId());
+//
+//        specialistRepository.save(currentSpecialist);
+//    }
+//    private void sendSuccessEmailToSpecialist(
+//            StaffEntity createdStaff, SpecialistEntity createdSpecialist) {
+//        String to = createdStaff.getEmail();
+//        String subject = "HeyDoctor: Đăng ký tài khoản bác sĩ thành công!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("doctorName", createdSpecialist.getFullName());
+//        params.put("email", createdStaff.getEmail());
+//        params.put("password", createdStaff.getEmail());
+//
+//        mailService.sendEmail(to, subject, "create-doctor", params);
+//    }
+//
+//    private void notifyToDoctorOverEmail(SpecialistCreationRequest request, String password) {
+//        String to = request.getEmail();
+//        String subject = "HeyDoctor: Tạo Tài Khoản Bác Sĩ Thành Công!";
+//        Map<String, Object> params = new HashMap<String, Object>();
+//
+//        params.put("doctorName", request.getFullName());
+//        params.put("email", to);
+//        params.put("password", password);
+//        mailService.sendEmail(to, subject, "create-doctor", params);
+//    }
+//
+//    private void notifyResetPasswordToDoctorOverEmail(String to, String name, String password) {
+//        String subject = "HeyDoctor: Đặt Mật Khẩu Tài Khoản Bác Sĩ Thành Công!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("doctorName", name);
+//        params.put("email", to);
+//        params.put("password", password);
+//        mailService.sendEmail(to, subject, "doctor-reset-password", params);
+//    }
 }

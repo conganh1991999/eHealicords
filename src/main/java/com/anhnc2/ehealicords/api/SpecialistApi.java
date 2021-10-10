@@ -4,9 +4,8 @@ import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.common.Staff;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
-import com.anhnc2.ehealicords.data.request.CreateDoctorRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
-import com.anhnc2.ehealicords.data.request.SpecialistInfoRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
 import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
@@ -19,8 +18,11 @@ import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,16 +38,14 @@ import java.util.List;
 @RequestMapping("api/protected/specialists")
 @AllArgsConstructor
 public class SpecialistApi {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpecialistApi.class);
 
     private final SpecialistService specialistService;
 
-    @PostMapping("/doctors")
-    public HttpResponse<StaffInfoResponse> createSpecialist(
-            @Valid SpecialistInfoRequest specialist, @RequestParam MultipartFile avatar) {
-        LOGGER.debug("Specialist creation request: {}", specialist);
-
-        StaffInfoResponse responseData = specialistService.createSpecialist(specialist, avatar);
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PostMapping(value = "/create-av", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public HttpResponse<StaffInfoResponse> createSpecialistWithAvatar(@Valid @ModelAttribute SpecialistCreationRequest request) {
+        StaffInfoResponse responseData
+                = specialistService.createSpecialist(request, request.getAvatar());
 
         return HttpResponseImpl.<StaffInfoResponse>builder()
                 .code(StatusCode.SUCCESS)
@@ -54,9 +53,10 @@ public class SpecialistApi {
                 .build();
     }
 
-    @PostMapping("/create-doctor") // create (1)
-    public HttpResponse<Object> createDoctor(@RequestBody CreateDoctorRequest request) {
-        specialistService.createDoctor(request);
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PostMapping("/create-avk")
+    public HttpResponse<Object> createSpecialistWithAvatarKey(@RequestBody SpecialistCreationRequest request) {
+        specialistService.createSpecialist(request, null);
         return HttpResponseImpl.success("OK");
     }
 
@@ -88,11 +88,11 @@ public class SpecialistApi {
         return HttpResponseImpl.success(specialistService.findById(id));
     }
 
-    @PostMapping("/update")
-    public HttpResponse<Object> updateSpecialistInfo(@RequestBody SpecialistInfoRequest specialist) {
-        specialistService.updateSpecialistInfo(specialist);
-        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
-    }
+//    @PostMapping("/update")
+//    public HttpResponse<Object> updateSpecialistInfo(@RequestBody SpecialistInfoRequest specialist) {
+//        specialistService.updateSpecialistInfo(specialist);
+//        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
+//    }
 
     @PostMapping("/delete")
     public HttpResponse<Object> deleteSpecialist() {
