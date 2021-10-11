@@ -22,6 +22,7 @@ import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
+import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
 import com.anhnc2.ehealicords.repository.RoleRepository;
@@ -149,6 +150,15 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
+    public Staff getSpecialist(Long id) {
+        return Staff.fromDAO(
+                specialistRepository
+                        .findById(id)
+                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS))
+        );
+    }
+
+    @Override
     public PresignResult getAvatarUpdateUrl(String fileName) {
         SpecialistEntity specialist = getByStaffId(userService.getCurrentUserId());
 
@@ -193,11 +203,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     @Override
     public SpecialistEntity getBySpecialistId(long specialistId) {
         return specialistRepository.findById(specialistId).get();
-    }
-
-    @Override
-    public Staff findById(long id) {
-        return Staff.fromDAO(specialistRepository.findById(id).get());
     }
 
     @Override

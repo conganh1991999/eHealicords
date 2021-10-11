@@ -85,9 +85,9 @@ public class SpecialistApi {
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("/{id}")
-    public HttpResponse<Staff> getDoctorInfo(@PathVariable long id) {
-        return HttpResponseImpl.success(specialistService.findById(id));
-    } // TODO
+    public HttpResponse<Staff> getSpecialistInformation(@PathVariable Long id) {
+        return HttpResponseImpl.success(specialistService.getSpecialist(id));
+    }
 
 //    @PostMapping("/update")
 //    public HttpResponse<Object> updateSpecialistInfo(@RequestBody SpecialistInfoRequest specialist) {

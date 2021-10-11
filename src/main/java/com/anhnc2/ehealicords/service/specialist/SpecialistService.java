@@ -25,6 +25,8 @@ public interface SpecialistService {
 
     List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId);
 
+    Staff getSpecialist(Long id);
+
     PresignResult getAvatarUpdateUrl(String fileName);
 
     void updateAvatar(String key);
@@ -36,8 +38,6 @@ public interface SpecialistService {
     SpecialistEntity getByStaffId(long id);
 
     SpecialistEntity getBySpecialistId(long specialistId);
-
-    Staff findById(long id);
 
     PresignResult getPresignUrl(String filename, String filetype);
 
