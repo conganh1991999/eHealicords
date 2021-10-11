@@ -40,7 +40,7 @@ springdoc:
     path: /api/public/api-docs
 server:
   forward-headers-strategy: native
-  port: 8080
+  port: 8484
   ssl:
     key-store: classpath:ehealicords.jks
     key-store-password: Zxcvb,12345
@@ -50,13 +50,9 @@ jwt:
   validTime: 31536000000
 aws:
   s3:
-    #    Anhvan bucket
-    #    bucket-name: heydoctor-storage
-    #    access-key-id: AKIAYSINEZGPVCIAIZFT
-    #    secret-access-key: 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
-    bucket-name: heydoctor-me
-    access-key-id: AKIAY2WG6TD76LY7OQXT
-    secret-access-key: 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
+    bucket-name: ehealicords
+    access-key-id: AKIA5HMVTII6QHWW6VOD
+    secret-access-key: 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
   ses:
     source-email: "\"Hey Doctor\" <noreply@heydoctor.me>"
     access-key-id: AKIAYSINEZGP4VK7HUM5
