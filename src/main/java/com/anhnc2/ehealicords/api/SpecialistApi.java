@@ -16,8 +16,6 @@ import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +58,8 @@ public class SpecialistApi {
         return HttpResponseImpl.success("OK");
     }
 
-    @GetMapping("")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @GetMapping("/all")
     @Transactional
     public HttpResponse<List<SpecialistEntity>> getAllSpecialists() {
         List<SpecialistEntity> specialistEntities = specialistService.getAllSpecialists();
@@ -70,23 +69,25 @@ public class SpecialistApi {
                 .build();
     }
 
-    @GetMapping("/query")
-    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(
-            @RequestParam("branchId") Integer branchId,
-            @RequestParam("specialtyId") Integer specialtyId) {
-        return HttpResponseImpl.success(
-                specialistService.findAllSpecialistBySpecialityIdAndBranchId(branchId, specialtyId));
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @GetMapping("branch/{branchId}/all")
+    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@PathVariable Integer branchId) {
+        return HttpResponseImpl.success(specialistService.getAllSpecialistsOfBranch(branchId));
     }
 
-    @GetMapping("branches/{branchId}")
-    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@PathVariable int branchId) {
-        return HttpResponseImpl.success(specialistService.findAllSpecialistsOfBranch(branchId));
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @GetMapping("/branch/specialty/all")
+    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@RequestParam("branchId") Integer branchId,
+                                                               @RequestParam("specialtyId") Integer specialtyId) {
+        return HttpResponseImpl
+                .success(specialistService.getAllSpecialistsOfSpecialty(branchId, specialtyId));
     }
 
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("/{id}")
     public HttpResponse<Staff> getDoctorInfo(@PathVariable long id) {
         return HttpResponseImpl.success(specialistService.findById(id));
-    }
+    } // TODO
 
 //    @PostMapping("/update")
 //    public HttpResponse<Object> updateSpecialistInfo(@RequestBody SpecialistInfoRequest specialist) {

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface SpecialistRepository extends JpaRepository<SpecialistEntity, Long> {
     SpecialistEntity findByStaffId(long staffId);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM specialists WHERE branch_id = ?1")
-    List<SpecialistEntity> findAllSpecialistOfBranch(int branchId);
+    @Query(nativeQuery = true, value = "SELECT * FROM specialist WHERE branch_id = ?1")
+    List<SpecialistEntity> findAllSpecialistOfBranch(Integer branchId);
 
     List<SpecialistEntity> findAlByMedialSpecialtyIdAndBranchId(Integer specialtyId, Integer branchId);
 

@@ -67,11 +67,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     private final MedicalSpecialtyRepository medicalSpecialtyRepository;
 
     @Override
-    public List<SpecialistEntity> getAllSpecialists() {
-        return specialistRepository.findAll();
-    }
-
-    @Override
     @Transactional
     public StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar) {
         StaffEntity createdStaff = staffService.createStaffForSpecialist(specialist);
@@ -135,6 +130,25 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
+    public List<SpecialistEntity> getAllSpecialists() {
+        return specialistRepository.findAll();
+    }
+
+    @Override
+    public List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId) {
+        List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
+        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId) {
+        List<SpecialistEntity> specialists =
+                specialistRepository.findAlByMedialSpecialtyIdAndBranchId(specialtyId, branchId);
+
+        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+    }
+
+    @Override
     public PresignResult getAvatarUpdateUrl(String fileName) {
         SpecialistEntity specialist = getByStaffId(userService.getCurrentUserId());
 
@@ -184,23 +198,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     @Override
     public Staff findById(long id) {
         return Staff.fromDAO(specialistRepository.findById(id).get());
-    }
-
-    @Override
-    public List<LiteStaff> findAllSpecialistsOfBranch(int branchId) {
-        List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
-
-        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<LiteStaff> findAllSpecialistBySpecialityIdAndBranchId(
-            int branchId, int specialtyId) {
-//        List<SpecialistEntity> specialists =
-//                specialistRepository.findAlBySpecialtyIdAndBranchId(specialtyId, branchId);
-//
-//        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
-        return null;
     }
 
     @Override

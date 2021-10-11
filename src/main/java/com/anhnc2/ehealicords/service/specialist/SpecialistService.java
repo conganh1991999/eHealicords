@@ -17,9 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface SpecialistService {
+    StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
+
     List<SpecialistEntity> getAllSpecialists();
 
-    StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
+    List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId);
+
+    List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId);
 
     PresignResult getAvatarUpdateUrl(String fileName);
 
@@ -34,10 +38,6 @@ public interface SpecialistService {
     SpecialistEntity getBySpecialistId(long specialistId);
 
     Staff findById(long id);
-
-    List<LiteStaff> findAllSpecialistsOfBranch(int branchId);
-
-    List<LiteStaff> findAllSpecialistBySpecialityIdAndBranchId(int branchId, int specialtyId);
 
     PresignResult getPresignUrl(String filename, String filetype);
 
