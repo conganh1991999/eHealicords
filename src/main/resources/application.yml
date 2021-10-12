@@ -41,10 +41,10 @@ springdoc:
 server:
   forward-headers-strategy: native
   port: 8484
-  ssl:
-    key-store: classpath:ehealicords.jks
-    key-store-password: Zxcvb,12345
-    key-store-type: JKS
+#  ssl:
+#    key-store: classpath:ehealicords.jks
+#    key-store-password: Zxcvb,12345
+#    key-store-type: JKS
 jwt:
   secret: disuf83y8y4oiu3498ufijdjf948378yfgsa
   validTime: 31536000000
