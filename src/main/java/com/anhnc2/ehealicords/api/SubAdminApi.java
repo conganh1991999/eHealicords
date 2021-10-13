@@ -37,6 +37,7 @@ public class SubAdminApi {
     }
 
     @PostMapping("/change-password")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     public HttpResponse<Object> changeSubAdminPassword(@Valid @RequestBody ChangeLoginInfoRequest request) {
         subAdminService.changeSubAdminPassword(request);
         return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
