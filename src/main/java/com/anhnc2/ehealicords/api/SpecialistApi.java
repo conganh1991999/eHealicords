@@ -58,7 +58,7 @@ public class SpecialistApi {
         return HttpResponseImpl.success("OK");
     }
 
-    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     @Transactional
     public HttpResponse<List<SpecialistEntity>> getAllSpecialists() {
