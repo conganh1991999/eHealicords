@@ -178,6 +178,13 @@ public class SpecialistServiceImpl implements SpecialistService {
         staffService.updateStaffPassword(request);
     }
 
+    @Override
+    public void deleteSpecialist(Long specialistId) {
+        // DELETE staff
+        // DELETE avatar
+        // DELETE specialist
+    }
+
 //    @Override
 //    public void updateSpecialistInfo(SpecialistInfoRequest specialist) {
 //        long staffId = userService.getCurrentUserId();
@@ -220,13 +227,6 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         specialist.setAvatarKey(key);
         specialistRepository.save(specialist);
-    }
-
-    @Override
-    public void deleteSpecialist() {
-        // DELETE staff
-        // DELETE avatar
-        // DELETE specialist
     }
 
     @Override

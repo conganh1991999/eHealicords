@@ -146,9 +146,10 @@ public class SpecialistApi {
         return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     @PostMapping("/delete")
-    public HttpResponse<Object> deleteSpecialist() {
-        specialistService.deleteSpecialist();
+    public HttpResponse<Object> deleteSpecialist(@RequestParam("specialistId") Long specialistId) {
+        specialistService.deleteSpecialist(specialistId);
         return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 

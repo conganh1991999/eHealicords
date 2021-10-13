@@ -28,11 +28,11 @@ public interface SpecialistService {
 
     void changeSpecialistPassword(PasswordUpdateRequest request);
 
+    void deleteSpecialist(Long specialistId);
+
     PresignResult getAvatarUpdateUrl(String fileName);
 
     void updateAvatar(String key);
-
-    void deleteSpecialist();
 
     SpecialistEntity getByStaffId(long id);
 
