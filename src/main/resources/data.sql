@@ -21,3 +21,9 @@ INSERT INTO role VALUE (null, 'ROLE_DOCTOR');
 INSERT INTO staff VALUES(null, 'anh.nguyeniotbycse@hcmut.edu.vn', 'Cong Anh Nguyen', '$2a$10$yW4JCgzIbsXkfvK71mYFHueCQUIhbJdzs/DQJuvnFmdNu6qQ6KVMG', CURRENT_TIMESTAMP(), 'ACTIVE', 1);
 
 INSERT INTO staff_roles VALUES(1, 2);
+
+INSERT INTO room VALUES (null, 'Phòng khám 1', null, 1, 1);
+
+INSERT INTO room_type VALUES(null, 'Phòng khám', null, 1);
+
+INSERT INTO medical_specialty VALUES(null, 'Nội Tiêu hóa – Gan Mật', null);

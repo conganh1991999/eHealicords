@@ -7,7 +7,7 @@ import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.common.Staff;
 
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
-import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
@@ -25,7 +25,7 @@ public interface SpecialistService {
 
     List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId);
 
-    Staff getSpecialist(Long id);
+    SpecialistDetailsResponse getSpecialist(Long id);
 
     PresignResult getAvatarUpdateUrl(String fileName);
 
@@ -42,8 +42,6 @@ public interface SpecialistService {
     PresignResult getPresignUrl(String filename, String filetype);
 
     PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(int branchId, int page, int pageSize);
-
-    DoctorDetailsResponse getDetailDoctor(long doctorId);
 
     void resetPassword(long doctorId);
 

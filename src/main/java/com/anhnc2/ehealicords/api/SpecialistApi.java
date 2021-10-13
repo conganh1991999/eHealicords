@@ -7,7 +7,7 @@ import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
-import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
@@ -77,7 +77,7 @@ public class SpecialistApi {
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("/branch/specialty/all")
-    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@RequestParam("branchId") Integer branchId,
+    public HttpResponse<List<LiteStaff>> getSpecialistInSpecialty(@RequestParam("branchId") Integer branchId,
                                                                @RequestParam("specialtyId") Integer specialtyId) {
         return HttpResponseImpl
                 .success(specialistService.getAllSpecialistsOfSpecialty(branchId, specialtyId));
@@ -85,7 +85,7 @@ public class SpecialistApi {
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("/{id}")
-    public HttpResponse<Staff> getSpecialistInformation(@PathVariable Long id) {
+    public HttpResponse<SpecialistDetailsResponse> getSpecialistInformation(@PathVariable Long id) {
         return HttpResponseImpl.success(specialistService.getSpecialist(id));
     }
 
@@ -142,11 +142,6 @@ public class SpecialistApi {
 
         return HttpResponseImpl.success(
                 specialistService.getAllDoctorOfBranch(branchId, page, pageSize));
-    }
-
-    @GetMapping("/doctors/{id}")
-    public HttpResponse<DoctorDetailsResponse> getDoctor(@PathVariable("id") Long doctorId) {
-        return HttpResponseImpl.success(specialistService.getDetailDoctor(doctorId));
     }
 
     @PostMapping("/doctors/{id}/reset-password")

@@ -1,34 +1,26 @@
 package com.anhnc2.ehealicords.service.specialist;
 
-import com.anhnc2.ehealicords.constant.AcademicRank;
-import com.anhnc2.ehealicords.constant.Degree;
-import com.anhnc2.ehealicords.constant.Gender;
-import com.anhnc2.ehealicords.constant.RoleType;
-import com.anhnc2.ehealicords.constant.SpecialistDegree;
-import com.anhnc2.ehealicords.constant.SpecialistType;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.constant.UserStatus;
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.common.Staff;
-import com.anhnc2.ehealicords.data.entity.BranchEntity;
-import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
-import com.anhnc2.ehealicords.data.response.DoctorDetailsResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.RegisterException;
+import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
-import com.anhnc2.ehealicords.repository.RoleRepository;
+import com.anhnc2.ehealicords.repository.RoomRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
 import com.anhnc2.ehealicords.repository.StaffRepository;
-import com.anhnc2.ehealicords.service.clinic.BranchService;
 import com.anhnc2.ehealicords.service.common.AppUserService;
 import com.anhnc2.ehealicords.service.external.MailService;
 import com.anhnc2.ehealicords.service.external.StorageService;
@@ -37,11 +29,7 @@ import com.anhnc2.ehealicords.util.FileUtil;
 import com.anhnc2.ehealicords.util.PasswordGenerator;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,14 +46,19 @@ public class SpecialistServiceImpl implements SpecialistService {
     private static final String SPECIALIST_KEY_PREFIX = "specialists";
     private static final String AVATAR = "avatar";
 
+    private final AppUserService userService;
     private final StaffService staffService;
+
     private final StorageService storageService;
     private final MailService mailService;
-    private final AppUserService userService;
-    private final SpecialistRepository specialistRepository;
-    private final PasswordEncoder passwordEncoder;
+
     private final StaffRepository staffRepository;
     private final MedicalSpecialtyRepository medicalSpecialtyRepository;
+    private final BranchRepository branchRepository;
+    private final RoomRepository roomRepository;
+    private final SpecialistRepository specialistRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -150,13 +143,36 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public Staff getSpecialist(Long id) {
-        return Staff.fromDAO(
+    public SpecialistDetailsResponse getSpecialist(Long id) {
+        SpecialistEntity specialist =
                 specialistRepository
                         .findById(id)
-                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS))
-        );
+                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
+
+        return SpecialistDetailsResponse.builder()
+                .id(specialist.getId())
+                .email(specialist.getEmail())
+                .fullName(specialist.getFullName())
+                .phoneNumber(specialist.getPhoneNumber())
+                .avatarKey(specialist.getAvatarKey())
+                .dateOfBirth(specialist.getDateOfBirth())
+                .dateOfStartingWork(specialist.getDateOfStartingWork())
+                .gender(specialist.getGender())
+                .specialistType(specialist.getSpecialistType())
+                .academicRank(specialist.getAcademicRank())
+                .degree(specialist.getDegree())
+                .degreeOfSpecialist(specialist.getDegreeOfSpecialist())
+                .medicalSpecialtyId(specialist.getMedialSpecialtyId())
+                .medicalSpecialtyName(medicalSpecialtyRepository.getById(specialist.getMedialSpecialtyId()).getName())
+                .branchId(specialist.getBranchId())
+                .branchName(branchRepository.getById(specialist.getBranchId()).getName())
+                .roomId(specialist.getRoomId())
+                .roomName(roomRepository.getById(specialist.getRoomId()).getName())
+                .createdTime(specialist.getCreatedTime())
+                .updatedTime(specialist.getUpdatedTime())
+                .build();
     }
+
 
     @Override
     public PresignResult getAvatarUpdateUrl(String fileName) {
@@ -237,27 +253,6 @@ public class SpecialistServiceImpl implements SpecialistService {
                 .total(doctors.getTotalElements())
                 .totalPage(doctors.getTotalPages())
                 .items(result)
-                .build();
-    }
-
-    @Override
-    public DoctorDetailsResponse getDetailDoctor(long doctorId) {
-        SpecialistEntity specialist = specialistRepository.findById(doctorId).get();
-        StaffEntity staff = staffRepository.findById(specialist.getStaffId()).get();
-
-        return DoctorDetailsResponse.builder()
-                .id(specialist.getId())
-                .fullName(specialist.getFullName())
-                .email(staff.getEmail())
-                .degree(specialist.getDegreeOfSpecialist())
-                .academicRank(specialist.getAcademicRank())
-                .avatarKey(specialist.getAvatarKey())
-                .phoneNumber(specialist.getPhoneNumber())
-                .gender(specialist.getGender())
-                .specialtyId(specialist.getMedialSpecialtyId())
-                .specialtyName(getSpecialtyName(specialist))
-                .branchId(specialist.getBranchId())
-                .branchName(staff.getBranchEntity().getName())
                 .build();
     }
 
