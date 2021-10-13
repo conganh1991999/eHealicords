@@ -7,9 +7,8 @@ import com.anhnc2.ehealicords.data.auth.AuthUser;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
-import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
-import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
+import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.StaffCreationRequest;
@@ -25,7 +24,6 @@ import com.anhnc2.ehealicords.repository.StaffRepository;
 import com.anhnc2.ehealicords.service.common.AppUserService;
 import com.anhnc2.ehealicords.service.common.JwtService;
 import com.anhnc2.ehealicords.service.external.MailService;
-import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,11 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -83,36 +77,35 @@ public class StaffServiceImpl implements StaffService {
                         .findByEmail(request.getEmail())
                         .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
 
-        ChangeLoginInfoRequest changeLoginInfoRequest =
-                ChangeLoginInfoRequest
-                        .builder()
+        PasswordUpdateRequest updateRequest =
+                PasswordUpdateRequest.builder()
                         .newPassword(request.getNewPassword())
                         .oldPassword(request.getOldPassword())
                         .build();
 
-        changePassword(changeLoginInfoRequest, staff);
+        updatePassword(updateRequest, staff);
     }
 
     @Override
-    public void updateLoginInformation(ChangeLoginInfoRequest request) {
+    public void updateStaffPassword(PasswordUpdateRequest request) {
         StaffEntity staff =
                 staffRepository
                         .findById(appUserService.getCurrentUserId())
                         .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
 
-        changePassword(request, staff);
+        updatePassword(request, staff);
     }
 
-    private void changePassword(ChangeLoginInfoRequest loginInfo, StaffEntity staff) {
-        if (!passwordEncoder.matches(loginInfo.getOldPassword(), staff.getPassword())) {
+    private void updatePassword(PasswordUpdateRequest updateRequest, StaffEntity staff) {
+        if (!passwordEncoder.matches(updateRequest.getOldPassword(), staff.getPassword())) {
             throw new PasswordNotMatchException();
         }
 
-        if (passwordEncoder.matches(loginInfo.getNewPassword(), staff.getPassword())) {
+        if (passwordEncoder.matches(updateRequest.getNewPassword(), staff.getPassword())) {
             throw new TheSameOldPasswordException();
         }
 
-        staff.setPassword(passwordEncoder.encode(loginInfo.getNewPassword()));
+        staff.setPassword(passwordEncoder.encode(updateRequest.getNewPassword()));
         staff.setStatus(UserStatus.ACTIVE);
         staffRepository.saveAndFlush(staff);
     }
@@ -151,6 +144,36 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public StaffEntity getStaffById(Long id) {
+        return staffRepository.getById(id);
+    }
+
+//    @Override
+//    public void update(long staffId, SaveSubAdminRequest request) {
+//        StaffEntity staff = staffRepository.findById(staffId).get();
+//
+//        List<RoleType> roles = staff.getRoleEntities().stream()
+//                .map(RoleEntity::getType)
+//                .collect(Collectors.toList());
+//
+//        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
+//            return;
+//        }
+//
+//        staff.setFullName(request.getFullName());
+//
+//        if(!request.getEmail().equals(staff.getEmail())){
+//            String password = PasswordGenerator.random();
+//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+//            staff.setPassword(passwordEncoder.encode(password));
+//
+//            createStaffForSubAdmin(request, password);
+//        }
+//
+//        staffRepository.saveAndFlush(staff);
+//    }
+
+    @Override
     public void updateStaff(Long staffId, String fullName, Integer branchId) {
         StaffEntity currentStaff = getStaffById(staffId);
         BranchEntity branch = branchRepository
@@ -163,21 +186,18 @@ public class StaffServiceImpl implements StaffService {
         staffRepository.save(currentStaff);
     }
 
-    @Override
-    public void updatePassword(Long staffId, PasswordUpdateRequest request) {
-        if (!request.getPassword().equals(request.getRePassword())) {
-            throw new AppException(StatusCode.PASSWORD_DOES_NOT_MATCH);
-        }
-        StaffEntity currentStaff = getStaffById(staffId);
-        currentStaff.setPassword(passwordEncoder.encode(request.getPassword()));
-        staffRepository.save(currentStaff);
-    }
-
-    @Override
-    public StaffEntity getStaffById(Long id) {
-        return staffRepository.findById(id).get();
-    }
-
+//    @Override
+//    public void resetPasswordByEmail(String email) {
+//        StaffEntity staff = staffRepository.findByEmail(email).get();
+//        String password = PasswordGenerator.random();
+//        String encodedPassword = passwordEncoder.encode(password);
+//        staff.setPassword(encodedPassword);
+//        staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+//
+//        staffRepository.saveAndFlush(staff);
+//        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
+//    }
+//
 //    @Override
 //    public void deactivate(long staffId) {
 //        StaffEntity staff = staffRepository.findById(staffId).get();
@@ -210,43 +230,6 @@ public class StaffServiceImpl implements StaffService {
 //
 //            notifyActivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName(), password);
 //        }
-//    }
-//
-//    @Override
-//    public void resetPasswordByEmail(String email) {
-//        StaffEntity staff = staffRepository.findByEmail(email).get();
-//        String password = PasswordGenerator.random();
-//        String encodedPassword = passwordEncoder.encode(password);
-//        staff.setPassword(encodedPassword);
-//        staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-//
-//        staffRepository.saveAndFlush(staff);
-//        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
-//    }
-//
-//    @Override
-//    public void update(long staffId, SaveSubAdminRequest request) {
-//        StaffEntity staff = staffRepository.findById(staffId).get();
-//
-//        List<RoleType> roles = staff.getRoleEntities().stream()
-//                .map(RoleEntity::getType)
-//                .collect(Collectors.toList());
-//
-//        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-//            return;
-//        }
-//
-//        staff.setFullName(request.getFullName());
-//
-//        if(!request.getEmail().equals(staff.getEmail())){
-//            String password = PasswordGenerator.random();
-//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-//            staff.setPassword(passwordEncoder.encode(password));
-//
-//            createStaffForSubAdmin(request, password);
-//        }
-//
-//        staffRepository.saveAndFlush(staff);
 //    }
 //
 //    private void notifyActivateToSubAdminOverEmail(String to, String fullName, String password) {

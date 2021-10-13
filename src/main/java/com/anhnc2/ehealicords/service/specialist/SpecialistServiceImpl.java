@@ -173,6 +173,29 @@ public class SpecialistServiceImpl implements SpecialistService {
                 .build();
     }
 
+    @Override
+    public void changeSpecialistPassword(PasswordUpdateRequest request) {
+        staffService.updateStaffPassword(request);
+    }
+
+//    @Override
+//    public void updateSpecialistInfo(SpecialistInfoRequest specialist) {
+//        long staffId = userService.getCurrentUserId();
+//
+//        SpecialistEntity currentSpecialist = getByStaffId(staffId);
+//
+//        staffService.updateStaff(staffId, specialist.getFullName(), specialist.getBranchId());
+//
+//        currentSpecialist.setFullName(specialist.getFullName());
+//        currentSpecialist.setPhoneNumber(specialist.getPhoneNumber());
+//        currentSpecialist.setGender(specialist.getGender());
+//        currentSpecialist.setAcademicRank(specialist.getAcademicRank());
+//        currentSpecialist.setDegreeOfSpecialist(specialist.getDegreeOfSpecialist());
+//        currentSpecialist.setMedialSpecialtyId(specialist.getSpecialtyId());
+//        currentSpecialist.setBranchId(specialist.getBranchId());
+//
+//        specialistRepository.save(currentSpecialist);
+//    }
 
     @Override
     public PresignResult getAvatarUpdateUrl(String fileName) {
@@ -200,11 +223,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public void updatePassword(PasswordUpdateRequest request) {
-        staffService.updatePassword(userService.getCurrentUserId(), request);
-    }
-
-    @Override
     public void deleteSpecialist() {
         // DELETE staff
         // DELETE avatar
@@ -214,11 +232,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     @Override
     public SpecialistEntity getByStaffId(long id) {
         return specialistRepository.findByStaffId(id);
-    }
-
-    @Override
-    public SpecialistEntity getBySpecialistId(long specialistId) {
-        return specialistRepository.findById(specialistId).get();
     }
 
     @Override
@@ -258,20 +271,6 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     @Transactional
-    public void resetPassword(long doctorId) {
-        SpecialistEntity specialist = specialistRepository.findById(doctorId).get();
-        StaffEntity staff = staffRepository.findById(specialist.getStaffId()).get();
-        String password = PasswordGenerator.random();
-        String encodedPassword = passwordEncoder.encode(password);
-        staff.setPassword(encodedPassword);
-        staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-
-        staffRepository.saveAndFlush(staff);
-        // notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
-    }
-
-    @Override
-    @Transactional
     public void updateDoctor(long doctorId, UpdateDoctorRequest updateDoctorRequest) {
         SpecialistEntity specialist = specialistRepository.findById(doctorId).get();
         StaffEntity staff = staffRepository.findById(specialist.getStaffId()).get();
@@ -295,7 +294,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         staffRepository.saveAndFlush(staff);
 
         if (!oldEmail.equals(updateDoctorRequest.getEmail())) {
-            resetPassword(specialist.getId());
+            // resetPassword(specialist.getId());
         }
     }
 
@@ -304,23 +303,19 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
 //    @Override
-//    public void updateSpecialistInfo(SpecialistInfoRequest specialist) {
-//        long staffId = userService.getCurrentUserId();
+//    @Transactional
+//    public void resetPassword(long doctorId) {
+//        SpecialistEntity specialist = specialistRepository.findById(doctorId).get();
+//        StaffEntity staff = staffRepository.findById(specialist.getStaffId()).get();
+//        String password = PasswordGenerator.random();
+//        String encodedPassword = passwordEncoder.encode(password);
+//        staff.setPassword(encodedPassword);
+//        staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
 //
-//        SpecialistEntity currentSpecialist = getByStaffId(staffId);
-//
-//        staffService.updateStaff(staffId, specialist.getFullName(), specialist.getBranchId());
-//
-//        currentSpecialist.setFullName(specialist.getFullName());
-//        currentSpecialist.setPhoneNumber(specialist.getPhoneNumber());
-//        currentSpecialist.setGender(specialist.getGender());
-//        currentSpecialist.setAcademicRank(specialist.getAcademicRank());
-//        currentSpecialist.setDegreeOfSpecialist(specialist.getDegreeOfSpecialist());
-//        currentSpecialist.setMedialSpecialtyId(specialist.getSpecialtyId());
-//        currentSpecialist.setBranchId(specialist.getBranchId());
-//
-//        specialistRepository.save(currentSpecialist);
+//        staffRepository.saveAndFlush(staff);
+//        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
 //    }
+//
 //    private void sendSuccessEmailToSpecialist(
 //            StaffEntity createdStaff, SpecialistEntity createdSpecialist) {
 //        String to = createdStaff.getEmail();

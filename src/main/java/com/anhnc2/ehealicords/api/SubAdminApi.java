@@ -1,21 +1,16 @@
 package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
-import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
-import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
+import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
-import com.anhnc2.ehealicords.service.common.AppUserService;
-import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.service.subadmin.SubAdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +33,7 @@ public class SubAdminApi {
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    public HttpResponse<Object> changeSubAdminPassword(@Valid @RequestBody ChangeLoginInfoRequest request) {
+    public HttpResponse<Object> changeSubAdminPassword(@Valid @RequestBody PasswordUpdateRequest request) {
         subAdminService.changeSubAdminPassword(request);
         return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
     }

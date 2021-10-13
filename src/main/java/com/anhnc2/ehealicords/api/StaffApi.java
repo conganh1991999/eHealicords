@@ -1,9 +1,7 @@
 package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
-import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
-import com.anhnc2.ehealicords.data.request.ForgetPasswordRequest;
 import com.anhnc2.ehealicords.data.request.LoginRequest;
 import com.anhnc2.ehealicords.data.response.AuthResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;

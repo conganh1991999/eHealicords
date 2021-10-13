@@ -1,9 +1,8 @@
 package com.anhnc2.ehealicords.service.staff;
 
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
-import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
-import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
+import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 
@@ -12,23 +11,21 @@ public interface StaffService {
 
     void forceChangePassword(ForceChangePasswordRequest request);
 
-    StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest);
+    void updateStaffPassword(PasswordUpdateRequest request);
 
-    void updateLoginInformation(ChangeLoginInfoRequest request);
+    StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest);
 
     StaffEntity createStaffForSpecialist(SpecialistCreationRequest specialistRequest);
 
-    void updateStaff(Long staffId, String fullName, Integer branchId);
-
-    void updatePassword(Long staffId, PasswordUpdateRequest request);
-
     StaffEntity getStaffById(Long id);
 
+    // void update(long staffId, SaveSubAdminRequest request);
+
+    void updateStaff(Long staffId, String fullName, Integer branchId);
+
+//    void resetPasswordByEmail(String email);
+//
 //    void deactivate(long staffId);
 //
 //    void activate(long staffId);
-//
-//    void update(long staffId, SaveSubAdminRequest request);
-//
-//    void resetPasswordByEmail(String email);
 }

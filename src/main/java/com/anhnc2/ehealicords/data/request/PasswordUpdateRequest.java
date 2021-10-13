@@ -1,13 +1,20 @@
 package com.anhnc2.ehealicords.data.request;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Builder
+@Data
 public class PasswordUpdateRequest {
-    private String password;
-    private String rePassword;
+    @Size(min = 6, max = 20, message = "new password must be 6 - 20 characters in length")
+    @NotNull(message = "new password must not be null")
+    @NotBlank(message = "new password must not be blank")
+    String newPassword;
+
+    @NotNull(message = "old password must not be null")
+    @NotBlank(message = "old password must not be blank")
+    String oldPassword;
 }

@@ -1,6 +1,6 @@
 package com.anhnc2.ehealicords.service.subadmin;
 
-import com.anhnc2.ehealicords.data.request.ChangeLoginInfoRequest;
+import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 
@@ -9,7 +9,7 @@ import java.util.List;
 public interface SubAdminService {
     long createSubAdmin(SaveSubAdminRequest request);
 
-    void changeSubAdminPassword(ChangeLoginInfoRequest request);
+    void changeSubAdminPassword(PasswordUpdateRequest request);
 
     List<SubAdminResponse> getAllSubAdmin();
 

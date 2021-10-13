@@ -2,17 +2,16 @@ package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.PresignResult;
-import com.anhnc2.ehealicords.data.common.Staff;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
-import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
-import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
@@ -78,9 +77,20 @@ public class SpecialistApi {
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("/branch/specialty/all")
     public HttpResponse<List<LiteStaff>> getSpecialistInSpecialty(@RequestParam("branchId") Integer branchId,
-                                                               @RequestParam("specialtyId") Integer specialtyId) {
+                                                                  @RequestParam("specialtyId") Integer specialtyId) {
         return HttpResponseImpl
                 .success(specialistService.getAllSpecialistsOfSpecialty(branchId, specialtyId));
+    }
+
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @GetMapping("/all-doctor")
+    public HttpResponse<PaginationResponse<List<DoctorResponse>>> getAllDoctors(
+            @RequestParam("branchId") Integer branchId,
+            @RequestParam("page") Integer page,
+            @RequestParam("pageSize") Integer pageSize) {
+
+        return HttpResponseImpl.success(
+                specialistService.getAllDoctorOfBranch(branchId, page, pageSize));
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
@@ -95,16 +105,11 @@ public class SpecialistApi {
 //        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
 //    }
 
-    @PostMapping("/delete")
-    public HttpResponse<Object> deleteSpecialist() {
-        specialistService.deleteSpecialist();
-        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
-    }
-
-    @PostMapping("/password/update")
-    public HttpResponse<Object> updateSpecialistPassword(@RequestBody PasswordUpdateRequest request) {
-        specialistService.updatePassword(request);
-        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
+    @PutMapping("/doctors/{id}")
+    public HttpResponse<Object> updateDoctorInfo(
+            @PathVariable("id") Long doctorId, @RequestBody UpdateDoctorRequest request) {
+        specialistService.updateDoctor(doctorId, request);
+        return HttpResponseImpl.success("OK");
     }
 
     @PostMapping("/avatar/update/presign")
@@ -134,26 +139,17 @@ public class SpecialistApi {
                 .build();
     }
 
-    @GetMapping("/all-doctor")
-    public HttpResponse<PaginationResponse<List<DoctorResponse>>> getAllDoctors(
-            @RequestParam("branchId") Integer branchId,
-            @RequestParam("page") Integer page,
-            @RequestParam("pageSize") Integer pageSize) {
-
-        return HttpResponseImpl.success(
-                specialistService.getAllDoctorOfBranch(branchId, page, pageSize));
+    @PreAuthorize("hasRole('DOCTOR')")
+    @PostMapping("/password/update")
+    public HttpResponse<Object> changeSpecialistPassword(@RequestBody PasswordUpdateRequest request) {
+        specialistService.changeSpecialistPassword(request);
+        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 
-    @PostMapping("/doctors/{id}/reset-password")
-    public HttpResponse<Object> resetPassword(@PathVariable("id") Long doctorId) {
-        specialistService.resetPassword(doctorId);
-        return HttpResponseImpl.success("OK");
+    @PostMapping("/delete")
+    public HttpResponse<Object> deleteSpecialist() {
+        specialistService.deleteSpecialist();
+        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 
-    @PutMapping("/doctors/{id}")
-    public HttpResponse<Object> updateDoctorInfo(
-            @PathVariable("id") Long doctorId, @RequestBody UpdateDoctorRequest request) {
-        specialistService.updateDoctor(doctorId, request);
-        return HttpResponseImpl.success("OK");
-    }
 }
