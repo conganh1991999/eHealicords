@@ -3,9 +3,9 @@ package com.anhnc2.ehealicords.api;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
+import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
-import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
@@ -99,17 +99,18 @@ public class SpecialistApi {
         return HttpResponseImpl.success(specialistService.getSpecialist(id));
     }
 
-//    @PostMapping("/update")
-//    public HttpResponse<Object> updateSpecialistInfo(@RequestBody SpecialistInfoRequest specialist) {
-//        specialistService.updateSpecialistInfo(specialist);
-//        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
-//    }
-
-    @PutMapping("/doctors/{id}")
-    public HttpResponse<Object> updateDoctorInfo(
-            @PathVariable("id") Long doctorId, @RequestBody UpdateDoctorRequest request) {
-        specialistService.updateDoctor(doctorId, request);
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PutMapping("/update/{id}")
+    public HttpResponse<Object> updateSpecialistInformation(@PathVariable("id") Long specialistId,
+                                                            @RequestBody SpecialistUpdateRequest request) {
+        specialistService.updateSpecialistInformation(specialistId, request);
         return HttpResponseImpl.success("OK");
+    }
+
+    @PutMapping("/avatar/update")
+    public HttpResponse<Object> updateAvatar(@RequestParam("key") String key) {
+        specialistService.updateAvatar(key);
+        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 
     @PostMapping("/avatar/update/presign")
@@ -120,12 +121,6 @@ public class SpecialistApi {
                 .code(StatusCode.SUCCESS)
                 .data(presignResult)
                 .build();
-    }
-
-    @PutMapping("/avatar/update")
-    public HttpResponse<Object> updateAvatar(@RequestParam("key") String key) {
-        specialistService.updateAvatar(key);
-        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
     }
 
     @GetMapping("/avatar/presign")

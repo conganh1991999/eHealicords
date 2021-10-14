@@ -5,4 +5,8 @@
 {
     "email": "trancaovan1999@gmail.com",
     "password": "vantran123456"
+},
+{
+    "email": "anhnc2@yds.com.vn",
+    "password": "anhncyds123"
 }

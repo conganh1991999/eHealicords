@@ -111,6 +111,17 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public void resetPassword(StaffEntity staff) {
+        String password = PasswordGenerator.random();
+        String encodedPassword = passwordEncoder.encode(password);
+        staff.setPassword(encodedPassword);
+        staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+
+        staffRepository.saveAndFlush(staff);
+        // notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
+    }
+
+    @Override
     public StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest) {
         Set<RoleEntity> roleEntities =
                 roleRepository.findAllIn(Collections.singletonList(RoleType.ROLE_SUB_ADMIN.name()));
@@ -230,6 +241,16 @@ public class StaffServiceImpl implements StaffService {
 //
 //            notifyActivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName(), password);
 //        }
+//    }
+//
+//    private void notifyResetPasswordToDoctorOverEmail(String to, String name, String password) {
+//        String subject = "HeyDoctor: Đặt Mật Khẩu Tài Khoản Bác Sĩ Thành Công!";
+//        Map<String, Object> params = new HashMap<>();
+//
+//        params.put("doctorName", name);
+//        params.put("email", to);
+//        params.put("password", password);
+//        mailService.sendEmail(to, subject, "doctor-reset-password", params);
 //    }
 //
 //    private void notifyActivateToSubAdminOverEmail(String to, String fullName, String password) {

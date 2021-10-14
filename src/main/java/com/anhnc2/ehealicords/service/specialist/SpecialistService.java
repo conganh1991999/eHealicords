@@ -2,14 +2,13 @@ package com.anhnc2.ehealicords.service.specialist;
 
 import com.anhnc2.ehealicords.data.common.PresignResult;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
-import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
+import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
-
-import com.anhnc2.ehealicords.data.request.UpdateDoctorRequest;
-import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
+import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +29,8 @@ public interface SpecialistService {
 
     void deleteSpecialist(Long specialistId);
 
+    void updateSpecialistInformation(Long specialistId, SpecialistUpdateRequest updateRequest);
+
     PresignResult getAvatarUpdateUrl(String fileName);
 
     void updateAvatar(String key);
@@ -40,8 +41,5 @@ public interface SpecialistService {
 
     PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(int branchId, int page, int pageSize);
 
-    void  updateDoctor(long doctorId, UpdateDoctorRequest updateDoctorRequest);
-
     // void resetPassword(long doctorId);
-    // void updateSpecialistInfo(SpecialistInfoRequest specialist);
 }

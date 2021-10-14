@@ -13,6 +13,8 @@ public interface StaffService {
 
     void updateStaffPassword(PasswordUpdateRequest request);
 
+    void resetPassword(StaffEntity staff);
+
     StaffEntity createStaffForSubAdmin(SaveSubAdminRequest subAdminRequest);
 
     StaffEntity createStaffForSpecialist(SpecialistCreationRequest specialistRequest);
