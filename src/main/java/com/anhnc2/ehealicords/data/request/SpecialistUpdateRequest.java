@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class UpdateDoctorRequest {
+public class DoctorUpdateRequest {
     AcademicRank academicRank;
     String avatarKey;
     SpecialistDegree degree;
