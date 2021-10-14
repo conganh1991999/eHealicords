@@ -27,7 +27,6 @@ import com.anhnc2.ehealicords.util.FileUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,8 +54,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     private final BranchRepository branchRepository;
     private final RoomRepository roomRepository;
     private final SpecialistRepository specialistRepository;
-
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -130,6 +127,35 @@ public class SpecialistServiceImpl implements SpecialistService {
     public List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId) {
         List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
         return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(
+            int branchId, int page, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
+        List<DoctorResponse> result =
+                doctors.getContent().stream()
+                        .map(
+                                specialist ->
+                                        DoctorResponse.builder()
+                                                .id(specialist.getId())
+                                                .fullName(specialist.getFullName())
+                                                .specialty(getSpecialtyName(specialist))
+                                                .build())
+                        .collect(Collectors.toList());
+
+        return PaginationResponse.<List<DoctorResponse>>builder()
+                .page(page)
+                .pageSize(pageSize)
+                .total(doctors.getTotalElements())
+                .totalPage(doctors.getTotalPages())
+                .items(result)
+                .build();
+    }
+
+    private String getSpecialtyName(SpecialistEntity specialist) {
+        return medicalSpecialtyRepository.findById(specialist.getMedialSpecialtyId()).get().getName();
     }
 
     @Override
@@ -217,19 +243,31 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
+    public PresignResult getPresignUrl(String filename, String filetype) {
+        String key = String.join("/", SPECIALIST_KEY_PREFIX, AVATAR, filename);
+
+        return PresignResult.builder()
+                .key(key)
+                .presignUrl(storageService.preSignWithType(key, filetype))
+                .build();
+    }
+
+    @Override
     public PresignResult getAvatarUpdateUrl(String fileName) {
-        SpecialistEntity specialist = getByStaffId(userService.getCurrentUserId());
+        SpecialistEntity specialist
+                = specialistRepository.findByStaffId(userService.getCurrentUserId());
 
         String key =
                 String.join(
-                        "/", SPECIALIST_KEY_PREFIX, String.valueOf(specialist.getId()), "avatar", fileName);
+                        "/", SPECIALIST_KEY_PREFIX, String.valueOf(specialist.getId()), AVATAR, fileName);
 
         return PresignResult.builder().key(key).presignUrl(storageService.preSign(key)).build();
     }
 
     @Override
     public void updateAvatar(String key) {
-        SpecialistEntity specialist = getByStaffId(userService.getCurrentUserId());
+        SpecialistEntity specialist
+                = specialistRepository.findByStaffId(userService.getCurrentUserId());
 
         String avatarKey = specialist.getAvatarKey();
 
@@ -239,50 +277,6 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         specialist.setAvatarKey(key);
         specialistRepository.save(specialist);
-    }
-
-    @Override
-    public SpecialistEntity getByStaffId(long id) {
-        return specialistRepository.findByStaffId(id);
-    }
-
-    @Override
-    public PresignResult getPresignUrl(String filename, String filetype) {
-        String key = String.join("/", SPECIALIST_KEY_PREFIX, "avatar", filename);
-
-        return PresignResult.builder()
-                .key(key)
-                .presignUrl(storageService.preSignWithType(key, filetype))
-                .build();
-    }
-
-    @Override
-    public PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(
-            int branchId, int page, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
-        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
-        List<DoctorResponse> result =
-                doctors.getContent().stream()
-                        .map(
-                                specialist ->
-                                        DoctorResponse.builder()
-                                                .id(specialist.getId())
-                                                .fullName(specialist.getFullName())
-                                                .specialty(getSpecialtyName(specialist))
-                                                .build())
-                        .collect(Collectors.toList());
-
-        return PaginationResponse.<List<DoctorResponse>>builder()
-                .page(page)
-                .pageSize(pageSize)
-                .total(doctors.getTotalElements())
-                .totalPage(doctors.getTotalPages())
-                .items(result)
-                .build();
-    }
-
-    private String getSpecialtyName(SpecialistEntity specialist) {
-        return medicalSpecialtyRepository.findById(specialist.getMedialSpecialtyId()).get().getName();
     }
 
 //    private void sendSuccessEmailToSpecialist(
