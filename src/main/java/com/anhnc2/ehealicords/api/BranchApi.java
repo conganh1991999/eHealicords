@@ -3,7 +3,6 @@ package com.anhnc2.ehealicords.api;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
-import com.anhnc2.ehealicords.data.request.BranchSettingsAdvance;
 import com.anhnc2.ehealicords.data.response.BranchDetailsResponse;
 import com.anhnc2.ehealicords.data.response.BranchResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
@@ -66,12 +65,12 @@ public class BranchApi {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
     public HttpResponse<BranchDetailsResponse> getBranchById(@PathVariable("id") Integer id) {
-        BranchEntity branchDAO = branchService.getBranchById(id);
+        BranchEntity branch = branchService.getBranchById(id);
+        BranchDetailsResponse branchDetails = new BranchDetailsResponse(branch);
 
-        BranchDetailsResponse branchDetails = new BranchDetailsResponse(branchDAO);
         return HttpResponseImpl.<BranchDetailsResponse>builder()
                 .code(StatusCode.SUCCESS)
-                .message("Get branchEntity successful!")
+                .message("Get branch successfully!")
                 .data(branchDetails)
                 .build();
     }
@@ -86,18 +85,6 @@ public class BranchApi {
         return HttpResponseImpl.builder()
                 .code(StatusCode.SUCCESS)
                 .message("Get update successful!")
-                .build();
-    }
-
-    @PutMapping("/{id}/advance-settings")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
-    public HttpResponse<Object> updateBranchAdvanceSettings(
-            @PathVariable("id") Integer branchId, @RequestBody BranchSettingsAdvance settings) {
-        branchService.updateAdvanceSettings(branchId, settings);
-
-        return HttpResponseImpl.builder()
-                .code(StatusCode.SUCCESS)
-                .message("Update branch advance settings successful!")
                 .build();
     }
 

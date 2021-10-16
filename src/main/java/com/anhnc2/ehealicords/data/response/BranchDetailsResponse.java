@@ -14,35 +14,24 @@ public class BranchDetailsResponse {
     public BranchDetailsResponse(BranchEntity branchEntity) {
         this.id = branchEntity.getId();
         this.name = branchEntity.getName();
+        this.email = branchEntity.getEmail();
+        this.phoneNumber = branchEntity.getPhoneNumber();
+        this.status = branchEntity.getStatus();
+        this.address = branchEntity.getAddress();
         this.province = branchEntity.getProvinceEntity().toBuilder().build();
         this.district = branchEntity.getDistrictEntity().toBuilder().build();
         this.ward = branchEntity.getWardEntity().toBuilder().build();
-        this.businessHour = branchEntity.getBusinessHoursEntity().toBuilder().build();
-        this.address = branchEntity.getAddress();
-        this.status = branchEntity.getStatus();
+        this.businessHours = branchEntity.getBusinessHoursEntity().toBuilder().build();
     }
 
     private Integer id;
-
     private String name;
-
-    private ProvinceEntity province;
-
-    private DistrictEntity district;
-
-    private WardEntity ward;
-
-    BranchStatus status;
-
+    private String email;
+    private String phoneNumber;
+    private BranchStatus status;
     private String address;
-
-    BusinessHoursEntity businessHour;
-
-    Integer minutePerShift;
-
-    Integer minuteDeposit;
-
-    Long feeAppointment;
-
-    Long feeConsulting;
+    private ProvinceEntity province;
+    private DistrictEntity district;
+    private WardEntity ward;
+    private BusinessHoursEntity businessHours;
 }

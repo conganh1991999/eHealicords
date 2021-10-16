@@ -5,7 +5,6 @@ import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.BusinessHoursEntity;
 import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
-import com.anhnc2.ehealicords.data.request.BranchSettingsAdvance;
 import com.anhnc2.ehealicords.exception.BranchException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.BusinessHoursRepository;
@@ -72,10 +71,10 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public BranchEntity getBranchById(int id) {
+    public BranchEntity getBranchById(Integer id) {
         return branchRepository
                 .findById(id)
-                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_NOT_EXISTED));
+                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
     }
 
     @Override
@@ -85,7 +84,7 @@ public class BranchServiceImpl implements BranchService {
         BranchEntity branchDAOCurrent =
                 branchRepository
                         .findById(branch.getId())
-                        .orElseThrow(() -> new BranchException(StatusCode.BRANCH_NOT_EXISTED));
+                        .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
 
         BusinessHoursEntity businessHourOfBranch = branchDAOCurrent.getBusinessHoursEntity();
 
@@ -112,20 +111,4 @@ public class BranchServiceImpl implements BranchService {
         branchRepository.saveAndFlush(branchDAOCurrent);
     }
 
-    @Override
-    public int getMinutePerShiftByBranchId(int branchId) {
-        return 0;
-    }
-
-    @Override
-    public int getMinuteDepositByBranchId(int branchId) {
-        return 0;
-    }
-
-    @Override
-    public void updateAdvanceSettings(int branchId, BranchSettingsAdvance settings) {
-        BranchEntity branchDAO = branchRepository.findById(branchId).get();
-
-        branchRepository.saveAndFlush(branchDAO);
-    }
 }

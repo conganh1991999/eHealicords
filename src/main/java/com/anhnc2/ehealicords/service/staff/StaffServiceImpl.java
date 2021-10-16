@@ -189,7 +189,7 @@ public class StaffServiceImpl implements StaffService {
         StaffEntity currentStaff = getStaffById(staffId);
         BranchEntity branch = branchRepository
                 .findById(branchId)
-                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_NOT_EXISTED));
+                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
 
         currentStaff.setFullName(fullName);
         currentStaff.setBranchEntity(branch);
