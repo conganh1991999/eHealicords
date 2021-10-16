@@ -30,3 +30,6 @@ INSERT INTO medical_specialty VALUES(null, 'Nội Tiêu hóa – Gan Mật', nul
 
 INSERT INTO district
 VALUES(null, '10', 'Quận', 1);
+
+INSERT INTO district
+VALUES(null, 'Bình thạnh', 'Quận', 1);

@@ -79,36 +79,38 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     @Transactional
-    public void updateBranch(BranchCreationRequest branch) {
-        LOGGER.debug("Update BranchEntity: {}", branch);
-        BranchEntity branchDAOCurrent =
+    public void updateBranch(BranchCreationRequest branchRequest) {
+        BranchEntity current =
                 branchRepository
-                        .findById(branch.getId())
+                        .findById(branchRequest.getId())
                         .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
 
-        BusinessHoursEntity businessHourOfBranch = branchDAOCurrent.getBusinessHoursEntity();
+        BusinessHoursEntity businessHoursOfBranch = current.getBusinessHoursEntity();
 
         // Update branch information
-        branchDAOCurrent.setName(branch.getName());
-        branchDAOCurrent.setProvinceId(branch.getProvinceId());
-        branchDAOCurrent.setDistrictId(branch.getDistrictId());
-        branchDAOCurrent.setWardId(branch.getWardId());
-        branchDAOCurrent.setAddress(branch.getAddress());
-        branchDAOCurrent.setFullAddress(branch.getFullAddress());
+        current.setName(branchRequest.getName());
+        current.setEmail(branchRequest.getEmail());
+        current.setPhoneNumber(branchRequest.getPhoneNumber());
+        current.setAddress(branchRequest.getAddress());
+        current.setProvinceId(branchRequest.getProvinceId());
+        current.setDistrictId(branchRequest.getDistrictId());
+        current.setWardId(branchRequest.getWardId());
+        current.setFullAddress(branchRequest.getFullAddress());
 
         // Update business hours
-        businessHourOfBranch.setMorningOpen(branch.getMorningOpen());
-        businessHourOfBranch.setMorningClose(branch.getMorningClose());
-        businessHourOfBranch.setAfternoonOpen(branch.getAfternoonOpen());
-        businessHourOfBranch.setAfternoonClose(branch.getAfternoonClose());
-        businessHourOfBranch.setEveningOpen(branch.getEveningOpen());
-        businessHourOfBranch.setEveningClose(branch.getEveningClose());
-        businessHourOfBranch.setDays(
-                branch.getDays().stream()
-                        .map(i -> DayOfWeek.of(i).name())
-                        .collect(Collectors.joining(",")));
+        businessHoursOfBranch.setMorningOpen(branchRequest.getMorningOpen());
+        businessHoursOfBranch.setMorningClose(branchRequest.getMorningClose());
+        businessHoursOfBranch.setAfternoonOpen(branchRequest.getAfternoonOpen());
+        businessHoursOfBranch.setAfternoonClose(branchRequest.getAfternoonClose());
+        businessHoursOfBranch.setEveningOpen(branchRequest.getEveningOpen());
+        businessHoursOfBranch.setEveningClose(branchRequest.getEveningClose());
+        businessHoursOfBranch.setDays(
+                branchRequest.getDays().stream()
+                        .map(day -> DayOfWeek.of(day).name())
+                        .collect(Collectors.joining(","))
+        );
 
-        branchRepository.saveAndFlush(branchDAOCurrent);
+        branchRepository.saveAndFlush(current);
     }
 
 }

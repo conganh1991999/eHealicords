@@ -77,14 +77,14 @@ public class BranchApi {
 
     @PutMapping("/{id}/update")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
-    public HttpResponse<Object> updateBranch(
-            @PathVariable("id") Integer id, @RequestBody BranchCreationRequest branch) {
-        branch.setId(id);
-        branchService.updateBranch(branch);
+    public HttpResponse<Object> updateBranch(@PathVariable("id") Integer id,
+                                             @RequestBody BranchCreationRequest request) {
+        request.setId(id);
+        branchService.updateBranch(request);
         // cacheService.clearCache("branches");
         return HttpResponseImpl.builder()
                 .code(StatusCode.SUCCESS)
-                .message("Get update successful!")
+                .message("Update branch successfully!")
                 .build();
     }
 

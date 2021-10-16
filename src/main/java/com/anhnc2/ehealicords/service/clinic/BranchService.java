@@ -12,5 +12,5 @@ public interface BranchService {
 
     BranchEntity getBranchById(Integer id);
 
-    void updateBranch(BranchCreationRequest branchDAO);
+    void updateBranch(BranchCreationRequest branchRequest);
 }
