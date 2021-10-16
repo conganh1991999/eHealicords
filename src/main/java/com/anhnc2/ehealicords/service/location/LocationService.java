@@ -10,13 +10,13 @@ import java.util.Optional;
 public interface LocationService {
     List<ProvinceEntity> getProvinces();
 
-    List<DistrictEntity> getDistricts(int provinceId);
+    List<DistrictEntity> getDistricts(Integer provinceId);
 
-    List<WardEntity> getWards(int districtId);
+    List<WardEntity> getWards(Integer districtId);
 
-    Optional<ProvinceEntity> getProvinceById(int id);
+    Optional<ProvinceEntity> getProvinceById(Integer id);
 
-    Optional<DistrictEntity> getDistrictById(int id);
+    Optional<DistrictEntity> getDistrictById(Integer id);
 
-    Optional<WardEntity> getWardById(int id);
+    Optional<WardEntity> getWardById(Integer id);
 }

@@ -15,6 +15,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class LocationServiceImpl implements LocationService {
+
     private final ProvinceRepository provinceRepository;
     private final DistrictRepository districtRepository;
     private final WardRepository wardRepository;
@@ -25,27 +26,27 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<DistrictEntity> getDistricts(int provinceId) {
+    public List<DistrictEntity> getDistricts(Integer provinceId) {
         return districtRepository.findAllByProvinceId(provinceId);
     }
 
     @Override
-    public List<WardEntity> getWards(int districtId) {
+    public List<WardEntity> getWards(Integer districtId) {
         return wardRepository.findAllByDistrictId(districtId);
     }
 
     @Override
-    public Optional<ProvinceEntity> getProvinceById(int id) {
+    public Optional<ProvinceEntity> getProvinceById(Integer id) {
         return provinceRepository.findById(id);
     }
 
     @Override
-    public Optional<DistrictEntity> getDistrictById(int id) {
+    public Optional<DistrictEntity> getDistrictById(Integer id) {
         return districtRepository.findById(id);
     }
 
     @Override
-    public Optional<WardEntity> getWardById(int id) {
+    public Optional<WardEntity> getWardById(Integer id) {
         return wardRepository.findById(id);
     }
 }

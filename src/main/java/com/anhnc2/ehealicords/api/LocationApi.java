@@ -8,7 +8,6 @@ import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.service.location.LocationService;
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +19,11 @@ import java.util.List;
 @RequestMapping("/api/protected/locations")
 @AllArgsConstructor
 public class LocationApi {
+
     private final LocationService locationService;
 
     @GetMapping("/provinces")
-    @Cacheable(cacheNames = "provinces")
+    // @Cacheable(cacheNames = "provinces")
     public HttpResponse<List<ProvinceEntity>> getProvinceList() {
         return HttpResponseImpl.<List<ProvinceEntity>>builder()
                 .code(StatusCode.SUCCESS)
@@ -32,19 +32,19 @@ public class LocationApi {
     }
 
     @GetMapping("/provinces/{provinceId}/districts")
-    @Cacheable(cacheNames = "districts")
-    public HttpResponse<List<DistrictEntity>> getDistrictList(
-            @PathVariable(name = "provinceId") int provinceId) {
+    // @Cacheable(cacheNames = "districts")
+    public HttpResponse<List<DistrictEntity>> getDistrictList(@PathVariable(name = "provinceId") Integer provinceId) {
         return HttpResponseImpl.<List<DistrictEntity>>builder()
+                .code(StatusCode.SUCCESS)
                 .data(locationService.getDistricts(provinceId))
                 .build();
     }
 
     @GetMapping("/districts/{districtId}/wards")
-    @Cacheable("wards")
-    public HttpResponse<List<WardEntity>> getWardList(
-            @PathVariable(name = "districtId") int districtId) {
+    // @Cacheable("wards")
+    public HttpResponse<List<WardEntity>> getWardList(@PathVariable(name = "districtId") Integer districtId) {
         return HttpResponseImpl.<List<WardEntity>>builder()
+                .code(StatusCode.SUCCESS)
                 .data(locationService.getWards(districtId))
                 .build();
     }
