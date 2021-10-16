@@ -53,12 +53,12 @@ public class BranchApi {
     @PreAuthorize("hasRole('ADMIN')")
     // @Cacheable(cacheNames = "branches")
     public HttpResponse<List<BranchResponse>> getAllBranches() {
-        List<BranchResponse> branches =
-                branchService.getAllBranch().stream().map(BranchResponse::new).collect(Collectors.toList());
+        List<BranchResponse> branches
+                = branchService.getAllBranch().stream().map(BranchResponse::new).collect(Collectors.toList());
 
         return HttpResponseImpl.<List<BranchResponse>>builder()
                 .code(StatusCode.SUCCESS)
-                .message("Get all branches successful!")
+                .message("Get all branches successfully!")
                 .data(branches)
                 .build();
     }

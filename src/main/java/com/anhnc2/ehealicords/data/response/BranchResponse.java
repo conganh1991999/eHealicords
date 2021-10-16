@@ -10,13 +10,15 @@ public class BranchResponse {
         this.id = branchEntity.getId();
         this.name = branchEntity.getName();
         this.fullAddress = branchEntity.getFullAddress();
+        this.email = branchEntity.getEmail();
+        this.phoneNumber = branchEntity.getPhoneNumber();
         this.status = branchEntity.getStatus();
     }
 
     private Integer id;
     private String name;
     private String fullAddress;
+    private String email;
+    private String phoneNumber;
     private BranchStatus status;
-    private Long feeAppointment;
-    private Long feeConsulting;
 }
