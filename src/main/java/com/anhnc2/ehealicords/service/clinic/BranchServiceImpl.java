@@ -4,11 +4,11 @@ import com.anhnc2.ehealicords.constant.BranchStatus;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.BusinessHoursEntity;
-import com.anhnc2.ehealicords.data.request.BranchRequest;
+import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
 import com.anhnc2.ehealicords.data.request.BranchSettingsAdvance;
 import com.anhnc2.ehealicords.exception.BranchException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
-import com.anhnc2.ehealicords.repository.BusinessHourRepository;
+import com.anhnc2.ehealicords.repository.BusinessHoursRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +22,49 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class BranchServiceImpl implements BranchService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BranchServiceImpl.class);
 
     private final BranchRepository branchRepository;
-    private final BusinessHourRepository businessHourRepository;
+    private final BusinessHoursRepository businessHoursRepository;
+
+    @Override
+    public void createBranch(BranchCreationRequest branchRequest) {
+        BusinessHoursEntity businessHours =
+                BusinessHoursEntity.builder()
+                        .morningOpen(branchRequest.getMorningOpen())
+                        .morningClose(branchRequest.getMorningClose())
+                        .afternoonOpen(branchRequest.getAfternoonOpen())
+                        .afternoonClose(branchRequest.getAfternoonClose())
+                        .eveningOpen(branchRequest.getEveningOpen())
+                        .eveningClose(branchRequest.getEveningClose())
+                        .days(
+                                branchRequest.getDays().stream()
+                                        .map(day -> DayOfWeek.of(day).name())
+                                        .collect(Collectors.joining(","))
+                        )
+                        .build();
+
+        businessHoursRepository.saveAndFlush(businessHours);
+
+        BranchEntity branch =
+                BranchEntity.builder()
+                        .name(branchRequest.getName())
+                        .fullAddress(branchRequest.getFullAddress())
+                        .address(branchRequest.getAddress())
+                        .email(branchRequest.getEmail())
+                        .phoneNumber(branchRequest.getPhoneNumber())
+                        .provinceId(branchRequest.getProvinceId())
+                        .districtId(branchRequest.getDistrictId())
+                        .wardId(branchRequest.getWardId())
+                        .status(BranchStatus.ACTIVE)
+                        .businessHoursId(businessHours.getId())
+                        .build();
+
+        LOGGER.debug("Create BranchEntity: {}", branch);
+
+        branchRepository.save(branch);
+    }
 
     @Override
     public List<BranchEntity> getAllBranch() {
@@ -41,39 +80,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     @Transactional
-    public void createBranch(BranchRequest branch) {
-        BusinessHoursEntity businessHour = BusinessHoursEntity.builder()
-                .morningOpen(branch.getMorningOpen())
-                .morningClose(branch.getMorningClose())
-                .afternoonOpen(branch.getAfternoonOpen())
-                .afternoonClose(branch.getAfternoonClose())
-                .eveningOpen(branch.getEveningOpen())
-                .eveningClose(branch.getEveningClose())
-                .days(branch.getDays().stream().map(day -> DayOfWeek.of(day).name())
-                        .collect(Collectors.joining(",")))
-                .build();
-
-        businessHourRepository.saveAndFlush(businessHour);
-
-        BranchEntity branchDAO = BranchEntity.builder()
-                .name(branch.getName())
-                .provinceId(branch.getProvinceId())
-                .districtId(branch.getDistrictId())
-                .wardId(branch.getWardId())
-                .address(branch.getAddress())
-                .fullAddress(branch.getFullAddress())
-                .status(BranchStatus.ACTIVE)
-                .businessHoursId(businessHour.getId())
-                .build();
-
-        LOGGER.debug("Create BranchEntity: {}", branchDAO);
-
-        branchRepository.saveAndFlush(branchDAO);
-    }
-
-    @Override
-    @Transactional
-    public void updateBranch(BranchRequest branch) {
+    public void updateBranch(BranchCreationRequest branch) {
         LOGGER.debug("Update BranchEntity: {}", branch);
         BranchEntity branchDAOCurrent =
                 branchRepository

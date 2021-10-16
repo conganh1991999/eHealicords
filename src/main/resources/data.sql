@@ -27,3 +27,6 @@ INSERT INTO room VALUES (null, 'Phòng khám 1', null, 1, 1);
 INSERT INTO room_type VALUES(null, 'Phòng khám', null, 1);
 
 INSERT INTO medical_specialty VALUES(null, 'Nội Tiêu hóa – Gan Mật', null);
+
+INSERT INTO district
+VALUES(null, '10', 'Quận', 1);

@@ -2,7 +2,7 @@ package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
-import com.anhnc2.ehealicords.data.request.BranchRequest;
+import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
 import com.anhnc2.ehealicords.data.request.BranchSettingsAdvance;
 import com.anhnc2.ehealicords.data.response.BranchDetailsResponse;
 import com.anhnc2.ehealicords.data.response.BranchResponse;
@@ -40,12 +40,12 @@ public class BranchApi {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Integer> createBranch(@RequestBody BranchRequest branch) {
+    public HttpResponse<Integer> createBranch(@RequestBody BranchCreationRequest branch) {
         branchService.createBranch(branch);
         // cacheService.clearCache("branches");
         return HttpResponseImpl.<Integer>builder()
                 .code(StatusCode.SUCCESS)
-                .message("Create new branchEntity successful!")
+                .message("Create new branch successfully!")
                 .build();
     }
 
@@ -79,7 +79,7 @@ public class BranchApi {
     @PutMapping("/{id}/update")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
     public HttpResponse<Object> updateBranch(
-            @PathVariable("id") Integer id, @RequestBody BranchRequest branch) {
+            @PathVariable("id") Integer id, @RequestBody BranchCreationRequest branch) {
         branch.setId(id);
         branchService.updateBranch(branch);
         // cacheService.clearCache("branches");
