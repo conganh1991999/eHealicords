@@ -6,7 +6,7 @@ import com.anhnc2.ehealicords.data.entity.ProvinceEntity;
 import com.anhnc2.ehealicords.data.entity.WardEntity;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.location.LocationService;
+import com.anhnc2.ehealicords.service.catalog.LocationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
