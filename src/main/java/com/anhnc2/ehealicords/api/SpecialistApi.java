@@ -12,7 +12,7 @@ import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
-import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
 import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -40,11 +40,11 @@ public class SpecialistApi {
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @PostMapping(value = "/create-av", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public HttpResponse<StaffInfoResponse> createSpecialistWithAvatar(@Valid @ModelAttribute SpecialistCreationRequest request) {
-        StaffInfoResponse responseData
+    public HttpResponse<SpecialistInfoResponse> createSpecialistWithAvatar(@Valid @ModelAttribute SpecialistCreationRequest request) {
+        SpecialistInfoResponse responseData
                 = specialistService.createSpecialist(request, request.getAvatar());
 
-        return HttpResponseImpl.<StaffInfoResponse>builder()
+        return HttpResponseImpl.<SpecialistInfoResponse>builder()
                 .code(StatusCode.SUCCESS)
                 .data(responseData)
                 .build();

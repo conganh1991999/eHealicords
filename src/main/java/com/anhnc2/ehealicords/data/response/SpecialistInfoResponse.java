@@ -14,9 +14,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StaffInfoResponse {
+public class SpecialistInfoResponse {
+    private Long specialistId;
     private Long staffId;
-    private Long accountId;
     private Integer medicalSpecialtyId;
     private Integer branchId;
 
@@ -29,9 +29,9 @@ public class StaffInfoResponse {
 
     private String avatarName;
 
-    public StaffInfoResponse(StaffEntity staffEntity, SpecialistEntity specialistEntity) {
-        this.staffId = specialistEntity.getId();
-        this.accountId = staffEntity.getId();
+    public SpecialistInfoResponse(StaffEntity staffEntity, SpecialistEntity specialistEntity) {
+        this.specialistId = specialistEntity.getId();
+        this.staffId = staffEntity.getId();
         this.medicalSpecialtyId = specialistEntity.getMedialSpecialtyId();
         this.branchId = specialistEntity.getBranchId();
         this.fullName = specialistEntity.getFullName();

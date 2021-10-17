@@ -9,13 +9,13 @@ import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
-import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface SpecialistService {
-    StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
+    SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
 
     List<SpecialistEntity> getAllSpecialists();
 

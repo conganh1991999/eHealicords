@@ -11,7 +11,7 @@ import com.anhnc2.ehealicords.data.response.DoctorResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
-import com.anhnc2.ehealicords.data.response.StaffInfoResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
@@ -57,7 +57,7 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     @Transactional
-    public StaffInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar) {
+    public SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar) {
         StaffEntity createdStaff = staffService.createStaffForSpecialist(specialist);
 
         SpecialistEntity createdSpecialist = createSpecialistProfile(specialist, avatar, createdStaff);
@@ -65,7 +65,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         // sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
         // notifyToDoctorOverEmail(request, password);
 
-        return new StaffInfoResponse(createdStaff, createdSpecialist);
+        return new SpecialistInfoResponse(createdStaff, createdSpecialist);
     }
 
     private SpecialistEntity createSpecialistProfile(SpecialistCreationRequest specialist,
