@@ -1,3 +1,7 @@
+CREATE DATABASE ehealicords;
+
+USE ehealicords;
+
 CREATE TABLE business_hours(
                                id int not null primary key auto_increment,
                                morning_open time,
