@@ -112,7 +112,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void resetPassword(StaffEntity staff) {
-        String password = PasswordGenerator.random();
+        String password = "random"; // PasswordGenerator.random();
         String encodedPassword = passwordEncoder.encode(password);
         staff.setPassword(encodedPassword);
         staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
@@ -138,7 +138,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     private StaffEntity createStaff(StaffCreationRequest request) {
-        String password = PasswordGenerator.random();
+        String password = "random"; // PasswordGenerator.random();
         String encodedPassword = passwordEncoder.encode(password);
 
         StaffEntity newStaff =
