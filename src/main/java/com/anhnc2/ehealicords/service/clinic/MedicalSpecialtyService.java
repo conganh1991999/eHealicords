@@ -1,15 +1,13 @@
 package com.anhnc2.ehealicords.service.clinic;
 
-import com.anhnc2.ehealicords.data.entity.MedicalSpecialtyEntity;
+import com.anhnc2.ehealicords.data.common.MedicalSpecialty;
 
 import java.util.List;
 
-// TODO: clinic
-
 public interface MedicalSpecialtyService {
-    List<MedicalSpecialtyEntity> getAllMedicalSpecialities();
+    MedicalSpecialty createMedicalSpecialty(MedicalSpecialty specialty);
 
-    MedicalSpecialtyEntity createMedicalSpecialty(MedicalSpecialtyEntity specialty);
+    List<MedicalSpecialty> getAllMedicalSpecialities();
 
-    MedicalSpecialtyEntity updateMedicalSpecialty(MedicalSpecialtyEntity specialty);
+    MedicalSpecialty updateMedicalSpecialty(MedicalSpecialty specialty);
 }

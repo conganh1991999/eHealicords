@@ -1,6 +1,7 @@
 package com.anhnc2.ehealicords.service.clinic;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
+import com.anhnc2.ehealicords.data.common.MedicalSpecialty;
 import com.anhnc2.ehealicords.data.entity.MedicalSpecialtyEntity;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
@@ -8,33 +9,37 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-// TODO: clinic
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
 
-    private final MedicalSpecialtyRepository medicalSpecialtyRepository;
+    private final MedicalSpecialtyRepository repository;
 
     @Override
-    public MedicalSpecialtyEntity createMedicalSpecialty(MedicalSpecialtyEntity specialty) {
+    public MedicalSpecialty createMedicalSpecialty(MedicalSpecialty specialty) {
         if (specialty.getName().equals("")) {
             throw new AppException(
                     StatusCode.SPECIALTY_INVALID, new Exception("Name of specialty can't empty"));
         }
 
-        return medicalSpecialtyRepository.saveAndFlush(specialty);
+        MedicalSpecialtyEntity newMedicalSpecialtyEntity = repository.save(specialty.toEntity());
+
+        return new MedicalSpecialty(newMedicalSpecialtyEntity);
     }
 
     @Override
-    public List<MedicalSpecialtyEntity> getAllMedicalSpecialities() {
-        return medicalSpecialtyRepository.findAll();
+    public List<MedicalSpecialty> getAllMedicalSpecialities() {
+        return repository.findAll()
+                .stream()
+                .map(MedicalSpecialty::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public MedicalSpecialtyEntity updateMedicalSpecialty(MedicalSpecialtyEntity specialty) {
-        MedicalSpecialtyEntity target = medicalSpecialtyRepository.getById(specialty.getId());
+    public MedicalSpecialty updateMedicalSpecialty(MedicalSpecialty specialty) {
+        MedicalSpecialtyEntity target = repository.getById(specialty.getId());
 
         if (specialty.getName().equals("")) {
             throw new AppException(
@@ -44,7 +49,7 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
         target.setName(specialty.getName());
         target.setDescription(specialty.getDescription());
 
-        return medicalSpecialtyRepository.saveAndFlush(target);
+        return new MedicalSpecialty(repository.save(target));
     }
 
 }
