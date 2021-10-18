@@ -6,7 +6,7 @@ import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
-import com.anhnc2.ehealicords.data.response.DoctorResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -42,7 +43,7 @@ public class SpecialistApi {
     @PostMapping(value = "/create-av", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public HttpResponse<SpecialistInfoResponse> createSpecialistWithAvatar(@Valid @ModelAttribute SpecialistCreationRequest request) {
         SpecialistInfoResponse responseData
-                = specialistService.createSpecialist(request, request.getAvatar());
+                = specialistService.createSpecialist(request);
 
         return HttpResponseImpl.<SpecialistInfoResponse>builder()
                 .code(StatusCode.SUCCESS)
@@ -53,7 +54,7 @@ public class SpecialistApi {
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @PostMapping("/create-avk")
     public HttpResponse<Object> createSpecialistWithAvatarKey(@RequestBody SpecialistCreationRequest request) {
-        specialistService.createSpecialist(request, null);
+        specialistService.createSpecialist(request);
         return HttpResponseImpl.success("OK");
     }
 
@@ -70,7 +71,7 @@ public class SpecialistApi {
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
     @GetMapping("branch/{branchId}/all")
-    public HttpResponse<List<LiteStaff>> getSpecialistInBranch(@PathVariable Integer branchId) {
+    public HttpResponse<List<LiteStaff>> getSpecialistsInBranch(@PathVariable Integer branchId) {
         return HttpResponseImpl.success(specialistService.getAllSpecialistsOfBranch(branchId));
     }
 
@@ -80,17 +81,6 @@ public class SpecialistApi {
                                                                   @RequestParam("specialtyId") Integer specialtyId) {
         return HttpResponseImpl
                 .success(specialistService.getAllSpecialistsOfSpecialty(branchId, specialtyId));
-    }
-
-    @PreAuthorize("hasRole('SUB_ADMIN')")
-    @GetMapping("/all-doctor")
-    public HttpResponse<PaginationResponse<List<DoctorResponse>>> getAllDoctors(
-            @RequestParam("branchId") Integer branchId,
-            @RequestParam("page") Integer page,
-            @RequestParam("pageSize") Integer pageSize) {
-
-        return HttpResponseImpl.success(
-                specialistService.getAllDoctorOfBranch(branchId, page, pageSize));
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
@@ -107,15 +97,10 @@ public class SpecialistApi {
         return HttpResponseImpl.success("OK");
     }
 
-    @PutMapping("/avatar/update")
-    public HttpResponse<Object> updateAvatar(@RequestParam("key") String key) {
-        specialistService.updateAvatar(key);
-        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
-    }
-
+    @PreAuthorize("hasRole('DOCTOR')")
     @PostMapping("/avatar/update/presign")
     public HttpResponse<PresignResult> getAvatarUpdateUrl(@RequestParam("fileName") String fileName) {
-        PresignResult presignResult = specialistService.getAvatarUpdateUrl(fileName);
+        PresignResult presignResult = specialistService.getPresignUrl(fileName);
 
         return HttpResponseImpl.<PresignResult>builder()
                 .code(StatusCode.SUCCESS)
@@ -123,6 +108,7 @@ public class SpecialistApi {
                 .build();
     }
 
+    @PreAuthorize("hasRole('DOCTOR')")
     @GetMapping("/avatar/presign")
     public HttpResponse<PresignResult> getAvatarUpdateUrl(
             @RequestParam("filename") String filename, @RequestParam("filetype") String filetype) {
@@ -131,6 +117,23 @@ public class SpecialistApi {
         return HttpResponseImpl.<PresignResult>builder()
                 .code(StatusCode.SUCCESS)
                 .data(presignResult)
+                .build();
+    }
+
+    @PreAuthorize("hasRole('DOCTOR')")
+    @PutMapping("/this-specialist/avatar/update-avk")
+    public HttpResponse<Object> updateAvatarKey(@RequestParam("key") String key) {
+        specialistService.updateAvatar(key);
+        return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
+    }
+
+    @PreAuthorize("hasRole('DOCTOR')")
+    @PutMapping("/this-specialist/avatar/update-av")
+    public HttpResponse<Object> updateAvatar(@RequestBody MultipartFile avatar) {
+        String avatarName = specialistService.updateAvatar(avatar);
+        return HttpResponseImpl.builder()
+                .code(StatusCode.SUCCESS)
+                .data(avatarName)
                 .build();
     }
 
@@ -146,6 +149,17 @@ public class SpecialistApi {
     public HttpResponse<Object> deleteSpecialist(@RequestParam("specialistId") Long specialistId) {
         specialistService.deleteSpecialist(specialistId);
         return HttpResponseImpl.builder().code(StatusCode.SUCCESS).build();
+    }
+
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @GetMapping("/all-paging")
+    public HttpResponse<PaginationResponse<List<SpecialistResponse>>> getSpecialistsInBranch(
+            @RequestParam("branchId") Integer branchId,
+            @RequestParam("page") Integer page,
+            @RequestParam("pageSize") Integer pageSize) {
+
+        return HttpResponseImpl.success(
+                specialistService.getAllSpecialistsOfBranch(branchId, page, pageSize));
     }
 
 }

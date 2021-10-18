@@ -44,7 +44,7 @@ public class SpecialistInfoResponse {
     }
 
     private String resolveAvatarKey(String avatarKey) {
-        return avatarKey.substring(avatarKey.lastIndexOf("/") + 1);
+        return avatarKey == null ? null : avatarKey.substring(avatarKey.lastIndexOf("/") + 1);
     }
 
 }

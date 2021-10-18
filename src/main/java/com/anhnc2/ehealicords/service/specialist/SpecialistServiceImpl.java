@@ -7,7 +7,7 @@ import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
-import com.anhnc2.ehealicords.data.response.DoctorResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
@@ -57,10 +57,10 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     @Transactional
-    public SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar) {
+    public SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist) {
         StaffEntity createdStaff = staffService.createStaffForSpecialist(specialist);
 
-        SpecialistEntity createdSpecialist = createSpecialistProfile(specialist, avatar, createdStaff);
+        SpecialistEntity createdSpecialist = createSpecialistProfile(specialist, createdStaff);
 
         // sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
         // notifyToDoctorOverEmail(request, password);
@@ -68,8 +68,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         return new SpecialistInfoResponse(createdStaff, createdSpecialist);
     }
 
-    private SpecialistEntity createSpecialistProfile(SpecialistCreationRequest specialist,
-                                                     MultipartFile avatar, StaffEntity createdStaff) {
+    private SpecialistEntity createSpecialistProfile(SpecialistCreationRequest specialist, StaffEntity createdStaff) {
         SpecialistEntity newSpecialist =
                 SpecialistEntity.builder()
                         .email(specialist.getEmail())
@@ -92,30 +91,22 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         newSpecialist = specialistRepository.saveAndFlush(newSpecialist);
 
-        if (avatar == null) {
-            return newSpecialist;
+        String avatarKey = specialist.getAvatarKey();
+        MultipartFile avatar = specialist.getAvatar();
+
+        String newAvatarKey;
+
+        if (avatarKey != null && !avatarKey.trim().isEmpty()) {
+            newAvatarKey = avatarKey;
+        } else if (avatar != null) {
+            newAvatarKey = saveAvatarFile(avatar);
+        } else {
+            newAvatarKey = null;
         }
 
-        String avatarFileName = avatar.getOriginalFilename();
-        String avatarKey =
-                String.join(
-                        "/",
-                        SPECIALIST_KEY_PREFIX,
-                        String.valueOf(newSpecialist.getId()),
-                        AVATAR,
-                        FileUtil.appendCurrentTimeMillisToName(
-                                avatarFileName == null ? AVATAR : avatarFileName
-                        )
-                );
-
-        try {
-            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(avatar));
-            newSpecialist.setAvatarKey(avatarKey);
-            newSpecialist.setUpdatedTime(System.currentTimeMillis());
-            return specialistRepository.save(newSpecialist);
-        } catch (IOException e) {
-            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-        }
+        newSpecialist.setAvatarKey(newAvatarKey);
+        newSpecialist.setUpdatedTime(System.currentTimeMillis());
+        return specialistRepository.save(newSpecialist);
     }
 
     @Override
@@ -127,35 +118,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     public List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId) {
         List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
         return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
-    }
-
-    @Override
-    public PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(
-            int branchId, int page, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
-        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
-        List<DoctorResponse> result =
-                doctors.getContent().stream()
-                        .map(
-                                specialist ->
-                                        DoctorResponse.builder()
-                                                .id(specialist.getId())
-                                                .fullName(specialist.getFullName())
-                                                .specialty(getSpecialtyName(specialist))
-                                                .build())
-                        .collect(Collectors.toList());
-
-        return PaginationResponse.<List<DoctorResponse>>builder()
-                .page(page)
-                .pageSize(pageSize)
-                .total(doctors.getTotalElements())
-                .totalPage(doctors.getTotalPages())
-                .items(result)
-                .build();
-    }
-
-    private String getSpecialtyName(SpecialistEntity specialist) {
-        return medicalSpecialtyRepository.findById(specialist.getMedialSpecialtyId()).get().getName();
     }
 
     @Override
@@ -243,40 +205,106 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public PresignResult getPresignUrl(String filename, String filetype) {
-        String key = String.join("/", SPECIALIST_KEY_PREFIX, AVATAR, filename);
+    public PresignResult getPresignUrl(String fileName) {
+        String key = String.join("/", SPECIALIST_KEY_PREFIX, AVATAR, fileName);
 
         return PresignResult.builder()
                 .key(key)
-                .presignUrl(storageService.preSignWithType(key, filetype))
+                .presignUrl(storageService.preSign(key))
                 .build();
     }
 
     @Override
-    public PresignResult getAvatarUpdateUrl(String fileName) {
-        SpecialistEntity specialist
-                = specialistRepository.findByStaffId(userService.getCurrentUserId());
+    public PresignResult getPresignUrl(String fileName, String fileType) {
+        String key = String.join("/", SPECIALIST_KEY_PREFIX, AVATAR, fileName);
 
-        String key =
-                String.join(
-                        "/", SPECIALIST_KEY_PREFIX, String.valueOf(specialist.getId()), AVATAR, fileName);
-
-        return PresignResult.builder().key(key).presignUrl(storageService.preSign(key)).build();
+        return PresignResult.builder()
+                .key(key)
+                .presignUrl(storageService.preSignWithType(key, fileType))
+                .build();
     }
 
     @Override
-    public void updateAvatar(String key) {
+    public void updateAvatar(String newKey) {
         SpecialistEntity specialist
                 = specialistRepository.findByStaffId(userService.getCurrentUserId());
 
-        String avatarKey = specialist.getAvatarKey();
+        String oldKey = specialist.getAvatarKey();
 
-        if (avatarKey != null) {
-            storageService.delete(avatarKey);
+        specialist.setAvatarKey(newKey);
+        specialistRepository.save(specialist);
+
+        if (oldKey != null) {
+            storageService.delete(oldKey);
+        }
+    }
+
+    @Override
+    public String updateAvatar(MultipartFile avatar) {
+        SpecialistEntity specialist
+                = specialistRepository.findByStaffId(userService.getCurrentUserId());
+
+        String oldKey = specialist.getAvatarKey();
+
+        String newKey = avatar == null ? null : saveAvatarFile(avatar);
+
+        specialist.setAvatarKey(newKey);
+        specialistRepository.save(specialist);
+
+        if (oldKey != null) {
+            storageService.delete(oldKey);
         }
 
-        specialist.setAvatarKey(key);
-        specialistRepository.save(specialist);
+        return newKey == null ? null : newKey.substring(newKey.lastIndexOf("/") + 1);
+    }
+
+    private String saveAvatarFile(MultipartFile avatar) {
+        String avatarFileName = avatar.getOriginalFilename();
+        String avatarKey =
+                String.join(
+                        "/",
+                        SPECIALIST_KEY_PREFIX,
+                        AVATAR,
+                        FileUtil.appendCurrentTimeMillisToName(
+                                avatarFileName == null ? AVATAR : avatarFileName
+                        )
+                );
+
+        try {
+            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(avatar));
+            return avatarKey;
+        } catch (IOException e) {
+            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
+        }
+    }
+
+    // TODO: get list with paging
+    @Override
+    public PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
+        List<SpecialistResponse> result =
+                doctors.getContent().stream()
+                        .map(
+                                specialist ->
+                                        SpecialistResponse.builder()
+                                                .id(specialist.getId())
+                                                .fullName(specialist.getFullName())
+                                                .specialty(getSpecialtyName(specialist))
+                                                .build())
+                        .collect(Collectors.toList());
+
+        return PaginationResponse.<List<SpecialistResponse>>builder()
+                .page(page)
+                .pageSize(pageSize)
+                .total(doctors.getTotalElements())
+                .totalPage(doctors.getTotalPages())
+                .items(result)
+                .build();
+    }
+
+    private String getSpecialtyName(SpecialistEntity specialist) {
+        return medicalSpecialtyRepository.getById(specialist.getMedialSpecialtyId()).getName();
     }
 
 //    private void sendSuccessEmailToSpecialist(
@@ -302,5 +330,5 @@ public class SpecialistServiceImpl implements SpecialistService {
 //        params.put("password", password);
 //        mailService.sendEmail(to, subject, "create-doctor", params);
 //    }
-//
+
 }

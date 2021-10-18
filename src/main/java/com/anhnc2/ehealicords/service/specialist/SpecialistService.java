@@ -5,7 +5,7 @@ import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
-import com.anhnc2.ehealicords.data.response.DoctorResponse;
+import com.anhnc2.ehealicords.data.response.SpecialistResponse;
 import com.anhnc2.ehealicords.data.response.LiteStaff;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
@@ -15,13 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface SpecialistService {
-    SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist, MultipartFile avatar);
+    SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist);
 
     List<SpecialistEntity> getAllSpecialists();
 
     List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId);
-
-    PaginationResponse<List<DoctorResponse>> getAllDoctorOfBranch(int branchId, int page, int pageSize);
 
     List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId);
 
@@ -33,9 +31,13 @@ public interface SpecialistService {
 
     void updateSpecialistInformation(Long specialistId, SpecialistUpdateRequest updateRequest);
 
-    PresignResult getAvatarUpdateUrl(String fileName);
+    PresignResult getPresignUrl(String fileName);
+
+    PresignResult getPresignUrl(String fileName, String fileType);
 
     void updateAvatar(String key);
 
-    PresignResult getPresignUrl(String filename, String filetype);
+    String updateAvatar(MultipartFile avatar);
+
+    PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize);
 }

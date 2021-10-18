@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DoctorResponse {
+public class SpecialistResponse {
     private Long id;
     private String fullName;
     private String specialty;
