@@ -1,10 +1,10 @@
-package com.anhnc2.ehealicords.api;
+package com.anhnc2.ehealicords.api.catalog;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.MedicalSpecialty;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.clinic.MedicalSpecialtyService;
+import com.anhnc2.ehealicords.service.catalog.MedicalSpecialtyService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
