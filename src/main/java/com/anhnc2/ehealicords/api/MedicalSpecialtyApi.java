@@ -1,11 +1,12 @@
-package com.anhnc2.ehealicords.api.catalog;
+package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.MedicalSpecialty;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.service.catalog.MedicalSpecialtyService;
+import com.anhnc2.ehealicords.service.clinic.MedicalSpecialtyService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +25,7 @@ public class MedicalSpecialtyApi {
     // private final CacheService cacheService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     public HttpResponse<MedicalSpecialty> createMedicalSpecialty(@RequestBody MedicalSpecialty body) {
         // cacheService.clearCache("medical-specialities");
         MedicalSpecialty specialty = service.createMedicalSpecialty(body);
@@ -35,6 +37,7 @@ public class MedicalSpecialtyApi {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     // @Cacheable(cacheNames = "medical-specialities")
     public HttpResponse<List<MedicalSpecialty>> getAllMedicalSpecialities() {
         List<MedicalSpecialty> medicalSpecialities = service.getAllMedicalSpecialities();
@@ -46,6 +49,7 @@ public class MedicalSpecialtyApi {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     public HttpResponse<MedicalSpecialty> updateMedicalSpecialty(@RequestBody MedicalSpecialty body) {
         // cacheService.clearCache("medical-specialities");
         MedicalSpecialty specialty = service.updateMedicalSpecialty(body);

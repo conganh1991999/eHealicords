@@ -1,23 +1,27 @@
 package com.anhnc2.ehealicords.service.clinic;
 
-import com.anhnc2.ehealicords.data.entity.RoomEntity;
+import com.anhnc2.ehealicords.data.common.Room;
+import com.anhnc2.ehealicords.data.common.RoomType;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.RoomDetailResponse;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
-// TODO: clinic
-
 public interface RoomService {
-    List<RoomEntity> getRoomAvailable(LocalDate date, List<LocalTime> times, int branchId, int specialty);
+    void createRoomType(RoomType roomType);
 
-    RoomEntity getRoomInfo(int id);
+    void updateRoomType(RoomType roomType);
 
-    PaginationResponse<List<RoomDetailResponse>> getRoomsOfBranch(int branchId, int page, int pageSize);
+    List<RoomType> getAllRoomTypesInBranch(Integer branchId);
 
-    void updateRoom(RoomEntity roomEntity);
+    void createRoom(Room room);
 
-    void createRoom(RoomEntity roomEntity);
+    void updateRoom(Room room);
+
+    List<Room> getAllRoomsInBranch(Integer branchId);
+
+    PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize);
+
+    List<Room> getAllRoomsOfRoomType(Integer branchId, Integer roomTypeId);
+
+    Room getRoomInformation(Integer id);
 }

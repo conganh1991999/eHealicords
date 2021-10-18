@@ -32,6 +32,8 @@ public class MedicalSpecialtyEntity {
 
     private String description;
 
+    // TODO: miss branchId
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "medialSpecialtyId")
     private List<SpecialistEntity> specialistEntities;

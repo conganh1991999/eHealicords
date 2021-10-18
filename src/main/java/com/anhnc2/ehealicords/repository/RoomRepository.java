@@ -44,4 +44,6 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Integer> {
     List<RoomEntity> findAllByBranchId(Integer branchId);
 
     Page<RoomEntity> findAllByBranchId(Integer branchId, Pageable pageable);
+
+    List<RoomEntity> findAllByRoomTypeIdAndBranchId(Integer roomTypeId, Integer branchId);
 }

@@ -1,4 +1,4 @@
-package com.anhnc2.ehealicords.service.catalog;
+package com.anhnc2.ehealicords.service.clinic;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.common.MedicalSpecialty;

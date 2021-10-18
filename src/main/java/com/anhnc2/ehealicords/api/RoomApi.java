@@ -1,18 +1,13 @@
 package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
-import com.anhnc2.ehealicords.data.entity.RoomEntity;
-import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
+import com.anhnc2.ehealicords.data.common.Room;
+import com.anhnc2.ehealicords.data.common.RoomType;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.RoomDetailResponse;
 import com.anhnc2.ehealicords.service.clinic.RoomService;
-import com.anhnc2.ehealicords.service.common.AppUserService;
-import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,78 +17,82 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-
-// TODO: clinic
 
 @RestController
 @RequestMapping("api/protected/rooms")
 @AllArgsConstructor
 public class RoomApi {
+
     private final RoomService roomService;
-    private final AppUserService service;
-    private final SpecialistService specialistService;
 
-    @GetMapping("/available")
-    public HttpResponse<List<RoomEntity>> getRoomAvailable(
-            @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date,
-            @RequestParam("times") @DateTimeFormat(iso = ISO.TIME) List<LocalTime> times) {
-        long staffId = service.getCurrentUserId();
-        SpecialistEntity specialist = null; // specialistService.getByStaffId(staffId);
+    @PostMapping("/create-room-type")
+    public HttpResponse<Object> createRoomType(@RequestBody RoomType body) {
+        roomService.createRoomType(body);
+        return HttpResponseImpl.success("OK");
+    }
 
-        List<RoomEntity> roomEntities =
-                roomService.getRoomAvailable(
-                        date, times, specialist.getBranchId(), specialist.getMedialSpecialtyId());
-        return HttpResponseImpl.<List<RoomEntity>>builder()
+    @PutMapping("/update-room-type")
+    public HttpResponse<Object> updateRoomType(@RequestBody RoomType body) {
+        roomService.updateRoomType(body);
+        return HttpResponseImpl.success("OK");
+    }
+
+    @GetMapping("/all-room-types/branch/{id}")
+    public HttpResponse<List<RoomType>> getAllRoomTypesInBranch(@PathVariable("id") Integer branchId) {
+        List<RoomType> result = roomService.getAllRoomTypesInBranch(branchId);
+        return HttpResponseImpl.<List<RoomType>>builder()
                 .code(StatusCode.SUCCESS)
-                .message("Lists all room available in shift and date for specialistDAO")
-                .data(roomEntities)
+                .data(result)
+                .message("All room types of this branch.")
                 .build();
     }
 
-    @GetMapping("/specialists/{specialistId}/available")
-    public HttpResponse<List<RoomEntity>> getRoomAvailableBySpecialisId(
-            @PathVariable Long specialistId,
-            @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date,
-            @RequestParam("times") @DateTimeFormat(iso = ISO.TIME) List<LocalTime> times) {
-        SpecialistEntity specialist = null; // specialistService.getBySpecialistId(specialistId);
+    @PostMapping("/create")
+    public HttpResponse<Object> createRoom(@RequestBody Room body) {
+        roomService.createRoom(body);
+        return HttpResponseImpl.success("OK");
+    }
 
-        List<RoomEntity> roomEntities =
-                roomService.getRoomAvailable(
-                        date, times, specialist.getBranchId(), specialist.getMedialSpecialtyId());
-        return HttpResponseImpl.<List<RoomEntity>>builder()
+    @PutMapping("/update")
+    public HttpResponse<Object> updateRoom(@RequestBody Room body) {
+        roomService.updateRoom(body);
+        return HttpResponseImpl.success("OK");
+    }
+
+    @GetMapping("/all/branch/{id}")
+    public HttpResponse<List<Room>> getAllRoomsInBranch(@PathVariable("id") Integer branchId) {
+        List<Room> result = roomService.getAllRoomsInBranch(branchId);
+        return HttpResponseImpl.<List<Room>>builder()
                 .code(StatusCode.SUCCESS)
-                .message("Lists all room available in shift and date of specialist")
-                .data(roomEntities)
+                .data(result)
+                .message("All room of this branch.")
+                .build();
+    }
+
+    @GetMapping("/all/paging")
+    public HttpResponse<PaginationResponse<List<Room>>> getAllRoomsInBranch(
+            @RequestParam("branchId") Integer branchId, @RequestParam("page") Integer page,
+            @RequestParam("pageSize") Integer pageSize) {
+        return HttpResponseImpl.success(
+                roomService.getAllRoomsInBranch(branchId, page, pageSize)
+        );
+    }
+
+    @GetMapping("/all/branch/{bid}/room-type/{tid}")
+    public HttpResponse<List<Room>> getAllRoomsOfRoomType(@PathVariable("bid") Integer branchId,
+                                                          @PathVariable("tid") Integer roomTypeId) {
+        List<Room> result = roomService.getAllRoomsOfRoomType(branchId, roomTypeId);
+        return HttpResponseImpl.<List<Room>>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("All room of this room type in this branch.")
                 .build();
     }
 
     @GetMapping("/{id}")
-    public HttpResponse<RoomEntity> getRoomInfo(@PathVariable int id) {
-        return HttpResponseImpl.success(roomService.getRoomInfo(id));
+    public HttpResponse<Room> getRoomInformation(@PathVariable("id") Integer id) {
+        return HttpResponseImpl.success(roomService.getRoomInformation(id));
     }
 
-    @GetMapping("")
-    public HttpResponse<PaginationResponse<List<RoomDetailResponse>>> getRoomOfBranch(
-            @RequestParam("branchId") int branchId,
-            @RequestParam("page") int page,
-            @RequestParam("pageSize") int pageSize) {
-        return HttpResponseImpl.success(roomService.getRoomsOfBranch(branchId, page, pageSize));
-    }
-
-    @PutMapping("/{id}")
-    public HttpResponse<Object> updateRoom(
-            @PathVariable("id") int roomId, @RequestBody RoomEntity roomEntity) {
-        roomEntity.setId(roomId);
-        roomService.updateRoom(roomEntity);
-        return HttpResponseImpl.success("OK");
-    }
-
-    @PostMapping("")
-    public HttpResponse<Object> createRoom(@RequestBody RoomEntity roomEntity) {
-        roomService.createRoom(roomEntity);
-        return HttpResponseImpl.success("OK");
-    }
 }

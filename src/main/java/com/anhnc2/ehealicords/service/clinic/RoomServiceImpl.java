@@ -1,55 +1,86 @@
 package com.anhnc2.ehealicords.service.clinic;
 
+import com.anhnc2.ehealicords.data.common.Room;
+import com.anhnc2.ehealicords.data.common.RoomType;
 import com.anhnc2.ehealicords.data.entity.RoomEntity;
+import com.anhnc2.ehealicords.data.entity.RoomTypeEntity;
 import com.anhnc2.ehealicords.data.response.PaginationResponse;
-import com.anhnc2.ehealicords.data.response.RoomDetailResponse;
-import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
 import com.anhnc2.ehealicords.repository.RoomRepository;
+import com.anhnc2.ehealicords.repository.RoomTypeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-// TODO: clinic
 
 @Service
 @AllArgsConstructor
 public class RoomServiceImpl implements RoomService {
+
+    private final RoomTypeRepository roomTypeRepository;
     private final RoomRepository roomRepository;
-    private final MedicalSpecialtyRepository medicalSpecialtyRepository;
 
     @Override
-    public List<RoomEntity> getRoomAvailable(
-            LocalDate date, List<LocalTime> times, int branchId, int specialtyId) {
-        return roomRepository.getRoomAvailable(date, times, branchId, specialtyId);
+    public void createRoomType(RoomType roomType) {
+        roomTypeRepository.save(roomType.toEntity());
     }
 
     @Override
-    public RoomEntity getRoomInfo(int id) {
-        return roomRepository.getById(id);
+    public void updateRoomType(RoomType roomType) {
+        RoomTypeEntity entity = roomTypeRepository.getById(roomType.getId());
+        entity.setName(roomType.getName());
+        entity.setDescription(roomType.getDescription());
+
+        roomTypeRepository.save(entity);
     }
 
     @Override
-    public PaginationResponse<List<RoomDetailResponse>> getRoomsOfBranch(
-            int branchId, int page, int pageSize) {
+    public List<RoomType> getAllRoomTypesInBranch(Integer branchId) {
+        return roomTypeRepository.findAllByBranchId(branchId)
+                .stream()
+                .map(RoomType::new)
+                .collect(Collectors.toList());
+    }
 
-        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by("medicalSpecialtyId", "id"));
+    @Override
+    public void createRoom(Room room) {
+        roomRepository.save(room.toEntity());
+    }
+
+    @Override
+    public void updateRoom(Room room) {
+        RoomEntity entity = roomRepository.getById(room.getId());
+        entity.setName(room.getName());
+        entity.setDescription(room.getDescription());
+        entity.setRoomTypeId(room.getRoomTypeId());
+
+        roomRepository.save(entity);
+    }
+
+    @Override
+    public List<Room> getAllRoomsInBranch(Integer branchId) {
+        return roomRepository.findAllByBranchId(branchId)
+                .stream()
+                .map(Room::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by("roomTypeId", "id"));
         Page<RoomEntity> roomPage = roomRepository.findAllByBranchId(branchId, pageRequest);
-        List<RoomDetailResponse> rooms =
+
+        List<Room> rooms =
                 roomPage.getContent().stream()
-                        .map(
-                                room ->
-                                        RoomDetailResponse.fromDAO(
-                                                room, getSpecialtyName(0))) // room.getMedicalSpecialtyId()
+                        .map(Room::new)
                         .collect(Collectors.toList());
+
         long total = roomPage.getTotalElements();
-        return PaginationResponse.<List<RoomDetailResponse>>builder()
+
+        return PaginationResponse.<List<Room>>builder()
                 .page(page)
                 .pageSize(pageSize)
                 .total(total)
@@ -59,23 +90,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void updateRoom(RoomEntity roomEntity) {
-        RoomEntity updateRoom = roomRepository.getById(roomEntity.getId());
-
-        updateRoom.setName(roomEntity.getName());
-        // updateRoom.setMedicalSpecialtyId(roomEntity.getMedicalSpecialtyId());
-        // updateRoom.setCapacity(roomEntity.getCapacity());
-        roomRepository.saveAndFlush(updateRoom);
+    public List<Room> getAllRoomsOfRoomType(Integer branchId, Integer roomTypeId) {
+        return roomRepository.findAllByRoomTypeIdAndBranchId(roomTypeId, branchId)
+                .stream()
+                .map(Room::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void createRoom(RoomEntity roomEntity) {
-        roomEntity.setId(null);
-
-        roomRepository.saveAndFlush(roomEntity);
-    }
-
-    private String getSpecialtyName(int specialtyId) {
-        return medicalSpecialtyRepository.getById(specialtyId).getName();
+    public Room getRoomInformation(Integer id) {
+        return new Room(roomRepository.getById(id));
     }
 }

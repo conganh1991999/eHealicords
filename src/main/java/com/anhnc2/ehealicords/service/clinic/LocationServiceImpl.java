@@ -1,4 +1,4 @@
-package com.anhnc2.ehealicords.service.catalog;
+package com.anhnc2.ehealicords.service.clinic;
 
 import com.anhnc2.ehealicords.data.entity.DistrictEntity;
 import com.anhnc2.ehealicords.data.entity.ProvinceEntity;
