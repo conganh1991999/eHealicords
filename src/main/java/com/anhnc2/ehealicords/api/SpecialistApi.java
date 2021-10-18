@@ -70,7 +70,7 @@ public class SpecialistApi {
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    @GetMapping("branch/{branchId}/all")
+    @GetMapping("/branch/{branchId}/all")
     public HttpResponse<List<LiteStaff>> getSpecialistsInBranch(@PathVariable Integer branchId) {
         return HttpResponseImpl.success(specialistService.getAllSpecialistsOfBranch(branchId));
     }
