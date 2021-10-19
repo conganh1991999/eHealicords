@@ -74,7 +74,7 @@ public class SpecialistServiceImpl implements SpecialistService {
                         .medialSpecialtyId(specialist.getMedialSpecialtyId())
                         .roomId(specialist.getRoomId())
                         .staffId(createdStaff.getId())
-                        .branchId(specialist.getBranchId())
+                        .branchId(createdStaff.getBranchEntity().getId())
                         .updatedTime(System.currentTimeMillis())
                         .build();
 

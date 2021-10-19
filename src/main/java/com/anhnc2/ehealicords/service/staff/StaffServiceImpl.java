@@ -4,6 +4,7 @@ import com.anhnc2.ehealicords.constant.RoleType;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.constant.UserStatus;
 import com.anhnc2.ehealicords.data.auth.AuthUser;
+import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
@@ -134,6 +135,12 @@ public class StaffServiceImpl implements StaffService {
         String password = "random"; // PasswordGenerator.random();
         String encodedPassword = passwordEncoder.encode(password);
 
+        BranchEntity branchEntity =
+                request.getBranchId() != null
+                        ? branchRepository.getById(request.getBranchId())
+                        : getCurrentStaff().getBranchEntity();
+
+
         StaffEntity newStaff =
                 StaffEntity.builder()
                         .email(request.getEmail())
@@ -141,7 +148,7 @@ public class StaffServiceImpl implements StaffService {
                         .roleEntities(request.getRoleEntities())
                         .password(encodedPassword)
                         .status(UserStatus.WAITING_CHANGE_PASSWORD)
-                        .branchEntity(branchRepository.getById(request.getBranchId()))
+                        .branchEntity(branchEntity)
                         .build();
 
         return staffRepository.saveAndFlush(newStaff);
