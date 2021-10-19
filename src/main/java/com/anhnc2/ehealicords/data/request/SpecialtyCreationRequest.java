@@ -1,4 +1,4 @@
-package com.anhnc2.ehealicords.data.common;
+package com.anhnc2.ehealicords.data.request;
 
 import com.anhnc2.ehealicords.data.entity.MedicalSpecialtyEntity;
 import lombok.AllArgsConstructor;
@@ -6,16 +6,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MedicalSpecialty {
-    private Integer id;
+public class SpecialtyCreationRequest {
     private String name;
     private String description;
-
-    public MedicalSpecialty(MedicalSpecialtyEntity entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.description = entity.getDescription();
-    }
 
     public MedicalSpecialtyEntity toEntity() {
         return MedicalSpecialtyEntity.builder()

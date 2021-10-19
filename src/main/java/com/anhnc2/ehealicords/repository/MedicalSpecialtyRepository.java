@@ -13,4 +13,6 @@ public interface MedicalSpecialtyRepository extends JpaRepository<MedicalSpecial
             value = "SELECT * FROM medical_specialties WHERE id IN :ids"
     )
     List<MedicalSpecialtyEntity> findMedicalSpecialityIn(@Param("ids") List<Integer> ids);
+
+    List<MedicalSpecialtyEntity> findAllByBranchId(Integer branchId);
 }

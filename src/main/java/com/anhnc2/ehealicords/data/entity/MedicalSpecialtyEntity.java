@@ -32,7 +32,7 @@ public class MedicalSpecialtyEntity {
 
     private String description;
 
-    // TODO: miss branchId
+    private Integer branchId;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "medialSpecialtyEntity")

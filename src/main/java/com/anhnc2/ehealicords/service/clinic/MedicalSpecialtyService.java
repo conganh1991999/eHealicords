@@ -1,13 +1,14 @@
 package com.anhnc2.ehealicords.service.clinic;
 
-import com.anhnc2.ehealicords.data.common.MedicalSpecialty;
+import com.anhnc2.ehealicords.data.request.SpecialtyCreationRequest;
+import com.anhnc2.ehealicords.data.response.SpecialtyResponse;
 
 import java.util.List;
 
 public interface MedicalSpecialtyService {
-    MedicalSpecialty createMedicalSpecialty(MedicalSpecialty specialty);
+    SpecialtyResponse createMedicalSpecialty(SpecialtyCreationRequest specialty);
 
-    List<MedicalSpecialty> getAllMedicalSpecialities();
+    List<SpecialtyResponse> getAllMedicalSpecialitiesInBranch();
 
-    MedicalSpecialty updateMedicalSpecialty(MedicalSpecialty specialty);
+    SpecialtyResponse updateMedicalSpecialty(Integer specialtyId, SpecialtyCreationRequest specialty);
 }
