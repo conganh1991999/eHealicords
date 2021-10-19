@@ -7,15 +7,13 @@ import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 import java.util.List;
 
 public interface SubAdminService {
-    long createSubAdmin(SaveSubAdminRequest request);
-
-    void changeSubAdminPassword(PasswordUpdateRequest request);
+    Long createSubAdmin(SaveSubAdminRequest request);
 
     List<SubAdminResponse> getAllSubAdmin();
+
+    void changeSubAdminPassword(PasswordUpdateRequest request);
 
 //    void deactivate(long staffId);
 //
 //    void activate(long staffId);
-//
-//    void update(long staffId, SaveSubAdminRequest request);
 }

@@ -28,21 +28,26 @@ public class SubAdminApi {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<Object> createSubAdmin(@Valid @RequestBody SaveSubAdminRequest request) {
-        return HttpResponseImpl.success(subAdminService.createSubAdmin(request));
+        return HttpResponseImpl.builder()
+                .data(subAdminService.createSubAdmin(request))
+                .build();
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public HttpResponse<List<SubAdminResponse>> getAllSubAdmins(){
+        return HttpResponseImpl.<List<SubAdminResponse>>builder()
+                .data(subAdminService.getAllSubAdmin())
+                .build();
     }
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    // @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
     public HttpResponse<Object> changeSubAdminPassword(@Valid @RequestBody PasswordUpdateRequest request) {
         subAdminService.changeSubAdminPassword(request);
-        return HttpResponseImpl.builder().code(StatusCode.CHANGE_PASSWORD_SUCCESS).build();
-    }
-
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<List<SubAdminResponse>> getAllSubAdmin(){
-        return HttpResponseImpl.success(subAdminService.getAllSubAdmin());
+        return HttpResponseImpl.builder()
+                .code(StatusCode.CHANGE_PASSWORD_SUCCESS)
+                .build();
     }
 
 //

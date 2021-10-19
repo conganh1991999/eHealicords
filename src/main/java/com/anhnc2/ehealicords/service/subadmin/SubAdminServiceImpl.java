@@ -8,13 +8,11 @@ import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.response.SubAdminResponse;
 import com.anhnc2.ehealicords.exception.AppException;
-import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.RoleRepository;
 import com.anhnc2.ehealicords.service.external.MailService;
 import com.anhnc2.ehealicords.service.staff.StaffService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,25 +24,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SubAdminServiceImpl implements SubAdminService {
 
-    private final BranchRepository branchRepository;
     private final StaffService staffService;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+
     private final MailService mailService;
+
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
-    public long createSubAdmin(SaveSubAdminRequest request) {
+    public Long createSubAdmin(SaveSubAdminRequest request) {
         StaffEntity staff = staffService.createStaffForSubAdmin(request);
 
         // notifyToSubAdminOverEmail(request, password);
 
         return staff.getId();
-    }
-
-    @Override
-    public void changeSubAdminPassword(PasswordUpdateRequest request) {
-        staffService.updateStaffPassword(request);
     }
 
     @Override
@@ -60,6 +53,11 @@ public class SubAdminServiceImpl implements SubAdminService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void changeSubAdminPassword(PasswordUpdateRequest request) {
+        staffService.updateStaffPassword(request);
+    }
+
 //    @Override
 //    public void deactivate(long staffId) {
 //        staffService.deactivate(staffId);
@@ -68,11 +66,5 @@ public class SubAdminServiceImpl implements SubAdminService {
 //    @Override
 //    public void activate(long staffId) {
 //        staffService.activate(staffId);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void update(long staffId, SaveSubAdminRequest request) {
-//        staffService.update(staffId, request);
 //    }
 }
