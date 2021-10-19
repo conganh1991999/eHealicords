@@ -7,16 +7,10 @@ import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
-import com.anhnc2.ehealicords.data.response.SpecialistResponse;
-import com.anhnc2.ehealicords.data.response.LiteStaff;
-import com.anhnc2.ehealicords.data.response.PaginationResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistDetailsResponse;
 import com.anhnc2.ehealicords.data.response.SpecialistInfoResponse;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.RegisterException;
-import com.anhnc2.ehealicords.repository.BranchRepository;
-import com.anhnc2.ehealicords.repository.MedicalSpecialtyRepository;
-import com.anhnc2.ehealicords.repository.RoomRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
 import com.anhnc2.ehealicords.repository.StaffRepository;
 import com.anhnc2.ehealicords.service.common.AppUserService;
@@ -25,8 +19,6 @@ import com.anhnc2.ehealicords.service.external.StorageService;
 import com.anhnc2.ehealicords.service.staff.StaffService;
 import com.anhnc2.ehealicords.util.FileUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,9 +42,6 @@ public class SpecialistServiceImpl implements SpecialistService {
     private final MailService mailService;
 
     private final StaffRepository staffRepository;
-    private final MedicalSpecialtyRepository medicalSpecialtyRepository;
-    private final BranchRepository branchRepository;
-    private final RoomRepository roomRepository;
     private final SpecialistRepository specialistRepository;
 
     @Override
@@ -65,7 +54,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         // sendSuccessEmailToSpecialist(createdStaff, createdSpecialist);
         // notifyToDoctorOverEmail(request, password);
 
-        return new SpecialistInfoResponse(createdStaff, createdSpecialist);
+        return new SpecialistInfoResponse(createdSpecialist);
     }
 
     private SpecialistEntity createSpecialistProfile(SpecialistCreationRequest specialist, StaffEntity createdStaff) {
@@ -106,26 +95,21 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         newSpecialist.setAvatarKey(newAvatarKey);
         newSpecialist.setUpdatedTime(System.currentTimeMillis());
-        return specialistRepository.save(newSpecialist);
+        return specialistRepository.saveAndFlush(newSpecialist);
     }
 
     @Override
-    public List<SpecialistEntity> getAllSpecialists() {
-        return specialistRepository.findAll();
-    }
-
-    @Override
-    public List<LiteStaff> getAllSpecialistsOfBranch(Integer branchId) {
+    public List<SpecialistInfoResponse> getAllSpecialistsOfBranch(Integer branchId) {
         List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
-        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+        return specialists.stream().map(SpecialistInfoResponse::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<LiteStaff> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId) {
+    public List<SpecialistInfoResponse> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId) {
         List<SpecialistEntity> specialists =
                 specialistRepository.findAlByMedialSpecialtyIdAndBranchId(specialtyId, branchId);
 
-        return specialists.stream().map(LiteStaff::fromDAO).collect(Collectors.toList());
+        return specialists.stream().map(SpecialistInfoResponse::new).collect(Collectors.toList());
     }
 
     @Override
@@ -133,42 +117,9 @@ public class SpecialistServiceImpl implements SpecialistService {
         SpecialistEntity specialist =
                 specialistRepository
                         .findById(id)
-                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
+                        .orElseThrow(() -> new AppException(StatusCode.SPECIALIST_DOES_NOT_EXISTS));
 
-        return SpecialistDetailsResponse.builder()
-                .id(specialist.getId())
-                .email(specialist.getEmail())
-                .fullName(specialist.getFullName())
-                .phoneNumber(specialist.getPhoneNumber())
-                .avatarKey(specialist.getAvatarKey())
-                .dateOfBirth(specialist.getDateOfBirth())
-                .dateOfStartingWork(specialist.getDateOfStartingWork())
-                .gender(specialist.getGender())
-                .specialistType(specialist.getSpecialistType())
-                .academicRank(specialist.getAcademicRank())
-                .degree(specialist.getDegree())
-                .degreeOfSpecialist(specialist.getDegreeOfSpecialist())
-                .medicalSpecialtyId(specialist.getMedialSpecialtyId())
-                .medicalSpecialtyName(medicalSpecialtyRepository.getById(specialist.getMedialSpecialtyId()).getName())
-                .branchId(specialist.getBranchId())
-                .branchName(branchRepository.getById(specialist.getBranchId()).getName())
-                .roomId(specialist.getRoomId())
-                .roomName(roomRepository.getById(specialist.getRoomId()).getName())
-                .createdTime(specialist.getCreatedTime())
-                .updatedTime(specialist.getUpdatedTime())
-                .build();
-    }
-
-    @Override
-    public void changeSpecialistPassword(PasswordUpdateRequest request) {
-        staffService.updateStaffPassword(request);
-    }
-
-    @Override
-    public void deleteSpecialist(Long specialistId) {
-        // DELETE staff
-        // DELETE avatar
-        // DELETE specialist
+        return new SpecialistDetailsResponse(specialist);
     }
 
     @Override
@@ -278,35 +229,42 @@ public class SpecialistServiceImpl implements SpecialistService {
         }
     }
 
-    // TODO: get list with paging
     @Override
-    public PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
-        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
-        List<SpecialistResponse> result =
-                doctors.getContent().stream()
-                        .map(
-                                specialist ->
-                                        SpecialistResponse.builder()
-                                                .id(specialist.getId())
-                                                .fullName(specialist.getFullName())
-                                                .specialty(getSpecialtyName(specialist))
-                                                .build())
-                        .collect(Collectors.toList());
-
-        return PaginationResponse.<List<SpecialistResponse>>builder()
-                .page(page)
-                .pageSize(pageSize)
-                .total(doctors.getTotalElements())
-                .totalPage(doctors.getTotalPages())
-                .items(result)
-                .build();
+    public void deleteSpecialist(Long specialistId) {
+        // DELETE staff
+        // DELETE avatar
+        // DELETE specialist
     }
 
-    private String getSpecialtyName(SpecialistEntity specialist) {
-        return medicalSpecialtyRepository.getById(specialist.getMedialSpecialtyId()).getName();
+    @Override
+    public void changeSpecialistPassword(PasswordUpdateRequest request) {
+        staffService.updateStaffPassword(request);
     }
 
+//    @Override
+//    public PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize) {
+//        PageRequest pageRequest = PageRequest.of(page, pageSize);
+//        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
+//        List<SpecialistResponse> result =
+//                doctors.getContent().stream()
+//                        .map(
+//                                specialist ->
+//                                        SpecialistResponse.builder()
+//                                                .id(specialist.getId())
+//                                                .fullName(specialist.getFullName())
+//                                                .specialty(specialist.getMedialSpecialtyEntity().getName())
+//                                                .build())
+//                        .collect(Collectors.toList());
+//
+//        return PaginationResponse.<List<SpecialistResponse>>builder()
+//                .page(page)
+//                .pageSize(pageSize)
+//                .total(doctors.getTotalElements())
+//                .totalPage(doctors.getTotalPages())
+//                .items(result)
+//                .build();
+//    }
+//
 //    private void sendSuccessEmailToSpecialist(
 //            StaffEntity createdStaff, SpecialistEntity createdSpecialist) {
 //        String to = createdStaff.getEmail();
@@ -330,5 +288,4 @@ public class SpecialistServiceImpl implements SpecialistService {
 //        params.put("password", password);
 //        mailService.sendEmail(to, subject, "create-doctor", params);
 //    }
-
 }

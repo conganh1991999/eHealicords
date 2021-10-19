@@ -35,6 +35,6 @@ public class RoomTypeEntity {
     private Integer branchId;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomTypeId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomTypeEntity")
     private List<RoomEntity> roomEntities;
 }

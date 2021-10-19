@@ -4,27 +4,24 @@ import com.anhnc2.ehealicords.constant.RoleType;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.constant.UserStatus;
 import com.anhnc2.ehealicords.data.auth.AuthUser;
-import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.RoleEntity;
 import com.anhnc2.ehealicords.data.entity.StaffEntity;
-import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.ForceChangePasswordRequest;
+import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SaveSubAdminRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.StaffCreationRequest;
 import com.anhnc2.ehealicords.exception.AppException;
-import com.anhnc2.ehealicords.exception.BranchException;
+import com.anhnc2.ehealicords.exception.AuthException;
 import com.anhnc2.ehealicords.exception.PasswordNotMatchException;
 import com.anhnc2.ehealicords.exception.TheSameOldPasswordException;
 import com.anhnc2.ehealicords.exception.WaitingChangePasswordException;
-import com.anhnc2.ehealicords.exception.AuthException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.RoleRepository;
 import com.anhnc2.ehealicords.repository.StaffRepository;
 import com.anhnc2.ehealicords.service.common.AppUserService;
 import com.anhnc2.ehealicords.service.common.JwtService;
 import com.anhnc2.ehealicords.service.external.MailService;
-import com.anhnc2.ehealicords.util.PasswordGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,10 +35,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
-    private final BranchRepository branchRepository;
-    private final RoleRepository roleRepository;
-    private final StaffRepository staffRepository;
-
     private final AppUserService appUserService;
 
     private final JwtService jwtService;
@@ -49,6 +42,10 @@ public class StaffServiceImpl implements StaffService {
     private final MailService mailService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final BranchRepository branchRepository;
+    private final RoleRepository roleRepository;
+    private final StaffRepository staffRepository;
 
     @Override
     public String checkPassword(String email, String password) {
@@ -88,11 +85,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void updateStaffPassword(PasswordUpdateRequest request) {
-        StaffEntity staff =
-                staffRepository
-                        .findById(appUserService.getCurrentUserId())
-                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
-
+        StaffEntity staff = getCurrentStaff();
         updatePassword(request, staff);
     }
 
@@ -155,46 +148,10 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffEntity getStaffById(Long id) {
-        return staffRepository.getById(id);
-    }
-
-//    @Override
-//    public void update(long staffId, SaveSubAdminRequest request) {
-//        StaffEntity staff = staffRepository.findById(staffId).get();
-//
-//        List<RoleType> roles = staff.getRoleEntities().stream()
-//                .map(RoleEntity::getType)
-//                .collect(Collectors.toList());
-//
-//        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
-//            return;
-//        }
-//
-//        staff.setFullName(request.getFullName());
-//
-//        if(!request.getEmail().equals(staff.getEmail())){
-//            String password = PasswordGenerator.random();
-//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
-//            staff.setPassword(passwordEncoder.encode(password));
-//
-//            createStaffForSubAdmin(request, password);
-//        }
-//
-//        staffRepository.saveAndFlush(staff);
-//    }
-
-    @Override
-    public void updateStaff(Long staffId, String fullName, Integer branchId) {
-        StaffEntity currentStaff = getStaffById(staffId);
-        BranchEntity branch = branchRepository
-                .findById(branchId)
-                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
-
-        currentStaff.setFullName(fullName);
-        currentStaff.setBranchEntity(branch);
-
-        staffRepository.save(currentStaff);
+    public StaffEntity getCurrentStaff() {
+        return staffRepository
+                .findById(appUserService.getCurrentUserId())
+                .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
     }
 
 //    @Override
@@ -207,6 +164,19 @@ public class StaffServiceImpl implements StaffService {
 //
 //        staffRepository.saveAndFlush(staff);
 //        notifyResetPasswordToDoctorOverEmail(staff.getEmail(), staff.getFullName(), password);
+//    }
+//
+//    @Override
+//    public void updateStaff(Long staffId, String fullName, Integer branchId) {
+//        StaffEntity currentStaff = getStaffById(staffId);
+//        BranchEntity branch = branchRepository
+//                .findById(branchId)
+//                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
+//
+//        currentStaff.setFullName(fullName);
+//        currentStaff.setBranchEntity(branch);
+//
+//        staffRepository.save(currentStaff);
 //    }
 //
 //    @Override
@@ -241,6 +211,31 @@ public class StaffServiceImpl implements StaffService {
 //
 //            notifyActivateToSubAdminOverEmail(staff.getEmail(), staff.getFullName(), password);
 //        }
+//    }
+//
+//    @Override
+//    public void update(long staffId, SaveSubAdminRequest request) {
+//        StaffEntity staff = staffRepository.findById(staffId).get();
+//
+//        List<RoleType> roles = staff.getRoleEntities().stream()
+//                .map(RoleEntity::getType)
+//                .collect(Collectors.toList());
+//
+//        if (!roles.contains(RoleType.ROLE_SUB_ADMIN)) {
+//            return;
+//        }
+//
+//        staff.setFullName(request.getFullName());
+//
+//        if(!request.getEmail().equals(staff.getEmail())){
+//            String password = PasswordGenerator.random();
+//            staff.setStatus(UserStatus.WAITING_CHANGE_PASSWORD);
+//            staff.setPassword(passwordEncoder.encode(password));
+//
+//            createStaffForSubAdmin(request, password);
+//        }
+//
+//        staffRepository.saveAndFlush(staff);
 //    }
 //
 //    private void notifyResetPasswordToDoctorOverEmail(String to, String name, String password) {

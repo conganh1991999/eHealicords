@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "medical_specialty")
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,6 +35,6 @@ public class MedicalSpecialtyEntity {
     // TODO: miss branchId
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medialSpecialtyId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medialSpecialtyEntity")
     private List<SpecialistEntity> specialistEntities;
 }

@@ -19,15 +19,15 @@ public interface StaffService {
 
     StaffEntity createStaffForSpecialist(SpecialistCreationRequest specialistRequest);
 
-    StaffEntity getStaffById(Long id);
-
-    // void update(long staffId, SaveSubAdminRequest request);
-
-    void updateStaff(Long staffId, String fullName, Integer branchId);
+    StaffEntity getCurrentStaff();
 
 //    void resetPasswordByEmail(String email);
+//
+//    void updateStaff(Long staffId, String fullName, Integer branchId);
 //
 //    void deactivate(long staffId);
 //
 //    void activate(long staffId);
+//
+//    void update(long staffId, SaveSubAdminRequest request);
 }

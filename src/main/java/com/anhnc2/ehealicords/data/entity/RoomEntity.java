@@ -22,7 +22,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "room")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,10 +36,10 @@ public class RoomEntity {
 
     private String description;
 
+    private Integer branchId;
+
     @Column(name = "room_type_id")
     private Integer roomTypeId;
-
-    private Integer branchId;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +47,6 @@ public class RoomEntity {
     private RoomTypeEntity roomTypeEntity;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomEntity")
     private List<SpecialistEntity> specialistEntities;
 }
