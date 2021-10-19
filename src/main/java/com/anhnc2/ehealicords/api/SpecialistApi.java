@@ -45,9 +45,9 @@ public class SpecialistApi {
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    @GetMapping("/branch/{branchId}/all")
-    public HttpResponse<List<SpecialistInfoResponse>> getSpecialistsInBranch(@PathVariable Integer branchId) {
-        List<SpecialistInfoResponse> data = specialistService.getAllSpecialistsOfBranch(branchId);
+    @GetMapping("/my-branch/all")
+    public HttpResponse<List<SpecialistInfoResponse>> getSpecialistsInBranch() {
+        List<SpecialistInfoResponse> data = specialistService.getAllSpecialistsOfBranch();
         return HttpResponseImpl.<List<SpecialistInfoResponse>>builder()
                 .code(StatusCode.SUCCESS)
                 .data(data)
@@ -55,10 +55,9 @@ public class SpecialistApi {
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    @GetMapping("/branch/specialty/all")
-    public HttpResponse<List<SpecialistInfoResponse>> getSpecialistInSpecialty(@RequestParam("branchId") Integer branchId,
-                                                                               @RequestParam("specialtyId") Integer specialtyId) {
-        List<SpecialistInfoResponse> data = specialistService.getAllSpecialistsOfSpecialty(branchId, specialtyId);
+    @GetMapping("/my-branch/specialty/{id}/all")
+    public HttpResponse<List<SpecialistInfoResponse>> getSpecialistInSpecialty(@PathVariable("id") Integer specialtyId) {
+        List<SpecialistInfoResponse> data = specialistService.getAllSpecialistsOfSpecialty(specialtyId);
         return HttpResponseImpl.<List<SpecialistInfoResponse>>builder()
                 .code(StatusCode.SUCCESS)
                 .data(data)

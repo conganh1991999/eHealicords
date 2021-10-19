@@ -13,9 +13,9 @@ import java.util.List;
 public interface SpecialistService {
     SpecialistInfoResponse createSpecialist(SpecialistCreationRequest specialist);
 
-    List<SpecialistInfoResponse> getAllSpecialistsOfBranch(Integer branchId);
+    List<SpecialistInfoResponse> getAllSpecialistsOfBranch();
 
-    List<SpecialistInfoResponse> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId);
+    List<SpecialistInfoResponse> getAllSpecialistsOfSpecialty(Integer specialtyId);
 
     SpecialistDetailsResponse getSpecialist(Long id);
 

@@ -99,13 +99,18 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public List<SpecialistInfoResponse> getAllSpecialistsOfBranch(Integer branchId) {
+    public List<SpecialistInfoResponse> getAllSpecialistsOfBranch() {
+        Integer branchId = staffService.getCurrentStaff().getBranchEntity().getId();
+
         List<SpecialistEntity> specialists = specialistRepository.findAllSpecialistOfBranch(branchId);
+
         return specialists.stream().map(SpecialistInfoResponse::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<SpecialistInfoResponse> getAllSpecialistsOfSpecialty(Integer branchId, Integer specialtyId) {
+    public List<SpecialistInfoResponse> getAllSpecialistsOfSpecialty(Integer specialtyId) {
+        Integer branchId = staffService.getCurrentStaff().getBranchEntity().getId();
+
         List<SpecialistEntity> specialists =
                 specialistRepository.findAlByMedialSpecialtyIdAndBranchId(specialtyId, branchId);
 
