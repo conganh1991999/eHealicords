@@ -4,10 +4,16 @@ import com.anhnc2.ehealicords.constant.BranchStatus;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.entity.BusinessHoursEntity;
+import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
+import com.anhnc2.ehealicords.data.response.BranchDetailsResponse;
+import com.anhnc2.ehealicords.data.response.BranchResponse;
+import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.BranchException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.BusinessHoursRepository;
+import com.anhnc2.ehealicords.repository.StaffRepository;
+import com.anhnc2.ehealicords.service.common.AppUserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +30,15 @@ public class BranchServiceImpl implements BranchService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BranchServiceImpl.class);
 
+    private final AppUserService appUserService;
+
     private final BranchRepository branchRepository;
     private final BusinessHoursRepository businessHoursRepository;
 
+    private final StaffRepository staffRepository;
+
     @Override
-    public void createBranch(BranchCreationRequest branchRequest) {
+    public BranchResponse createBranch(BranchCreationRequest branchRequest) {
         BusinessHoursEntity businessHours =
                 BusinessHoursEntity.builder()
                         .morningOpen(branchRequest.getMorningOpen())
@@ -62,19 +72,32 @@ public class BranchServiceImpl implements BranchService {
 
         LOGGER.debug("Create BranchEntity: {}", branch);
 
-        branchRepository.save(branch);
+        return new BranchResponse(branchRepository.save(branch));
     }
 
     @Override
-    public List<BranchEntity> getAllBranch() {
-        return branchRepository.findAll();
+    public List<BranchResponse> getAllBranch() {
+        return branchRepository.findAll().stream().map(BranchResponse::new).collect(Collectors.toList());
     }
 
     @Override
-    public BranchEntity getBranchById(Integer id) {
-        return branchRepository
-                .findById(id)
-                .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
+    public BranchDetailsResponse getBranchById(Integer id) {
+        BranchEntity entity =
+                branchRepository
+                        .findById(id)
+                        .orElseThrow(() -> new BranchException(StatusCode.BRANCH_DOES_NOT_EXISTED));
+
+        return new BranchDetailsResponse(entity);
+    }
+
+    @Override
+    public BranchDetailsResponse getMyBranch() {
+        StaffEntity staff =
+                staffRepository
+                        .findById(appUserService.getCurrentUserId())
+                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
+
+        return getBranchById(staff.getBranchEntity().getId());
     }
 
     @Override

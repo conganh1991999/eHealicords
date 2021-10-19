@@ -1,7 +1,6 @@
 package com.anhnc2.ehealicords.api;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
-import com.anhnc2.ehealicords.data.entity.BranchEntity;
 import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
 import com.anhnc2.ehealicords.data.response.BranchDetailsResponse;
 import com.anhnc2.ehealicords.data.response.BranchResponse;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/protected/branches")
@@ -39,11 +37,12 @@ public class BranchApi {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<Integer> createBranch(@RequestBody BranchCreationRequest branch) {
-        branchService.createBranch(branch);
+    public HttpResponse<BranchResponse> createBranch(@RequestBody BranchCreationRequest branch) {
+        BranchResponse result = branchService.createBranch(branch);
         // cacheService.clearCache("branches");
-        return HttpResponseImpl.<Integer>builder()
+        return HttpResponseImpl.<BranchResponse>builder()
                 .code(StatusCode.SUCCESS)
+                .data(result)
                 .message("Create new branch successfully!")
                 .build();
     }
@@ -52,8 +51,7 @@ public class BranchApi {
     @PreAuthorize("hasRole('ADMIN')")
     // @Cacheable(cacheNames = "branches")
     public HttpResponse<List<BranchResponse>> getAllBranches() {
-        List<BranchResponse> branches
-                = branchService.getAllBranch().stream().map(BranchResponse::new).collect(Collectors.toList());
+        List<BranchResponse> branches = branchService.getAllBranch();
 
         return HttpResponseImpl.<List<BranchResponse>>builder()
                 .code(StatusCode.SUCCESS)
@@ -63,10 +61,21 @@ public class BranchApi {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUB_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<BranchDetailsResponse> getBranchById(@PathVariable("id") Integer id) {
-        BranchEntity branch = branchService.getBranchById(id);
-        BranchDetailsResponse branchDetails = new BranchDetailsResponse(branch);
+        BranchDetailsResponse branchDetails = branchService.getBranchById(id);
+
+        return HttpResponseImpl.<BranchDetailsResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .message("Get branch successfully!")
+                .data(branchDetails)
+                .build();
+    }
+
+    @GetMapping("/my-branch")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
+    public HttpResponse<BranchDetailsResponse> getMyBranch() {
+        BranchDetailsResponse branchDetails = branchService.getMyBranch();
 
         return HttpResponseImpl.<BranchDetailsResponse>builder()
                 .code(StatusCode.SUCCESS)
