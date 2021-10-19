@@ -8,12 +8,10 @@ import com.anhnc2.ehealicords.data.entity.StaffEntity;
 import com.anhnc2.ehealicords.data.request.BranchCreationRequest;
 import com.anhnc2.ehealicords.data.response.BranchDetailsResponse;
 import com.anhnc2.ehealicords.data.response.BranchResponse;
-import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.BranchException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
 import com.anhnc2.ehealicords.repository.BusinessHoursRepository;
-import com.anhnc2.ehealicords.repository.StaffRepository;
-import com.anhnc2.ehealicords.service.common.AppUserService;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +28,10 @@ public class BranchServiceImpl implements BranchService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BranchServiceImpl.class);
 
-    private final AppUserService appUserService;
+    private final StaffService staffService;
 
     private final BranchRepository branchRepository;
     private final BusinessHoursRepository businessHoursRepository;
-
-    private final StaffRepository staffRepository;
 
     @Override
     public BranchResponse createBranch(BranchCreationRequest branchRequest) {
@@ -92,11 +88,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchDetailsResponse getMyBranch() {
-        StaffEntity staff =
-                staffRepository
-                        .findById(appUserService.getCurrentUserId())
-                        .orElseThrow(() -> new AppException(StatusCode.STAFF_DOES_NOT_EXISTS));
-
+        StaffEntity staff = staffService.getCurrentStaff();
         return getBranchById(staff.getBranchEntity().getId());
     }
 
