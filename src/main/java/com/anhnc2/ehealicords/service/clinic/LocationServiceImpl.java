@@ -49,4 +49,5 @@ public class LocationServiceImpl implements LocationService {
     public Optional<WardEntity> getWardById(Integer id) {
         return wardRepository.findById(id);
     }
+
 }

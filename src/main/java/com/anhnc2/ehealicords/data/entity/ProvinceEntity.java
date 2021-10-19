@@ -22,4 +22,8 @@ public class ProvinceEntity {
     private String code;
 
     private String prefix;
+
+    public String getFullName() {
+        return String.join(" ", prefix, name);
+    }
 }
