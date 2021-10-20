@@ -1,27 +1,27 @@
 package com.anhnc2.ehealicords.service.clinic;
 
-import com.anhnc2.ehealicords.data.common.Room;
-import com.anhnc2.ehealicords.data.common.RoomType;
-import com.anhnc2.ehealicords.data.response.PaginationResponse;
+import com.anhnc2.ehealicords.data.request.RoomCreationRequest;
+import com.anhnc2.ehealicords.data.request.RoomTypeCreationRequest;
+import com.anhnc2.ehealicords.data.response.RoomDetailsResponse;
+import com.anhnc2.ehealicords.data.response.RoomResponse;
+import com.anhnc2.ehealicords.data.response.RoomTypeResponse;
 
 import java.util.List;
 
 public interface RoomService {
-    void createRoomType(RoomType roomType);
+    RoomTypeResponse createRoomType(RoomTypeCreationRequest roomType);
 
-    void updateRoomType(RoomType roomType);
+    List<RoomTypeResponse> getAllRoomTypesInBranch();
 
-    List<RoomType> getAllRoomTypesInBranch(Integer branchId);
+    RoomTypeResponse updateRoomType(Integer roomTypeId, RoomTypeCreationRequest roomType);
 
-    void createRoom(Room room);
+    RoomResponse createRoom(RoomCreationRequest room);
 
-    void updateRoom(Room room);
+    List<RoomDetailsResponse> getAllRoomsInBranch();
 
-    List<Room> getAllRoomsInBranch(Integer branchId);
+    RoomResponse updateRoom(Integer roomId, RoomCreationRequest room);
 
-    PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize);
+    List<RoomDetailsResponse> getAllRoomsOfRoomType(Integer roomTypeId);
 
-    List<Room> getAllRoomsOfRoomType(Integer branchId, Integer roomTypeId);
-
-    Room getRoomInformation(Integer id);
+    // PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize);
 }

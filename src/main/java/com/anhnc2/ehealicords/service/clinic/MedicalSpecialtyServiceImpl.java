@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
 
-    private final MedicalSpecialtyRepository repository;
     private final StaffService staffService;
+
+    private final MedicalSpecialtyRepository repository;
 
     @Override
     public SpecialtyResponse createMedicalSpecialty(SpecialtyCreationRequest specialty) {

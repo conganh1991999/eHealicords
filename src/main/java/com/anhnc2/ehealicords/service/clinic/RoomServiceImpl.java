@@ -1,16 +1,16 @@
 package com.anhnc2.ehealicords.service.clinic;
 
-import com.anhnc2.ehealicords.data.common.Room;
-import com.anhnc2.ehealicords.data.common.RoomType;
 import com.anhnc2.ehealicords.data.entity.RoomEntity;
 import com.anhnc2.ehealicords.data.entity.RoomTypeEntity;
-import com.anhnc2.ehealicords.data.response.PaginationResponse;
+import com.anhnc2.ehealicords.data.request.RoomCreationRequest;
+import com.anhnc2.ehealicords.data.request.RoomTypeCreationRequest;
+import com.anhnc2.ehealicords.data.response.RoomDetailsResponse;
+import com.anhnc2.ehealicords.data.response.RoomResponse;
+import com.anhnc2.ehealicords.data.response.RoomTypeResponse;
 import com.anhnc2.ehealicords.repository.RoomRepository;
 import com.anhnc2.ehealicords.repository.RoomTypeRepository;
+import com.anhnc2.ehealicords.service.staff.StaffService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,85 +20,91 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
+    private final StaffService staffService;
+
     private final RoomTypeRepository roomTypeRepository;
     private final RoomRepository roomRepository;
 
     @Override
-    public void createRoomType(RoomType roomType) {
-        roomTypeRepository.save(roomType.toEntity());
+    public RoomTypeResponse createRoomType(RoomTypeCreationRequest roomType) {
+        RoomTypeEntity newRoomType = roomType.toEntity();
+
+        newRoomType.setBranchId(staffService.getCurrentStaff().getBranchEntity().getId());
+
+        return new RoomTypeResponse(roomTypeRepository.save(newRoomType));
     }
 
     @Override
-    public void updateRoomType(RoomType roomType) {
-        RoomTypeEntity entity = roomTypeRepository.getById(roomType.getId());
-        entity.setName(roomType.getName());
-        entity.setDescription(roomType.getDescription());
-
-        roomTypeRepository.save(entity);
-    }
-
-    @Override
-    public List<RoomType> getAllRoomTypesInBranch(Integer branchId) {
-        return roomTypeRepository.findAllByBranchId(branchId)
+    public List<RoomTypeResponse> getAllRoomTypesInBranch() {
+        return roomTypeRepository.findAllByBranchId(staffService.getCurrentStaff().getBranchEntity().getId())
                 .stream()
-                .map(RoomType::new)
+                .map(RoomTypeResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void createRoom(Room room) {
-        roomRepository.save(room.toEntity());
+    public RoomTypeResponse updateRoomType(Integer roomTypeId, RoomTypeCreationRequest roomType) {
+        RoomTypeEntity entity = roomTypeRepository.getById(roomTypeId);
+        entity.setName(roomType.getName());
+        entity.setDescription(roomType.getDescription());
+
+        return new RoomTypeResponse(roomTypeRepository.save(entity));
     }
 
     @Override
-    public void updateRoom(Room room) {
-        RoomEntity entity = roomRepository.getById(room.getId());
+    public RoomResponse createRoom(RoomCreationRequest room) {
+        RoomEntity newRoom = room.toEntity();
+
+        newRoom.setBranchId(staffService.getCurrentStaff().getBranchEntity().getId());
+
+        return new RoomResponse(roomRepository.save(newRoom));
+    }
+
+    @Override
+    public List<RoomDetailsResponse> getAllRoomsInBranch() {
+        return roomRepository.findAllByBranchId(staffService.getCurrentStaff().getBranchEntity().getId())
+                .stream()
+                .map(RoomDetailsResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RoomResponse updateRoom(Integer roomId, RoomCreationRequest room) {
+        RoomEntity entity = roomRepository.getById(roomId);
         entity.setName(room.getName());
         entity.setDescription(room.getDescription());
         entity.setRoomTypeId(room.getRoomTypeId());
 
-        roomRepository.save(entity);
+        return new RoomResponse(roomRepository.save(entity));
     }
 
     @Override
-    public List<Room> getAllRoomsInBranch(Integer branchId) {
-        return roomRepository.findAllByBranchId(branchId)
+    public List<RoomDetailsResponse> getAllRoomsOfRoomType(Integer roomTypeId) {
+        return roomRepository
+                .findAllByRoomTypeIdAndBranchId(roomTypeId, staffService.getCurrentStaff().getBranchEntity().getId())
                 .stream()
-                .map(Room::new)
+                .map(RoomDetailsResponse::new)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by("roomTypeId", "id"));
-        Page<RoomEntity> roomPage = roomRepository.findAllByBranchId(branchId, pageRequest);
-
-        List<Room> rooms =
-                roomPage.getContent().stream()
-                        .map(Room::new)
-                        .collect(Collectors.toList());
-
-        long total = roomPage.getTotalElements();
-
-        return PaginationResponse.<List<Room>>builder()
-                .page(page)
-                .pageSize(pageSize)
-                .total(total)
-                .totalPage((int) Math.ceil((double) total / pageSize))
-                .items(rooms)
-                .build();
-    }
-
-    @Override
-    public List<Room> getAllRoomsOfRoomType(Integer branchId, Integer roomTypeId) {
-        return roomRepository.findAllByRoomTypeIdAndBranchId(roomTypeId, branchId)
-                .stream()
-                .map(Room::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Room getRoomInformation(Integer id) {
-        return new Room(roomRepository.getById(id));
-    }
+//    @Override
+//    public PaginationResponse<List<Room>> getAllRoomsInBranch(Integer branchId, Integer page, Integer pageSize) {
+//        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by("roomTypeId", "id"));
+//        Page<RoomEntity> roomPage = roomRepository.findAllByBranchId(branchId, pageRequest);
+//
+//        List<Room> rooms =
+//                roomPage.getContent().stream()
+//                        .map(Room::new)
+//                        .collect(Collectors.toList());
+//
+//        long total = roomPage.getTotalElements();
+//
+//        return PaginationResponse.<List<Room>>builder()
+//                .page(page)
+//                .pageSize(pageSize)
+//                .total(total)
+//                .totalPage((int) Math.ceil((double) total / pageSize))
+//                .items(rooms)
+//                .build();
+//    }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "room_type")
-@Builder
+@Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
