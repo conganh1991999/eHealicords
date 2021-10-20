@@ -10,6 +10,7 @@ import com.anhnc2.ehealicords.data.response.RoomResponse;
 import com.anhnc2.ehealicords.data.response.RoomTypeResponse;
 import com.anhnc2.ehealicords.service.clinic.RoomService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class RoomApi {
     private final RoomService roomService;
 
     @PostMapping("/create-room-type")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<RoomTypeResponse> createRoomType(@RequestBody RoomTypeCreationRequest body) {
         RoomTypeResponse data = roomService.createRoomType(body);
         return HttpResponseImpl.<RoomTypeResponse>builder()
@@ -37,6 +39,7 @@ public class RoomApi {
     }
 
     @GetMapping("/all-room-types-in-branch")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<List<RoomTypeResponse>> getAllRoomTypesInBranch() {
         List<RoomTypeResponse> result = roomService.getAllRoomTypesInBranch();
         return HttpResponseImpl.<List<RoomTypeResponse>>builder()
@@ -47,6 +50,7 @@ public class RoomApi {
     }
 
     @PutMapping("/update-room-type/{id}")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<RoomTypeResponse> updateRoomType(@PathVariable("id") Integer roomTypeId,
                                                          @RequestBody RoomTypeCreationRequest body) {
         RoomTypeResponse result = roomService.updateRoomType(roomTypeId, body);
@@ -57,6 +61,7 @@ public class RoomApi {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<RoomResponse> createRoom(@RequestBody RoomCreationRequest body) {
         RoomResponse result = roomService.createRoom(body);
         return HttpResponseImpl.<RoomResponse>builder()
@@ -66,6 +71,7 @@ public class RoomApi {
     }
 
     @GetMapping("/all-in-branch")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<List<RoomDetailsResponse>> getAllRoomsInBranch() {
         List<RoomDetailsResponse> result = roomService.getAllRoomsInBranch();
         return HttpResponseImpl.<List<RoomDetailsResponse>>builder()
@@ -76,6 +82,7 @@ public class RoomApi {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<RoomResponse> updateRoom(@PathVariable("id") Integer roomId,
                                                  @RequestBody RoomCreationRequest body) {
         RoomResponse result = roomService.updateRoom(roomId, body);
@@ -87,6 +94,7 @@ public class RoomApi {
     }
 
     @GetMapping("/all-in-branch/room-type/{tid}")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<List<RoomDetailsResponse>> getAllRoomsOfRoomType(@PathVariable("tid") Integer roomTypeId) {
         List<RoomDetailsResponse> result = roomService.getAllRoomsOfRoomType(roomTypeId);
         return HttpResponseImpl.<List<RoomDetailsResponse>>builder()
