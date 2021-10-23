@@ -5,6 +5,7 @@ import com.anhnc2.ehealicords.data.request.PatientCreationRequest;
 import com.anhnc2.ehealicords.data.request.PatientUpdateRequest;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
+import com.anhnc2.ehealicords.data.response.PatientDetailsResponse;
 import com.anhnc2.ehealicords.data.response.PatientResponse;
 import com.anhnc2.ehealicords.service.user.PatientService;
 import lombok.AllArgsConstructor;
@@ -49,14 +50,13 @@ public class PatientApi {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientResponse> getPatientInformation(@PathVariable("id") Long patientId) {
-//        PatientResponse result = patientService.createPatient(patient);
-//        return HttpResponseImpl.<PatientResponse>builder()
-//                .code(StatusCode.SUCCESS)
-//                .data(result)
-//                .message("Create patient successfully!")
-//                .build();
-        return null;
+    public HttpResponse<PatientDetailsResponse> getPatientInformation(@PathVariable("id") Long patientId) {
+        PatientDetailsResponse result = patientService.getPatientInformation(patientId);
+        return HttpResponseImpl.<PatientDetailsResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Get patient successfully!")
+                .build();
     }
 
     @PostMapping("/update-phase-1")

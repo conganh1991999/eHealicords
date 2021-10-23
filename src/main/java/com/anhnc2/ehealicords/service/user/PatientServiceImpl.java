@@ -3,6 +3,7 @@ package com.anhnc2.ehealicords.service.user;
 import com.anhnc2.ehealicords.data.entity.PatientEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PatientCreationRequest;
+import com.anhnc2.ehealicords.data.response.PatientDetailsResponse;
 import com.anhnc2.ehealicords.data.response.PatientResponse;
 import com.anhnc2.ehealicords.repository.DistrictRepository;
 import com.anhnc2.ehealicords.repository.PatientRepository;
@@ -62,6 +63,11 @@ public class PatientServiceImpl implements PatientService {
                     response.setTempWard(p.getTempWardEntity().toBuilder().build());
                     return response;
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public PatientDetailsResponse getPatientInformation(Long patientId) {
+        return new PatientDetailsResponse(patientRepository.getById(patientId));
     }
 
 }
