@@ -3,6 +3,7 @@ package com.anhnc2.ehealicords.service.user;
 import com.anhnc2.ehealicords.data.entity.PatientEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PatientCreationRequest;
+import com.anhnc2.ehealicords.data.request.PatientUpdateRequest;
 import com.anhnc2.ehealicords.data.response.PatientDetailsResponse;
 import com.anhnc2.ehealicords.data.response.PatientResponse;
 import com.anhnc2.ehealicords.repository.DistrictRepository;
@@ -68,6 +69,35 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientDetailsResponse getPatientInformation(Long patientId) {
         return new PatientDetailsResponse(patientRepository.getById(patientId));
+    }
+
+    @Override
+    public PatientDetailsResponse updatePatientPhase2(Long patientId, PatientUpdateRequest request) {
+        PatientEntity patient = patientRepository.getById(patientId);
+
+        patient.setIdentityCardIssuePlace(request.getIdentityCardIssuePlace());
+        patient.setIdentityCardIssueDate(request.getIdentityCardIssueDate());
+        patient.setTemporaryResidenceAddress(request.getTemporaryResidenceAddress());
+        patient.setPermanentAddress(request.getPermanentAddress());
+        patient.setNationality(request.getNationality());
+        patient.setReligion(request.getReligion());
+        patient.setFolk(request.getFolk());
+        patient.setOccupation(request.getOccupation());
+        patient.setAcademicLevel(request.getAcademicLevel());
+        patient.setMaritalStatus(request.getMaritalStatus());
+        patient.setUpdatedTime(System.currentTimeMillis());
+        patient.setPermProvinceId(request.getPermProvinceId());
+        patient.setPermDistrictId(request.getPermDistrictId());
+        patient.setPermWardId(request.getPermWardId());
+
+        patient = patientRepository.saveAndFlush(patient);
+
+        PatientDetailsResponse detailsResponse = new PatientDetailsResponse(patient);
+        detailsResponse.setPermProvince(provinceRepository.getById(patient.getPermProvinceId()).toBuilder().build());
+        detailsResponse.setPermDistrict(districtRepository.getById(patient.getPermDistrictId()).toBuilder().build());
+        detailsResponse.setPermWard(wardRepository.getById(patient.getPermWardId()).toBuilder().build());
+
+        return detailsResponse;
     }
 
 }

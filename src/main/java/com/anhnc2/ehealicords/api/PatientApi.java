@@ -59,38 +59,38 @@ public class PatientApi {
                 .build();
     }
 
-    @PostMapping("/update-phase-1")
+    @PostMapping("/update-phase-1/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
     public HttpResponse<PatientResponse> updatePatientPhase1(@RequestBody PatientUpdateRequest request) {
 //        PatientResponse result = patientService.createPatient(patient);
 //        return HttpResponseImpl.<PatientResponse>builder()
 //                .code(StatusCode.SUCCESS)
 //                .data(result)
-//                .message("Create patient successfully!")
+//                .message("Update patient successfully!")
 //                .build();
         return null;
     }
 
-    @PostMapping("/update-phase-2")
+    @PostMapping("/update-phase-2/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientResponse> updatePatientPhase2(@RequestBody PatientUpdateRequest request) {
-//        PatientResponse result = patientService.createPatient(patient);
-//        return HttpResponseImpl.<PatientResponse>builder()
-//                .code(StatusCode.SUCCESS)
-//                .data(result)
-//                .message("Create patient successfully!")
-//                .build();
-        return null;
+    public HttpResponse<PatientDetailsResponse> updatePatientPhase2(@PathVariable("id") Long patientId,
+                                                                    @RequestBody PatientUpdateRequest request) {
+        PatientDetailsResponse result = patientService.updatePatientPhase2(patientId, request);
+        return HttpResponseImpl.<PatientDetailsResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Update patient successfully!")
+                .build();
     }
 
-    @PostMapping("/update")
+    @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
     public HttpResponse<PatientResponse> updatePatient(@RequestBody PatientUpdateRequest request) {
 //        PatientResponse result = patientService.createPatient(patient);
 //        return HttpResponseImpl.<PatientResponse>builder()
 //                .code(StatusCode.SUCCESS)
 //                .data(result)
-//                .message("Create patient successfully!")
+//                .message("Update patient successfully!")
 //                .build();
         return null;
     }
