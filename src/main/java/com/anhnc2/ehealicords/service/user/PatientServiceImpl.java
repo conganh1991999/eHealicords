@@ -12,6 +12,9 @@ import com.anhnc2.ehealicords.service.specialist.SpecialistService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class PatientServiceImpl implements PatientService {
@@ -43,6 +46,22 @@ public class PatientServiceImpl implements PatientService {
         response.setTempWard(wardRepository.getById(patientEntity.getTempWardId()).toBuilder().build());
 
         return response;
+    }
+
+    @Override
+    public List<PatientResponse> getAllPatients() {
+        List<PatientEntity> patientEntities
+                = patientRepository.findAllBySpecialistId(specialistService.getCurrentSpecialist().getId());
+
+        return patientEntities.stream()
+                .map(p -> {
+                    PatientResponse response = new PatientResponse(p);
+                    response.setBirthProvince(p.getBirthProvinceEntity().toBuilder().build());
+                    response.setTempProvince(p.getTempProvinceEntity().toBuilder().build());
+                    response.setTempDistrict(p.getTempDistrictEntity().toBuilder().build());
+                    response.setTempWard(p.getTempWardEntity().toBuilder().build());
+                    return response;
+                }).collect(Collectors.toList());
     }
 
 }
