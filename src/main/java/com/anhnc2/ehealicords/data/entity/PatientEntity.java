@@ -25,16 +25,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Patient {
+public class PatientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // gen
 
     @Column(name = "identity_card_number", nullable = false, unique = true)
     private Long identityCardNumber;
 
     @Column(name = "personal_health_id", nullable = false, unique = true)
-    private Long personalHealthId;
+    private Long personalHealthId; // gen
 
     private String gender;
 
@@ -74,16 +74,18 @@ public class Patient {
 
     private String relativePhoneNumber;
 
-    @Column(name = "relative_identity_card_number", nullable = false, unique = true)
+    @Column(name = "relative_identity_card_number")
     private Long relativeIdentityCardNumber;
 
     private String relative;
 
-    private Long createdTime;
+    private Long createdTime; // gen
 
-    private Long updatedTime;
+    private Long updatedTime; // gen
 
-    private Integer branchId;
+    private Integer branchId; // gen
+
+    private Long specialistId; // gen
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)

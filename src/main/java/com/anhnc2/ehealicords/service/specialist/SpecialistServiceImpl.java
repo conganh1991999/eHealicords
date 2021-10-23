@@ -246,7 +246,12 @@ public class SpecialistServiceImpl implements SpecialistService {
         staffService.updateStaffPassword(request);
     }
 
-//    @Override
+    @Override
+    public SpecialistEntity getCurrentSpecialist() {
+        return specialistRepository.findByStaffId(staffService.getCurrentStaff().getId());
+    }
+
+    //    @Override
 //    public PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize) {
 //        PageRequest pageRequest = PageRequest.of(page, pageSize);
 //        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);

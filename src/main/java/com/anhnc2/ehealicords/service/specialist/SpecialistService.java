@@ -1,6 +1,7 @@
 package com.anhnc2.ehealicords.service.specialist;
 
 import com.anhnc2.ehealicords.data.common.PresignResult;
+import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PasswordUpdateRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistCreationRequest;
 import com.anhnc2.ehealicords.data.request.SpecialistUpdateRequest;
@@ -32,6 +33,8 @@ public interface SpecialistService {
     void deleteSpecialist(Long specialistId);
 
     void changeSpecialistPassword(PasswordUpdateRequest request);
+
+    SpecialistEntity getCurrentSpecialist();
 
     // PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize);
 }
