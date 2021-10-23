@@ -61,14 +61,14 @@ public class PatientApi {
 
     @PostMapping("/update-phase-1/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientResponse> updatePatientPhase1(@RequestBody PatientUpdateRequest request) {
-//        PatientResponse result = patientService.createPatient(patient);
-//        return HttpResponseImpl.<PatientResponse>builder()
-//                .code(StatusCode.SUCCESS)
-//                .data(result)
-//                .message("Update patient successfully!")
-//                .build();
-        return null;
+    public HttpResponse<PatientDetailsResponse> updatePatientPhase1(@PathVariable("id") Long patientId,
+                                                                    @RequestBody PatientUpdateRequest request) {
+        PatientDetailsResponse result = patientService.updatePatientPhase1(patientId, request);
+        return HttpResponseImpl.<PatientDetailsResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Update patient successfully!")
+                .build();
     }
 
     @PostMapping("/update-phase-2/{id}")
@@ -92,7 +92,24 @@ public class PatientApi {
 //                .data(result)
 //                .message("Update patient successfully!")
 //                .build();
-        return null;
+        return null; // combine phase 1 & phase 2.
+    }
+
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<Object> deletePatient(@PathVariable("id") Long patientId) {
+        patientService.deletePatient(patientId);
+        return HttpResponseImpl.builder()
+                .code(StatusCode.SUCCESS)
+                .build();
+    }
+
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<Object> deletePatient() {
+        return HttpResponseImpl.builder()
+                .code(StatusCode.SUCCESS)
+                .build();
     }
 
 }

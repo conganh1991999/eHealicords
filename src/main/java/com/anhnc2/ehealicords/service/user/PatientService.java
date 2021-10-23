@@ -12,4 +12,7 @@ public interface PatientService {
     List<PatientResponse> getAllPatients();
     PatientDetailsResponse getPatientInformation(Long patientId);
     PatientDetailsResponse updatePatientPhase2(Long patientId, PatientUpdateRequest request);
+    PatientDetailsResponse updatePatientPhase1(Long patientId, PatientUpdateRequest request);
+
+    void deletePatient(Long patientId);
 }

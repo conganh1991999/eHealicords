@@ -100,4 +100,43 @@ public class PatientServiceImpl implements PatientService {
         return detailsResponse;
     }
 
+    @Override
+    public PatientDetailsResponse updatePatientPhase1(Long patientId, PatientUpdateRequest request) {
+        PatientEntity patient = patientRepository.getById(patientId);
+
+        patient.setIdentityCardNumber(request.getIdentityCardNumber());
+        patient.setPersonalHealthId(patient.getIdentityCardNumber());
+        patient.setGender(request.getGender());
+        patient.setHealthInsuranceCardNumber(request.getHealthInsuranceCardNumber());
+        patient.setFullName(request.getFullName());
+        patient.setDateOfBirth(request.getDateOfBirth());
+        patient.setPlaceOfBirth(request.getPlaceOfBirth());
+        patient.setHometown(request.getHometown());
+        patient.setPhoneNumber(request.getPhoneNumber());
+        patient.setRelativeName(request.getRelativeName());
+        patient.setRelativePhoneNumber(request.getRelativePhoneNumber());
+        patient.setRelativeIdentityCardNumber(request.getRelativeIdentityCardNumber());
+        patient.setRelative(request.getRelative());
+        patient.setUpdatedTime(System.currentTimeMillis());
+        patient.setBirthProvinceId(request.getBirthProvinceId());
+        patient.setTempProvinceId(request.getTempProvinceId());
+        patient.setTempDistrictId(request.getTempDistrictId());
+        patient.setTempWardId(request.getTempWardId());
+
+        patient = patientRepository.saveAndFlush(patient);
+
+        PatientDetailsResponse detailsResponse = new PatientDetailsResponse(patient);
+        detailsResponse.setBirthProvince(provinceRepository.getById(patient.getBirthProvinceId()).toBuilder().build());
+        detailsResponse.setTempProvince(provinceRepository.getById(patient.getTempProvinceId()).toBuilder().build());
+        detailsResponse.setTempDistrict(districtRepository.getById(patient.getTempDistrictId()).toBuilder().build());
+        detailsResponse.setTempWard(wardRepository.getById(patient.getTempWardId()).toBuilder().build());
+
+        return detailsResponse;
+    }
+
+    @Override
+    public void deletePatient(Long patientId) {
+        patientRepository.deleteById(patientId);
+    }
+
 }
