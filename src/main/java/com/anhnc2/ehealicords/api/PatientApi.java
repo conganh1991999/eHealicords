@@ -83,18 +83,6 @@ public class PatientApi {
                 .build();
     }
 
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientResponse> updatePatient(@RequestBody PatientUpdateRequest request) {
-//        PatientResponse result = patientService.createPatient(patient);
-//        return HttpResponseImpl.<PatientResponse>builder()
-//                .code(StatusCode.SUCCESS)
-//                .data(result)
-//                .message("Update patient successfully!")
-//                .build();
-        return null; // combine phase 1 & phase 2.
-    }
-
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
     public HttpResponse<Object> deletePatient(@PathVariable("id") Long patientId) {
