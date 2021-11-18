@@ -16,6 +16,10 @@ public class ExHistoryResponse {
     private String status;
     private Long patientId;
 
+    private String branchName;
+    private String exDoctorName;
+    private String reDoctorName;
+
     public ExHistoryResponse(ExHistoryEntity entity) {
         this.id = entity.getId();
         this.startDate = entity.getStartDate();

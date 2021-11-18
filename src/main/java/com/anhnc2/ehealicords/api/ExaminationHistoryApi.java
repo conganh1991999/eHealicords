@@ -8,10 +8,14 @@ import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
 import com.anhnc2.ehealicords.service.record.HistoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/protected/ex-history")
@@ -28,6 +32,17 @@ public class ExaminationHistoryApi {
                 .code(StatusCode.SUCCESS)
                 .data(result)
                 .message("Create examination history successfully!")
+                .build();
+    }
+
+    @GetMapping("/{patient_id}/all")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<List<ExHistoryResponse>> getExaminationHistoryOfPatient(@PathVariable("patient_id") Long patientId) {
+        List<ExHistoryResponse> results = historyService.getExaminationHistoryOfPatient(patientId);
+        return HttpResponseImpl.<List<ExHistoryResponse>>builder()
+                .code(StatusCode.SUCCESS)
+                .data(results)
+                .message("History of this patient.")
                 .build();
     }
 
