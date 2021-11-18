@@ -180,3 +180,42 @@ CREATE TABLE patient(
                         perm_district_id int,
                         perm_ward_id int
 );
+
+CREATE TABLE examination_history(
+                                    id bigint not null primary key auto_increment,
+                                    start_date datetime,
+                                    end_date datetime,
+                                    branch_id int,
+                                    patient_id bigint,
+                                    ex_doctor_id bigint,
+                                    re_doctor_id bigint,
+                                    record_type varchar(50),
+                                    status varchar(20),
+                                    brief_file_url varchar(500)
+);
+
+CREATE TABLE clinical_details (
+                                  id bigint not null primary key auto_increment,
+                                  patient_id bigint,
+                                  history_id bigint,
+                                  reason varchar(1000),
+                                  pathological_progress varchar(1000),
+                                  pulse double,
+                                  temperature double,
+                                  bp varchar(20),
+                                  breathing double,
+                                  height double,
+                                  weight double,
+                                  full_body_examination varchar(1000),
+                                  circulatory_system varchar(500),
+                                  respiratory_system varchar(500),
+                                  digestive_system varchar(500),
+                                  genitourinary_system varchar(500),
+                                  nerve_system varchar(500),
+                                  musculoskeletal_system varchar(500),
+                                  ent_system varchar(500),
+                                  maxillofacial_system varchar(500),
+                                  eye varchar(500),
+                                  nutritional_and_endocrinology_etc varchar(500),
+                                  brief_file_url varchar(500)
+);
