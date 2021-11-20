@@ -12,7 +12,6 @@ public class ExHistoryCreationRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private String recordType;
-    private String status;
     private Long patientId;
 
     public ExHistoryEntity toEntity() {
@@ -20,7 +19,6 @@ public class ExHistoryCreationRequest {
                 .startDate(startDate)
                 .endDate(endDate)
                 .recordType(recordType)
-                .status(status)
                 .patientId(patientId)
                 .build();
     }

@@ -39,7 +39,7 @@ public class HistoryServiceImpl implements HistoryService {
         SpecialistEntity thisSpecialist = specialistService.getCurrentSpecialist();
         ExHistoryEntity entity = request.toEntity();
         entity.setReDoctorId(thisSpecialist.getId());
-        entity.setBranchId(thisSpecialist.getBranchId());
+        entity.setStatus("ĐANG HOÀN THÀNH");
 
         return new ExHistoryResponse(exHistoryRepository.save(entity));
     }
@@ -49,7 +49,9 @@ public class HistoryServiceImpl implements HistoryService {
         List<ExHistoryEntity> entities = exHistoryRepository.findAllByPatientId(patientId);
         return entities.stream().map(e -> {
             ExHistoryResponse exHistoryResponse = new ExHistoryResponse(e);
-            exHistoryResponse.setBranchName(branchRepository.getById(e.getBranchId()).getName());
+            exHistoryResponse.setBranchName(
+                    e.getBranchId() == null ? null : branchRepository.getById(e.getBranchId()).getName()
+            );
             exHistoryResponse.setExDoctorName(
                     e.getExDoctorId() == null ? null : specialistRepository.getById(e.getExDoctorId()).getFullName()
             );
