@@ -273,3 +273,14 @@ CREATE TABLE anamnesis(
                           who varchar(50),
                           description varchar(300)
 );
+
+CREATE TABLE surgery_history(
+                          id bigint not null primary key auto_increment,
+                          patient_id bigint,
+                          history_id bigint,
+                          updated_doctor_id bigint,
+                          surgical_system varchar(50),
+                          year_of_surgery varchar(10),
+                          description varchar(200),
+                          where_of_surgery varchar(200)
+);
