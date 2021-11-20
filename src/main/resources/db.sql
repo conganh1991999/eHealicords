@@ -262,3 +262,14 @@ CREATE TABLE risk_factors(
                              occupational_hazards varchar(200),
                              others_hazards varchar(200)
 );
+
+CREATE TABLE anamnesis(
+                          id bigint not null primary key auto_increment,
+                          patient_id bigint,
+                          history_id bigint,
+                          updated_doctor_id bigint,
+                          anamnesis_type varchar(15),
+                          name varchar(100),
+                          who varchar(50),
+                          description varchar(300)
+);
