@@ -232,3 +232,19 @@ CREATE TABLE diag_and_conclusion(
                                     consultation varchar(500),
                                     brief_file_url varchar(200)
 );
+
+CREATE TABLE birth_status(
+                                    id bigint not null primary key auto_increment,
+                                    patient_id bigint,
+                                    history_id bigint,
+                                    updated_doctor_id bigint,
+                                    normal_birth bool,
+                                    hard_birth bool,
+                                    caesarean_section bool,
+                                    born_prematurely bool,
+                                    suffocated_at_birth bool,
+                                    born_weight double,
+                                    born_length double,
+                                    birth_defects varchar(300),
+                                    others_problem varchar(300)
+);
