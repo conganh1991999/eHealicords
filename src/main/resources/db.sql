@@ -248,3 +248,17 @@ CREATE TABLE birth_status(
                                     birth_defects varchar(300),
                                     others_problem varchar(300)
 );
+
+CREATE TABLE risk_factors(
+                             id bigint not null primary key auto_increment,
+                             patient_id bigint,
+                             history_id bigint,
+                             updated_doctor_id bigint,
+                             smoke bool,
+                             drink bool,
+                             drug bool,
+                             exercise bool,
+                             exposure_factors varchar(300),
+                             occupational_hazards varchar(200),
+                             others_hazards varchar(200)
+);
