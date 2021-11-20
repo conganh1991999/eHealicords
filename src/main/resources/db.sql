@@ -219,3 +219,16 @@ CREATE TABLE clinical_details (
                                   nutritional_and_endocrinology_etc varchar(500),
                                   brief_file_url varchar(500)
 );
+
+CREATE TABLE diag_and_conclusion(
+                                    id bigint not null primary key auto_increment,
+                                    patient_id bigint,
+                                    history_id bigint,
+                                    main_disease varchar(200),
+                                    additional_disease varchar(200),
+                                    disease_prognosis varchar(200),
+                                    solution varchar(500),
+                                    disease_conclusion varchar(200),
+                                    consultation varchar(500),
+                                    brief_file_url varchar(200)
+);
