@@ -3,6 +3,7 @@ package com.anhnc2.ehealicords.api;
 import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.request.ExHistoryCreationRequest;
 import com.anhnc2.ehealicords.data.request.ExHistoryUpdateRequest;
+import com.anhnc2.ehealicords.data.response.ExHistoryBriefResponse;
 import com.anhnc2.ehealicords.data.response.ExHistoryResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -73,4 +75,54 @@ public class ExaminationHistoryApi {
                 .build();
     }
 
+    @PostMapping("/brief")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<ExHistoryBriefResponse> briefExaminationHistory(
+            @RequestParam("patientId") Long patientId, @RequestParam("historyId") Long historyId) {
+
+        ExHistoryBriefResponse result = historyService.briefExaminationHistory(patientId, historyId);
+        return HttpResponseImpl.<ExHistoryBriefResponse>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Success!!!")
+                .build();
+    }
+
+    @PostMapping("/save-brief")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<String> saveExaminationHistory( // receive pdf.
+            @RequestParam("patientId") Long patientId, @RequestParam("historyId") Long historyId) {
+
+        String result = historyService.saveExaminationHistory(patientId, historyId);
+        return HttpResponseImpl.<String>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Success!!!")
+                .build();
+    }
+
+    @GetMapping("/{patientId}/{historyId}/get-brief-file")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<String> getExaminationHistoryBrief(
+            @PathVariable("patientId") Long patientId, @PathVariable("historyId") Long historyId) {
+
+        String result = historyService.getExaminationHistoryBrief(patientId, historyId);
+        return HttpResponseImpl.<String>builder()
+                .code(StatusCode.SUCCESS)
+                .data(result)
+                .message("Success!!!")
+                .build();
+    }
+
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public HttpResponse<Object> deleteExaminationHistory(
+            @RequestParam("patientId") Long patientId, @RequestParam("historyId") Long historyId) {
+
+        historyService.deleteExaminationHistory(patientId, historyId);
+        return HttpResponseImpl.builder()
+                .code(StatusCode.SUCCESS)
+                .message("Success!!!")
+                .build();
+    }
 }

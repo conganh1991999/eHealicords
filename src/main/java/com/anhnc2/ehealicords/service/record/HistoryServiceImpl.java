@@ -4,6 +4,7 @@ import com.anhnc2.ehealicords.data.entity.ExHistoryEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.ExHistoryCreationRequest;
 import com.anhnc2.ehealicords.data.request.ExHistoryUpdateRequest;
+import com.anhnc2.ehealicords.data.response.ExHistoryBriefResponse;
 import com.anhnc2.ehealicords.data.response.ExHistoryResponse;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
@@ -97,5 +98,25 @@ public class HistoryServiceImpl implements HistoryService {
         response.setReDoctorName(specialistRepository.getById(response.getReDoctorId()).getFullName());
 
         return response;
+    }
+
+    @Override
+    public ExHistoryBriefResponse briefExaminationHistory(Long patientId, Long historyId) {
+        return null;
+    }
+
+    @Override
+    public String saveExaminationHistory(Long patientId, Long historyId) {
+        return null;
+    }
+
+    @Override
+    public String getExaminationHistoryBrief(Long patientId, Long historyId) {
+        return null;
+    }
+
+    @Override
+    public void deleteExaminationHistory(Long patientId, Long historyId) {
+
     }
 }
