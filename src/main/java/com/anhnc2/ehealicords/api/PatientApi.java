@@ -44,7 +44,7 @@ public class PatientApi {
         return HttpResponseImpl.<List<PatientResponse>>builder()
                 .code(StatusCode.SUCCESS)
                 .data(results)
-                .message("All patients of this specialist on this branch")
+                .message("All patients.")
                 .build();
     }
 
@@ -61,8 +61,8 @@ public class PatientApi {
 
     @PostMapping("/update-phase-1/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientDetailsResponse> updatePatientPhase1(@PathVariable("id") Long patientId,
-                                                                    @RequestBody PatientUpdateRequest request) {
+    public HttpResponse<PatientDetailsResponse> updatePatientPhase1(
+            @PathVariable("id") Long patientId, @RequestBody PatientUpdateRequest request) {
         PatientDetailsResponse result = patientService.updatePatientPhase1(patientId, request);
         return HttpResponseImpl.<PatientDetailsResponse>builder()
                 .code(StatusCode.SUCCESS)
@@ -73,8 +73,8 @@ public class PatientApi {
 
     @PostMapping("/update-phase-2/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PatientDetailsResponse> updatePatientPhase2(@PathVariable("id") Long patientId,
-                                                                    @RequestBody PatientUpdateRequest request) {
+    public HttpResponse<PatientDetailsResponse> updatePatientPhase2(
+            @PathVariable("id") Long patientId, @RequestBody PatientUpdateRequest request) {
         PatientDetailsResponse result = patientService.updatePatientPhase2(patientId, request);
         return HttpResponseImpl.<PatientDetailsResponse>builder()
                 .code(StatusCode.SUCCESS)

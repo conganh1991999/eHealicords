@@ -52,8 +52,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientResponse> getAllPatients() {
-        List<PatientEntity> patientEntities
-                = patientRepository.findAllBySpecialistId(specialistService.getCurrentSpecialist().getId());
+        List<PatientEntity> patientEntities = patientRepository.findAll();
 
         return patientEntities.stream()
                 .map(p -> {
