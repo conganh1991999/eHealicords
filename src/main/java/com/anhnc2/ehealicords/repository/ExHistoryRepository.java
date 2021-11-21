@@ -11,4 +11,5 @@ public interface ExHistoryRepository extends JpaRepository<ExHistoryEntity, Long
     List<ExHistoryEntity> findAllByPatientIdAndStatus(Long patientId, String status);
     List<ExHistoryEntity> findAllByPatientId(Long patientId);
     ExHistoryEntity findByPatientIdAndStatus(Long patientId, String status);
+    ExHistoryEntity findByIdAndPatientId(Long historyId, Long patientId);
 }

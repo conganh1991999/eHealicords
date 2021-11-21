@@ -15,6 +15,10 @@ public class ExHistoryResponse {
     private String recordType;
     private String status;
     private Long patientId;
+    private Integer branchId;
+    private Long exDoctorId;
+    private Long reDoctorId;
+    private String briefFileUrl;
 
     private String branchName;
     private String exDoctorName;
@@ -27,5 +31,9 @@ public class ExHistoryResponse {
         this.recordType = entity.getRecordType();
         this.status = entity.getStatus();
         this.patientId = entity.getPatientId();
+        this.branchId = entity.getBranchId();
+        this.exDoctorId = entity.getExDoctorId();
+        this.reDoctorId = entity.getReDoctorId();
+        this.briefFileUrl = entity.getBriefFileUrl();
     }
 }

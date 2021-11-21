@@ -3,6 +3,7 @@ package com.anhnc2.ehealicords.service.record;
 import com.anhnc2.ehealicords.data.entity.ExHistoryEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.ExHistoryCreationRequest;
+import com.anhnc2.ehealicords.data.request.ExHistoryUpdateRequest;
 import com.anhnc2.ehealicords.data.response.ExHistoryResponse;
 import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.BranchRepository;
@@ -45,7 +46,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public List<ExHistoryResponse> getExaminationHistoryOfPatient(Long patientId) {
+    public List<ExHistoryResponse> getExaminationHistoriesOfPatient(Long patientId) {
         List<ExHistoryEntity> entities = exHistoryRepository.findAllByPatientId(patientId);
         return entities.stream().map(e -> {
             ExHistoryResponse exHistoryResponse = new ExHistoryResponse(e);
@@ -60,4 +61,41 @@ public class HistoryServiceImpl implements HistoryService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public ExHistoryResponse getExaminationHistoryOfPatient(Long patientId, Long historyId) {
+        ExHistoryEntity entity = exHistoryRepository.findByIdAndPatientId(historyId, patientId);
+        ExHistoryResponse response = new ExHistoryResponse(entity);
+
+        response.setBranchName(
+                entity.getBranchId() == null ? null : branchRepository.getById(entity.getBranchId()).getName()
+        );
+        response.setExDoctorName(
+                entity.getExDoctorId() == null ? null : specialistRepository.getById(entity.getExDoctorId()).getFullName()
+        );
+        response.setReDoctorName(specialistRepository.getById(entity.getReDoctorId()).getFullName());
+        return response;
+    }
+
+    @Override
+    public ExHistoryResponse updateExaminationHistory(Long historyId, ExHistoryUpdateRequest request) {
+        ExHistoryEntity entity = exHistoryRepository.getById(historyId);
+
+        entity.setStartDate(request.getStartDate());
+        entity.setEndDate(request.getEndDate());
+        entity.setRecordType(request.getRecordType());
+        entity.setBranchId(request.getBranchId());
+        entity.setExDoctorId(request.getExDoctorId());
+
+        ExHistoryResponse response = new ExHistoryResponse(exHistoryRepository.saveAndFlush(entity));
+
+        response.setBranchName(
+                response.getBranchId() == null ? null : branchRepository.getById(response.getBranchId()).getName()
+        );
+        response.setExDoctorName(
+                response.getExDoctorId() == null ? null : specialistRepository.getById(response.getExDoctorId()).getFullName()
+        );
+        response.setReDoctorName(specialistRepository.getById(response.getReDoctorId()).getFullName());
+
+        return response;
+    }
 }
