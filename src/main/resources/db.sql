@@ -284,3 +284,15 @@ CREATE TABLE surgery_history(
                           description varchar(200),
                           where_of_surgery varchar(200)
 );
+
+CREATE TABLE medicine(
+                         id bigint not null primary key auto_increment,
+                         medicine_code varchar(20),
+                         medicine_name varchar(100),
+                         content varchar(100),
+                         dosage_forms varchar(30),
+                         usage_forms varchar(30),
+                         medicine_type varchar(30),
+                         unit varchar(20),
+                         unit_price double
+);
