@@ -73,7 +73,7 @@ public class BranchApi {
     }
 
     @GetMapping("/my-branch")
-    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     public HttpResponse<BranchDetailsResponse> getMyBranch() {
         BranchDetailsResponse branchDetails = branchService.getMyBranch();
 

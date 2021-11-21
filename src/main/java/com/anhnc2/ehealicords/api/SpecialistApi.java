@@ -44,7 +44,7 @@ public class SpecialistApi {
                 .build();
     }
 
-    @PreAuthorize("hasRole('SUB_ADMIN')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'SUB_ADMIN')")
     @GetMapping("/my-branch/all")
     public HttpResponse<List<SpecialistInfoResponse>> getSpecialistsInBranch() {
         List<SpecialistInfoResponse> data = specialistService.getAllSpecialistsOfBranch();
