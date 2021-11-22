@@ -296,3 +296,15 @@ CREATE TABLE medicine(
                          unit varchar(20),
                          unit_price double
 );
+
+CREATE TABLE prescription(
+                             id bigint not null primary key auto_increment,
+                             patientId bigint,
+                             historyId bigint,
+                             updatedSpecialistId bigint,
+                             performedSpecialistId bigint,
+                             suppliedSpecialistId bigint,
+                             prescriptionStatus varchar(20),
+                             content varchar(1000),
+                             briefFileUrl varchar(500)
+);
