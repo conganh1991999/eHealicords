@@ -167,7 +167,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     private String saveBriefFile(Long patientId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        String avatarKey =
+        String fileKey =
                 String.join(
                         "/",
                         PRESCRIPTION_KEY_PREFIX,
@@ -178,8 +178,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 );
 
         try {
-            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
-            return avatarKey;
+            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
+            return fileKey;
         } catch (IOException e) {
             throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
         }
@@ -187,8 +187,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public String getPrescriptionBrief(Long presId) {
-        String avtKey = prescriptionRepository.getById(presId).getBriefFileUrl();
-        return avtKey == null ? "null" : avtKey;
+        String fileKey = prescriptionRepository.getById(presId).getBriefFileUrl();
+        return fileKey == null ? "null" : fileKey;
     }
 
     @Override

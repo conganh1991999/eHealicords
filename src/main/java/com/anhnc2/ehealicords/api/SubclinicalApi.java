@@ -12,12 +12,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/protected/subclinical-details")
@@ -28,11 +28,11 @@ public class SubclinicalApi {
 
     @GetMapping("/get-by-history")
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<SubclinicalResponse> getSubclinicalDetails(
+    public HttpResponse<List<SubclinicalResponse>> getSubclinicalDetails(
             @RequestParam("historyId") Long historyId, @RequestParam("patientId") Long patientId) {
 
-        SubclinicalResponse results = subclinicalService.getSubclinicalDetails(historyId, patientId);
-        return HttpResponseImpl.<SubclinicalResponse>builder()
+        List<SubclinicalResponse> results = subclinicalService.getSubclinicalDetails(historyId, patientId);
+        return HttpResponseImpl.<List<SubclinicalResponse>>builder()
                 .code(StatusCode.SUCCESS)
                 .data(results)
                 .message("Subclinical details of this patient in this examination.")

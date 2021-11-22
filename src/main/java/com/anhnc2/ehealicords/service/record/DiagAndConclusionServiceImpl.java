@@ -1,10 +1,8 @@
 package com.anhnc2.ehealicords.service.record;
 
-import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.DiagAndConclusionEntity;
 import com.anhnc2.ehealicords.data.request.DiagAndConclusionRequest;
 import com.anhnc2.ehealicords.data.response.DiagAndConclusionDetailsResponse;
-import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.DiagAndConclusionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,7 @@ public class DiagAndConclusionServiceImpl implements DiagAndConclusionService {
         DiagAndConclusionEntity entity = diagAndConclusionRepository.findByPatientIdAndHistoryId(patientId, historyId);
 
         if (entity == null) {
-            throw new AppException(StatusCode.DIAG_AND_CONCLUSION_DETAILS_NOT_FOUND);
+            return new DiagAndConclusionDetailsResponse(new DiagAndConclusionEntity());
         }
 
         return new DiagAndConclusionDetailsResponse(entity);

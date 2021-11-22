@@ -1,10 +1,8 @@
 package com.anhnc2.ehealicords.service.record;
 
-import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.ClinicalEntity;
 import com.anhnc2.ehealicords.data.request.ClinicalDetailsRequest;
 import com.anhnc2.ehealicords.data.response.ClinicalDetailsResponse;
-import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.ClinicalRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,7 @@ public class ClinicalServiceImpl implements ClinicalService {
         ClinicalEntity entity = clinicalRepository.findByPatientIdAndHistoryId(patientId, historyId);
 
         if (entity == null) {
-            throw new AppException(StatusCode.CLINICAL_DETAILS_NOT_FOUND);
+            return new ClinicalDetailsResponse(new ClinicalEntity());
         }
 
         return new ClinicalDetailsResponse(entity);

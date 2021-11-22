@@ -1,12 +1,9 @@
 package com.anhnc2.ehealicords.service.record;
 
 import com.anhnc2.ehealicords.constant.StatusCode;
-import com.anhnc2.ehealicords.data.entity.ClinicalEntity;
 import com.anhnc2.ehealicords.data.entity.SubclinicalEntity;
 import com.anhnc2.ehealicords.data.request.SubclinicalCreationRequest;
-import com.anhnc2.ehealicords.data.response.ClinicalDetailsResponse;
 import com.anhnc2.ehealicords.data.response.SubclinicalResponse;
-import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.SubclinicalRepository;
 import com.anhnc2.ehealicords.service.external.StorageService;
@@ -18,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,14 +28,14 @@ public class SubclinicalServiceImpl implements SubclinicalService {
     private final StorageService storageService;
 
     @Override
-    public SubclinicalResponse getSubclinicalDetails(Long historyId, Long patientId) {
-        SubclinicalEntity entity = subclinicalRepository.findByPatientIdAndHistoryId(patientId, historyId);
+    public List<SubclinicalResponse> getSubclinicalDetails(Long historyId, Long patientId) {
+        List<SubclinicalEntity> entities = subclinicalRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
 
-        if (entity == null) {
-            throw new AppException(StatusCode.SUBCLINICAL_DETAILS_NOT_FOUND);
+        if (entities.isEmpty()) {
+            return new ArrayList<>();
         }
 
-        return new SubclinicalResponse(entity);
+        return entities.stream().map(SubclinicalResponse::new).collect(Collectors.toList());
     }
 
     @Override
