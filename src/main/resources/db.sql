@@ -308,3 +308,13 @@ CREATE TABLE prescription(
                              content varchar(1000),
                              brief_file_url varchar(500)
 );
+
+CREATE TABLE sub_clinical_details(
+                                     id bigint not null primary key auto_increment,
+                                     patient_id bigint,
+                                     history_id bigint,
+                                     subclinical_type_id bigint,
+                                     subclinical_brief varchar(200),
+                                     list_image_keys varchar(1000),
+                                     brief_file_url varchar(500)
+);
