@@ -324,3 +324,9 @@ CREATE TABLE subclinical_type(
                                  name varchar(100),
                                  description varchar(200)
 );
+
+CREATE TABLE record_type(
+                                 id bigint not null primary key auto_increment,
+                                 name varchar(100),
+                                 description varchar(200)
+);
