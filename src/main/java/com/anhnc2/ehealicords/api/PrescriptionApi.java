@@ -4,10 +4,10 @@ import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.request.PrescriptionCreationRequest;
 import com.anhnc2.ehealicords.data.response.HttpResponse;
 import com.anhnc2.ehealicords.data.response.HttpResponseImpl;
-import com.anhnc2.ehealicords.data.response.PrescriptionBriefResponse;
 import com.anhnc2.ehealicords.data.response.PrescriptionResponse;
 import com.anhnc2.ehealicords.service.record.PrescriptionService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -72,21 +73,12 @@ public class PrescriptionApi {
                 .build();
     }
 
-    @PostMapping("/brief")
+    @PostMapping(value = "/save-brief", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<PrescriptionBriefResponse> briefPrescription(@RequestParam("presId") Long presId) {
-        PrescriptionBriefResponse result = prescriptionService.briefPrescription(presId);
-        return HttpResponseImpl.<PrescriptionBriefResponse>builder()
-                .code(StatusCode.SUCCESS)
-                .data(result)
-                .message("Success!!!")
-                .build();
-    }
+    public HttpResponse<String> savePrescription(
+            @RequestParam("presId") Long presId, @RequestBody MultipartFile briefFile) {
 
-    @PostMapping("/save-brief")
-    @PreAuthorize("hasRole('DOCTOR')")
-    public HttpResponse<String> savePrescription(@RequestParam("presId") Long presId) { // receive pdf
-        String result = prescriptionService.savePrescription(presId);
+        String result = prescriptionService.savePrescription(presId, briefFile);
         return HttpResponseImpl.<String>builder()
                 .code(StatusCode.SUCCESS)
                 .data(result)

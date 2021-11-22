@@ -5,16 +5,20 @@ import com.anhnc2.ehealicords.data.entity.ExHistoryEntity;
 import com.anhnc2.ehealicords.data.entity.PrescriptionEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PrescriptionCreationRequest;
-import com.anhnc2.ehealicords.data.response.PrescriptionBriefResponse;
 import com.anhnc2.ehealicords.data.response.PrescriptionResponse;
 import com.anhnc2.ehealicords.exception.AppException;
+import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.ExHistoryRepository;
 import com.anhnc2.ehealicords.repository.PrescriptionRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
+import com.anhnc2.ehealicords.service.external.StorageService;
 import com.anhnc2.ehealicords.service.specialist.SpecialistService;
+import com.anhnc2.ehealicords.util.FileUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +26,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PrescriptionServiceImpl implements PrescriptionService {
 
+    private static final String PRESCRIPTION_KEY_PREFIX = "prescriptions";
+
     private final PrescriptionRepository prescriptionRepository;
     private final ExHistoryRepository exHistoryRepository;
     private final SpecialistRepository specialistRepository;
 
     private final SpecialistService specialistService;
+    private final StorageService storageService;
 
     @Override
     public PrescriptionResponse creatPrescription(PrescriptionCreationRequest request) {
@@ -140,22 +147,58 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public PrescriptionBriefResponse briefPrescription(Long presId) {
-        return null;
+    public String savePrescription(Long presId, MultipartFile briefFile) {
+        PrescriptionEntity prescription = prescriptionRepository.getById(presId);
+
+        String oldKey = prescription.getBriefFileUrl();
+
+        String newKey = briefFile == null ? null : saveBriefFile(prescription.getPatientId(), briefFile);
+
+        prescription.setBriefFileUrl(newKey);
+        prescription.setPrescriptionStatus("HOÀN THÀNH");
+        prescriptionRepository.save(prescription);
+
+        if (oldKey != null) {
+            storageService.delete(oldKey);
+        }
+
+        return newKey == null ? "null" : newKey;
     }
 
-    @Override
-    public String savePrescription(Long presId) {
-        return null;
+    private String saveBriefFile(Long patientId, MultipartFile briefFile) {
+        String filename = briefFile.getOriginalFilename();
+        String avatarKey =
+                String.join(
+                        "/",
+                        PRESCRIPTION_KEY_PREFIX,
+                        "patient", patientId.toString(),
+                        FileUtil.appendCurrentTimeMillisToName(
+                                filename == null ? PRESCRIPTION_KEY_PREFIX : filename
+                        )
+                );
+
+        try {
+            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
+            return avatarKey;
+        } catch (IOException e) {
+            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
+        }
     }
 
     @Override
     public String getPrescriptionBrief(Long presId) {
-        return null;
+        String avtKey = prescriptionRepository.getById(presId).getBriefFileUrl();
+        return avtKey == null ? "null" : avtKey;
     }
 
     @Override
     public void deletePrescription(Long presId) {
+        String avtKey = prescriptionRepository.getById(presId).getBriefFileUrl();
 
+        if (avtKey != null) {
+            storageService.delete(avtKey);
+        }
+
+        prescriptionRepository.deleteById(presId);
     }
 }
