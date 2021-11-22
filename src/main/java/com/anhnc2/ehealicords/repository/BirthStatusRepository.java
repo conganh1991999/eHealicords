@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BirthStatusRepository extends JpaRepository<BirthStatusEntity, Long> {
     List<BirthStatusEntity> findAllByPatientId(Long patientId);
+    List<BirthStatusEntity> findAllByPatientIdAndHistoryId(Long patientId, Long historyId);
 }

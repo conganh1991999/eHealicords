@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface SurgeryHistoryRepository extends JpaRepository<SurgeryHistoryEntity, Long> {
     List<SurgeryHistoryEntity> findAllByPatientId(Long patientId);
+    List<SurgeryHistoryEntity> findAllByPatientIdAndHistoryId(Long patientId, Long historyId);
 }

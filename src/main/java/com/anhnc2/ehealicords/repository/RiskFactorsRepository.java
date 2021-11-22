@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RiskFactorsRepository extends JpaRepository<RiskFactorsEntity, Long> {
     List<RiskFactorsEntity> findAllByPatientId(Long patientId);
+    List<RiskFactorsEntity> findAllByPatientIdAndHistoryId(Long patientId, Long historyId);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface AnamnesisRepository extends JpaRepository<AnamnesisEntity, Long> {
     List<AnamnesisEntity> findAllByPatientIdAndAnamnesisType(Long patientId, String anamnesisType);
+    List<AnamnesisEntity> findAllByPatientIdAndHistoryId(Long patientId, Long historyId);
     AnamnesisEntity findByIdAndAnamnesisType(Long id, String anamnesisType);
-    void deleteById(Long id);
 }
