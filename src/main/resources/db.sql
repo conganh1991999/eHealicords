@@ -318,3 +318,9 @@ CREATE TABLE sub_clinical_details(
                                      list_image_keys varchar(1000),
                                      brief_file_url varchar(500)
 );
+
+CREATE TABLE subclinical_type(
+                                 id bigint not null primary key auto_increment,
+                                 name varchar(100),
+                                 description varchar(200)
+);
