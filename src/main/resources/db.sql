@@ -299,12 +299,12 @@ CREATE TABLE medicine(
 
 CREATE TABLE prescription(
                              id bigint not null primary key auto_increment,
-                             patientId bigint,
-                             historyId bigint,
-                             updatedSpecialistId bigint,
-                             performedSpecialistId bigint,
-                             suppliedSpecialistId bigint,
-                             prescriptionStatus varchar(20),
+                             patient_id bigint,
+                             history_id bigint,
+                             updated_specialist_id bigint,
+                             performed_specialist_id bigint,
+                             supplied_specialist_id bigint,
+                             prescription_status varchar(20),
                              content varchar(1000),
-                             briefFileUrl varchar(500)
+                             brief_file_url varchar(500)
 );
