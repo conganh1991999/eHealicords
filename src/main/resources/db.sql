@@ -330,3 +330,38 @@ CREATE TABLE record_type(
                                  name varchar(100),
                                  description varchar(200)
 );
+
+CREATE TABLE nationality(
+                            id int not null primary key auto_increment,
+                            name varchar(100)
+);
+
+CREATE TABLE religion(
+                         id int not null primary key auto_increment,
+                         name varchar(100)
+);
+
+CREATE TABLE folk(
+                     id int not null primary key auto_increment,
+                     name varchar(100)
+);
+
+CREATE TABLE occupation(
+                           id int not null primary key auto_increment,
+                           name varchar(100)
+);
+
+CREATE TABLE academic_level(
+                               id int not null primary key auto_increment,
+                               name varchar(100)
+);
+
+CREATE TABLE marital_status(
+                               id int not null primary key auto_increment,
+                               name varchar(100)
+);
+
+CREATE TABLE relative(
+                         id int not null primary key auto_increment,
+                         name varchar(100)
+);

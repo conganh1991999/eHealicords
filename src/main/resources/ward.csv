@@ -1,0 +1,880 @@
+1,Phúc Xá,Phường,1
+4,Trúc Bạch,Phường,1
+6,Vĩnh Phúc,Phường,1
+7,Cống Vị,Phường,1
+8,Liễu Giai,Phường,1
+10,Nguyễn Trung Trực,Phường,1
+13,Quán Thánh,Phường,1
+16,Ngọc Hà,Phường,1
+19,Điện Biên,Phường,1
+22,Đội Cấn,Phường,1
+25,Ngọc Khánh,Phường,1
+28,Kim Mã,Phường,1
+31,Giảng Võ,Phường,1
+34,Thành Công,Phường,1
+37,Phúc Tân,Phường,2
+40,Đồng Xuân,Phường,2
+43,Hàng Mã,Phường,2
+46,Hàng Buồm,Phường,2
+49,Hàng Đào,Phường,2
+52,Hàng Bồ,Phường,2
+55,Cửa Đông,Phường,2
+58,Lý Thái Tổ,Phường,2
+61,Hàng Bạc,Phường,2
+64,Hàng Gai,Phường,2
+67,Chương Dương Độ,Phường,2
+70,Hàng Trống,Phường,2
+73,Cửa Nam,Phường,2
+76,Hàng Bông,Phường,2
+79,Tràng Tiền,Phường,2
+82,Trần Hưng Đạo,Phường,2
+85,Phan Chu Trinh,Phường,2
+88,Hàng Bài,Phường,2
+91,Phú Thượng,Phường,3
+94,Nhật Tân,Phường,3
+97,Tứ Liên,Phường,3
+100,Quảng An,Phường,3
+103,Xuân La,Phường,3
+106,Yên Phụ,Phường,3
+109,Bưởi,Phường,3
+112,Thụy Khuê,Phường,3
+115,Thượng Thanh,Phường,4
+118,Ngọc Thụy,Phường,4
+121,Giang Biên,Phường,4
+124,Đức Giang,Phường,4
+127,Việt Hưng,Phường,4
+130,Gia Thụy,Phường,4
+133,Ngọc Lâm,Phường,4
+136,Phúc Lợi,Phường,4
+139,Bồ Đề,Phường,4
+142,Sài Đồng,Phường,4
+145,Long Biên,Phường,4
+148,Thạch Bàn,Phường,4
+151,Phúc Đồng,Phường,4
+154,Cự Khối,Phường,4
+157,Nghĩa Đô,Phường,5
+160,Nghĩa Tân,Phường,5
+163,Mai Dịch,Phường,5
+166,Dịch Vọng,Phường,5
+167,Dịch Vọng Hậu,Phường,5
+169,Quan Hoa,Phường,5
+172,Yên Hoà,Phường,5
+175,Trung Hoà,Phường,5
+178,Cát Linh,Phường,6
+181,Văn Miếu,Phường,6
+184,Quốc Tử Giám,Phường,6
+187,Láng Thượng,Phường,6
+190,Ô Chợ Dừa,Phường,6
+193,Văn Chương,Phường,6
+196,Hàng Bột,Phường,6
+199,Láng Hạ,Phường,6
+202,Khâm Thiên,Phường,6
+205,Thổ Quan,Phường,6
+208,Nam Đồng,Phường,6
+211,Trung Phụng,Phường,6
+214,Quang Trung,Phường,6
+217,Trung Liệt,Phường,6
+220,Phương Liên,Phường,6
+223,Thịnh Quang,Phường,6
+226,Trung Tự,Phường,6
+229,Kim Liên,Phường,6
+232,Phương Mai,Phường,6
+235,Ngã Tư Sở,Phường,6
+238,Khương Thượng,Phường,6
+241,Nguyễn Du,Phường,7
+244,Bạch Đằng,Phường,7
+247,Phạm Đình Hổ,Phường,7
+250,Bùi Thị Xuân,Phường,7
+253,Ngô Thì Nhậm,Phường,7
+256,Lê Đại Hành,Phường,7
+259,Đồng Nhân,Phường,7
+262,Phố Huế,Phường,7
+265,Đống Mác,Phường,7
+268,Thanh Lương,Phường,7
+271,Thanh Nhàn,Phường,7
+274,Cầu Dền,Phường,7
+277,Bách Khoa,Phường,7
+280,Đồng Tâm,Phường,7
+283,Vĩnh Tuy,Phường,7
+286,Bạch Mai,Phường,7
+289,Quỳnh Mai,Phường,7
+292,Quỳnh Lôi,Phường,7
+295,Minh Khai,Phường,7
+298,Trương Định,Phường,7
+301,Thanh Trì,Phường,8
+304,Vĩnh Hưng,Phường,8
+307,Định Công,Phường,8
+310,Mai Động,Phường,8
+313,Tương Mai,Phường,8
+316,Đại Kim,Phường,8
+319,Tân Mai,Phường,8
+322,Hoàng Văn Thụ,Phường,8
+325,Giáp Bát,Phường,8
+328,Lĩnh Nam,Phường,8
+331,Thịnh Liệt,Phường,8
+334,Trần Phú,Phường,8
+337,Hoàng Liệt,Phường,8
+340,Yên Sở,Phường,8
+343,Nhân Chính,Phường,9
+346,Thượng Đình,Phường,9
+349,Khương Trung,Phường,9
+352,Khương Mai,Phường,9
+355,Thanh Xuân Trung,Phường,9
+358,Phương Liệt,Phường,9
+361,Hạ Đình,Phường,9
+364,Khương Đình,Phường,9
+367,Thanh Xuân Bắc,Phường,9
+370,Thanh Xuân Nam,Phường,9
+373,Kim Giang,Phường,9
+379,Bắc Sơn,Xã,16
+382,Minh Trí,Xã,16
+385,Hồng Kỳ,Xã,16
+388,Nam Sơn,Xã,16
+391,Trung Giã,Xã,16
+394,Tân Hưng,Xã,16
+397,Minh Phú,Xã,16
+400,Phù Linh,Xã,16
+403,Bắc Phú,Xã,16
+406,Tân Minh,Xã,16
+409,Quang Tiến,Xã,16
+412,Hiền Ninh,Xã,16
+415,Tân Dân,Xã,16
+418,Tiên Dược,Xã,16
+421,Việt Long,Xã,16
+424,Xuân Giang,Xã,16
+427,Mai Đình,Xã,16
+430,Đức Hoà,Xã,16
+433,Thanh Xuân,Xã,16
+436,Đông Xuân,Xã,16
+439,Kim Lũ,Xã,16
+442,Phú Cường,Xã,16
+445,Phú Minh,Xã,16
+448,Phù Lỗ,Xã,16
+451,Xuân Thu,Xã,16
+457,Xuân Nộn,Xã,17
+460,Thuỵ Lâm,Xã,17
+463,Bắc Hồng,Xã,17
+466,Nguyên Khê,Xã,17
+469,Nam Hồng,Xã,17
+472,Tiên Dương,Xã,17
+475,Vân Hà,Xã,17
+478,Uy Nỗ,Xã,17
+481,Vân Nội,Xã,17
+484,Liên Hà,Xã,17
+487,Việt Hùng,Xã,17
+490,Kim Nỗ,Xã,17
+493,Kim Chung,Xã,17
+496,Dục Tú,Xã,17
+499,Đại Mạch,Xã,17
+502,Vĩnh Ngọc,Xã,17
+505,Cổ Loa,Xã,17
+508,Hải Bối,Xã,17
+511,Xuân Canh,Xã,17
+514,Võng La,Xã,17
+517,Tầm Xá,Xã,17
+520,Mai Lâm,Xã,17
+523,Đông Hội,Xã,17
+529,Yên Thường,Xã,18
+532,Yên Viên,Xã,18
+535,Ninh Hiệp,Xã,18
+538,Đình Xuyên,Xã,18
+541,Dương Hà,Xã,18
+544,Phù Đổng,Xã,18
+547,Trung Mầu,Xã,18
+550,Lệ Chi,Xã,18
+553,Cổ Bi,Xã,18
+556,Đặng Xá,Xã,18
+559,Phú Thị,Xã,18
+562,Kim Sơn,Xã,18
+568,Dương Quang,Xã,18
+571,Dương Xá,Xã,18
+574,Đông Dư,Xã,18
+577,Đa Tốn,Xã,18
+580,Kiêu Kỵ,Xã,18
+583,Bát Tràng,Xã,18
+586,Kim Lan,Xã,18
+589,Văn Đức,Xã,18
+592,Cầu Diễn,Phường,19
+622,Xuân Phương,Phường,19
+623,Phương Canh,Phường,19
+625,Mỹ Đình 1,Phường,19
+626,Mỹ Đình 2,Phường,19
+628,Tây Mỗ,Phường,19
+631,Mễ Trì,Phường,19
+632,Phú Đô,Phường,19
+634,Đại Mỗ,Phường,19
+637,Trung Văn,Phường,19
+643,Tân Triều,Xã,20
+646,Thanh Liệt,Xã,20
+649,Tả Thanh Oai,Xã,20
+652,Hữu Hoà,Xã,20
+655,Tam Hiệp,Xã,20
+658,Tứ Hiệp,Xã,20
+661,Yên Mỹ,Xã,20
+664,Vĩnh Quỳnh,Xã,20
+667,Ngũ Hiệp,Xã,20
+670,Duyên Hà,Xã,20
+673,Ngọc Hồi,Xã,20
+676,Vạn Phúc,Xã,20
+679,Đại áng,Xã,20
+682,Liên Ninh,Xã,20
+685,Đông Mỹ,Xã,20
+595,Thượng Cát,Phường,21
+598,Liên Mạc,Phường,21
+601,Đông Ngạc,Phường,21
+602,Đức Thắng,Phường,21
+604,Thụy Phương,Phường,21
+607,Tây Tựu,Phường,21
+610,Xuân Đỉnh,Phường,21
+611,Xuân Tảo,Phường,21
+613,Minh Khai,Phường,21
+616,Cổ Nhuế 1,Phường,21
+617,Cổ Nhuế 2,Phường,21
+619,Phú Diễn,Phường,21
+620,Phúc Diễn,Phường,21
+8974,Đại Thịnh,Xã,250
+8977,Kim Hoa,Xã,250
+8980,Thạch Đà,Xã,250
+8983,Tiến Thắng,Xã,250
+8986,Tự Lập,Xã,250
+8992,Thanh Lâm,Xã,250
+8995,Tam Đồng,Xã,250
+8998,Liên Mạc,Xã,250
+9001,Vạn Yên,Xã,250
+9004,Chu Phan,Xã,250
+9007,Tiến Thịnh,Xã,250
+9010,Mê Linh,Xã,250
+9013,Văn Khê,Xã,250
+9016,Hoàng Kim,Xã,250
+9019,Tiền Phong,Xã,250
+9022,Tráng Việt,Xã,250
+9538,Nguyễn Trãi,Phường,268
+9541,Mộ Lao,Phường,268
+9542,Văn Quán,Phường,268
+9544,Vạn Phúc,Phường,268
+9547,Yết Kiêu,Phường,268
+9550,Quang Trung,Phường,268
+9551,La Khê,Phường,268
+9552,Phú La,Phường,268
+9553,Phúc La,Phường,268
+9556,Hà Cầu,Phường,268
+9562,Yên Nghĩa,Phường,268
+9565,Kiến Hưng,Phường,268
+9568,Phú Lãm,Phường,268
+9571,Phú Lương,Phường,268
+9886,Dương Nội,Phường,268
+10117,Đồng Mai,Phường,268
+10123,Biên Giang,Phường,268
+9574,Lê Lợi,Phường,269
+9577,Phú Thịnh,Phường,269
+9580,Ngô Quyền,Phường,269
+9583,Quang Trung,Phường,269
+9586,Sơn Lộc,Phường,269
+9589,Xuân Khanh,Phường,269
+9592,Đường Lâm,Xã,269
+9595,Viên Sơn,Phường,269
+9598,Xuân Sơn,Xã,269
+9601,Trung Hưng,Phường,269
+9604,Thanh Mỹ,Xã,269
+9607,Trung Sơn Trầm,Phường,269
+9610,Kim Sơn,Xã,269
+9613,Sơn Đông,Xã,269
+9616,Cổ Đông,Xã,269
+9625,Phú Cường,Xã,271
+9628,Cổ Đô,Xã,271
+9631,Tản Hồng,Xã,271
+9634,Vạn Thắng,Xã,271
+9637,Châu Sơn,Xã,271
+9640,Phong Vân,Xã,271
+9643,Phú Đông,Xã,271
+9646,Phú Phương,Xã,271
+9649,Phú Châu,Xã,271
+9652,Thái Hòa,Xã,271
+9655,Đồng Thái,Xã,271
+9658,Phú Sơn,Xã,271
+9661,Minh Châu,Xã,271
+9664,Vật Lại,Xã,271
+9667,Chu Minh,Xã,271
+9670,Tòng Bạt,Xã,271
+9673,Cẩm Lĩnh,Xã,271
+9676,Sơn Đà,Xã,271
+9679,Đông Quang,Xã,271
+9682,Tiên Phong,Xã,271
+9685,Thụy An,Xã,271
+9688,Cam Thượng,Xã,271
+9691,Thuần Mỹ,Xã,271
+9694,Tản Lĩnh,Xã,271
+9697,Ba Trại,Xã,271
+9700,Minh Quang,Xã,271
+9703,Ba Vì,Xã,271
+9706,Vân Hòa,Xã,271
+9709,Yên Bài,Xã,271
+9712,Khánh Thượng,Xã,271
+9718,Vân Hà,Xã,272
+9721,Vân Phúc,Xã,272
+9724,Vân Nam,Xã,272
+9727,Xuân Phú,Xã,272
+9730,Phương Độ,Xã,272
+9733,Sen Chiểu,Xã,272
+9736,Cẩm Đình,Xã,272
+9739,Võng Xuyên,Xã,272
+9742,Thọ Lộc,Xã,272
+9745,Long Xuyên,Xã,272
+9748,Thượng Cốc,Xã,272
+9751,Hát Môn,Xã,272
+9754,Tích Giang,Xã,272
+9757,Thanh Đa,Xã,272
+9760,Trạch Mỹ Lộc,Xã,272
+9763,Phúc Hòa,Xã,272
+9766,Ngọc Tảo,Xã,272
+9769,Phụng Thượng,Xã,272
+9772,Tam Thuấn,Xã,272
+9775,Tam Hiệp,Xã,272
+9778,Hiệp Thuận,Xã,272
+9781,Liên Hiệp,Xã,272
+9787,Trung Châu,Xã,273
+9790,Thọ An,Xã,273
+9793,Thọ Xuân,Xã,273
+9796,Hồng Hà,Xã,273
+9799,Liên Hồng,Xã,273
+9802,Liên Hà,Xã,273
+9805,Hạ Mỗ,Xã,273
+9808,Liên Trung,Xã,273
+9811,Phương Đình,Xã,273
+9814,Thượng Mỗ,Xã,273
+9817,Tân Hội,Xã,273
+9820,Tân Lập,Xã,273
+9823,Đan Phượng,Xã,273
+9826,Đồng Tháp,Xã,273
+9829,Song Phượng,Xã,273
+9835,Đức Thượng,Xã,274
+9838,Minh Khai,Xã,274
+9841,Dương Liễu,Xã,274
+9844,Di Trạch,Xã,274
+9847,Đức Giang,Xã,274
+9850,Cát Quế,Xã,274
+9853,Kim Chung,Xã,274
+9856,Yên Sở,Xã,274
+9859,Sơn Đồng,Xã,274
+9862,Vân Canh,Xã,274
+9865,Đắc Sở,Xã,274
+9868,Lại Yên,Xã,274
+9871,Tiền Yên,Xã,274
+9874,Song Phương,Xã,274
+9877,An Khánh,Xã,274
+9880,An Thượng,Xã,274
+9883,Vân Côn,Xã,274
+9889,La Phù,Xã,274
+9892,Đông La,Xã,274
+4939,Đông Xuân,Xã,275
+9898,Sài Sơn,Xã,275
+9901,Phượng Cách,Xã,275
+9904,Yên Sơn,Xã,275
+9907,Ngọc Liệp,Xã,275
+9910,Ngọc Mỹ,Xã,275
+9913,Liệp Tuyết,Xã,275
+9916,Thạch Thán,Xã,275
+9919,Đồng Quang,Xã,275
+9922,Phú Cát,Xã,275
+9925,Tuyết Nghĩa,Xã,275
+9928,Nghĩa Hương,Xã,275
+9931,Cộng Hòa,Xã,275
+9934,Tân Phú,Xã,275
+9937,Đại Thành,Xã,275
+9940,Phú Mãn,Xã,275
+9943,Cấn Hữu,Xã,275
+9946,Tân Hòa,Xã,275
+9949,Hòa Thạch,Xã,275
+9952,Đông Yên,Xã,275
+4927,Yên Trung,Xã,276
+4930,Yên Bình,Xã,276
+4936,Tiến Xuân,Xã,276
+9958,Đại Đồng,Xã,276
+9961,Cẩm Yên,Xã,276
+9964,Lại Thượng,Xã,276
+9967,Phú Kim,Xã,276
+9970,Hương Ngải,Xã,276
+9973,Canh Nậu,Xã,276
+9976,Kim Quan,Xã,276
+9979,Dị Nậu,Xã,276
+9982,Bình Yên,Xã,276
+9985,Chàng Sơn,Xã,276
+9988,Thạch Hoà,Xã,276
+9991,Cần Kiệm,Xã,276
+9994,Hữu Bằng,Xã,276
+9997,Phùng Xá,Xã,276
+10000,Tân Xã,Xã,276
+10003,Thạch Xá,Xã,276
+10006,Bình Phú,Xã,276
+10009,Hạ Bằng,Xã,276
+10012,Đồng Trúc,Xã,276
+10021,Phụng Châu,Xã,277
+10024,Tiên Phương,Xã,277
+10027,Đông Sơn,Xã,277
+10030,Đông Phương Yên,Xã,277
+10033,Phú Nghĩa,Xã,277
+10039,Trường Yên,Xã,277
+10042,Ngọc Hòa,Xã,277
+10045,Thủy Xuân Tiên,Xã,277
+10048,Thanh Bình,Xã,277
+10051,Trung Hòa,Xã,277
+10054,Đại Yên,Xã,277
+10057,Thụy Hương,Xã,277
+10060,Tốt Động,Xã,277
+10063,Lam Điền,Xã,277
+10066,Tân Tiến,Xã,277
+10069,Nam Phương Tiến,Xã,277
+10072,Hợp Đồng,Xã,277
+10075,Hoàng Văn Thụ,Xã,277
+10078,Hoàng Diệu,Xã,277
+10081,Hữu Văn,Xã,277
+10084,Quảng Bị,Xã,277
+10087,Mỹ Lương,Xã,277
+10090,Thượng Vực,Xã,277
+10093,Hồng Phong,Xã,277
+10096,Đồng Phú,Xã,277
+10099,Trần Phú,Xã,277
+10102,Văn Võ,Xã,277
+10105,Đồng Lạc,Xã,277
+10108,Hòa Chính,Xã,277
+10111,Phú Nam An,Xã,277
+10120,Cự Khê,Xã,278
+10126,Bích Hòa,Xã,278
+10129,Mỹ Hưng,Xã,278
+10132,Cao Viên,Xã,278
+10135,Bình Minh,Xã,278
+10138,Tam Hưng,Xã,278
+10141,Thanh Cao,Xã,278
+10144,Thanh Thùy,Xã,278
+10147,Thanh Mai,Xã,278
+10150,Thanh Văn,Xã,278
+10153,Đỗ Động,Xã,278
+10156,Kim An,Xã,278
+10159,Kim Thư,Xã,278
+10162,Phương Trung,Xã,278
+10165,Tân Ước,Xã,278
+10168,Dân Hòa,Xã,278
+10171,Liên Châu,Xã,278
+10174,Cao Dương,Xã,278
+10177,Xuân Dương,Xã,278
+10180,Hồng Dương,Xã,278
+10186,Ninh Sở,Xã,279
+10189,Nhị Khê,Xã,279
+10192,Duyên Thái,Xã,279
+10195,Khánh Hà,Xã,279
+10198,Hòa Bình,Xã,279
+10201,Văn Bình,Xã,279
+10204,Hiền Giang,Xã,279
+10207,Hồng Vân,Xã,279
+10210,Vân Tảo,Xã,279
+10213,Liên Phương,Xã,279
+10216,Văn Phú,Xã,279
+10219,Tự Nhiên,Xã,279
+10222,Tiền Phong,Xã,279
+10225,Hà Hồi,Xã,279
+10228,Thư Phú,Xã,279
+10231,Nguyễn Trãi,Xã,279
+10234,Quất Động,Xã,279
+10237,Chương Dương,Xã,279
+10240,Tân Minh,Xã,279
+10243,Lê Lợi,Xã,279
+10246,Thắng Lợi,Xã,279
+10249,Dũng Tiến,Xã,279
+10252,Thống Nhất,Xã,279
+10255,Nghiêm Xuyên,Xã,279
+10258,Tô Hiệu,Xã,279
+10261,Văn Tự,Xã,279
+10264,Vạn Điểm,Xã,279
+10267,Minh Cường,Xã,279
+10276,Hồng Minh,Xã,280
+10279,Phượng Dực,Xã,280
+10282,Văn Nhân,Xã,280
+10285,Thụy Phú,Xã,280
+10288,Tri Trung,Xã,280
+10291,Đại Thắng,Xã,280
+10294,Phú Túc,Xã,280
+10297,Văn Hoàng,Xã,280
+10300,Hồng Thái,Xã,280
+10303,Hoàng Long,Xã,280
+10306,Quang Trung,Xã,280
+10309,Nam Phong,Xã,280
+10312,Nam Triều,Xã,280
+10315,Tân Dân,Xã,280
+10318,Sơn Hà,Xã,280
+10321,Chuyên Mỹ,Xã,280
+10324,Khai Thái,Xã,280
+10327,Phúc Tiến,Xã,280
+10330,Vân Từ,Xã,280
+10333,Tri Thủy,Xã,280
+10336,Đại Xuyên,Xã,280
+10339,Phú Yên,Xã,280
+10342,Bạch Hạ,Xã,280
+10345,Quang Lãng,Xã,280
+10348,Châu Can,Xã,280
+10351,Minh Tân,Xã,280
+10357,Viên An,Xã,281
+10360,Viên Nội,Xã,281
+10363,Hoa Sơn,Xã,281
+10366,Quảng Phú Cầu,Xã,281
+10369,Trường Thịnh,Xã,281
+10372,Cao Thành,Xã,281
+10375,Liên Bạt,Xã,281
+10378,Sơn Công,Xã,281
+10381,Đồng Tiến,Xã,281
+10384,Phương Tú,Xã,281
+10387,Trung Tú,Xã,281
+10390,Đồng Tân,Xã,281
+10393,Tảo Dương Văn,Xã,281
+10396,Vạn Thái,Xã,281
+10399,Minh Đức,Xã,281
+10402,Hòa Lâm,Xã,281
+10405,Hòa Xá,Xã,281
+10408,Trầm Lộng,Xã,281
+10411,Kim Đường,Xã,281
+10414,Hòa Nam,Xã,281
+10417,Hòa Phú,Xã,281
+10420,Đội Bình,Xã,281
+10423,Đại Hùng,Xã,281
+10426,Đông Lỗ,Xã,281
+10429,Phù Lưu,Xã,281
+10432,Đại Cường,Xã,281
+10435,Lưu Hoàng,Xã,281
+10438,Hồng Quang,Xã,281
+10444,Đồng Tâm,Xã,282
+10447,Thượng Lâm,Xã,282
+10450,Tuy Lai,Xã,282
+10453,Phúc Lâm,Xã,282
+10456,Mỹ Thành,Xã,282
+10459,Bột Xuyên,Xã,282
+10462,An Mỹ,Xã,282
+10465,Hồng Sơn,Xã,282
+10468,Lê Thanh,Xã,282
+10471,Xuy Xá,Xã,282
+10474,Phùng Xá,Xã,282
+10477,Phù Lưu Tế,Xã,282
+10480,Đại Hưng,Xã,282
+10483,Vạn Kim,Xã,282
+10486,Đốc Tín,Xã,282
+10489,Hương Sơn,Xã,282
+10492,Hùng Tiến,Xã,282
+10495,An Tiến,Xã,282
+10498,Hợp Tiến,Xã,282
+10501,Hợp Thanh,Xã,282
+10504,An Phú,Xã,282
+26734,Tân Định,Phường,760
+26737,Đa Kao,Phường,760
+26740,Bến Nghé,Phường,760
+26743,Bến Thành,Phường,760
+26746,Nguyễn Thái Bình,Phường,760
+26749,Phạm Ngũ Lão,Phường,760
+26752,Cầu Ông Lãnh,Phường,760
+26755,Cô Giang,Phường,760
+26758,Nguyễn Cư Trinh,Phường,760
+26761,Cầu Kho,Phường,760
+26764,Thạnh Xuân,Phường,761
+26767,Thạnh Lộc,Phường,761
+26770,Hiệp Thành,Phường,761
+26773,Thới An,Phường,761
+26776,Tân Chánh Hiệp,Phường,761
+26779,An Phú Đông,Phường,761
+26782,Tân Thới Hiệp,Phường,761
+26785,Trung Mỹ Tây,Phường,761
+26787,Tân Hưng Thuận,Phường,761
+26788,Đông Hưng Thuận,Phường,761
+26791,Tân Thới Nhất,Phường,761
+26794,Linh Xuân,Phường,762
+26797,Bình Chiểu,Phường,762
+26800,Linh Trung,Phường,762
+26803,Tam Bình,Phường,762
+26806,Tam Phú,Phường,762
+26809,Hiệp Bình Phước,Phường,762
+26812,Hiệp Bình Chánh,Phường,762
+26815,Linh Chiểu,Phường,762
+26818,Linh Tây,Phường,762
+26821,Linh Đông,Phường,762
+26824,Bình Thọ,Phường,762
+26827,Trường Thọ,Phường,762
+26830,Long Bình,Phường,763
+26833,Long Thạnh Mỹ,Phường,763
+26836,Tân Phú,Phường,763
+26839,Hiệp Phú,Phường,763
+26842,Tăng Nhơn Phú A,Phường,763
+26845,Tăng Nhơn Phú B,Phường,763
+26848,Phước Long B,Phường,763
+26851,Phước Long A,Phường,763
+26854,Trường Thạnh,Phường,763
+26857,Long Phước,Phường,763
+26860,Long Trường,Phường,763
+26863,Phước Bình,Phường,763
+26866,Phú Hữu,Phường,763
+26869,15,Phường,764
+26872,13,Phường,764
+26875,17,Phường,764
+26876,6,Phường,764
+26878,16,Phường,764
+26881,12,Phường,764
+26882,14,Phường,764
+26884,10,Phường,764
+26887,05,Phường,764
+26890,07,Phường,764
+26893,04,Phường,764
+26896,01,Phường,764
+26897,9,Phường,764
+26898,8,Phường,764
+26899,11,Phường,764
+26902,03,Phường,764
+26905,13,Phường,765
+26908,11,Phường,765
+26911,27,Phường,765
+26914,26,Phường,765
+26917,12,Phường,765
+26920,25,Phường,765
+26923,05,Phường,765
+26926,07,Phường,765
+26929,24,Phường,765
+26932,06,Phường,765
+26935,14,Phường,765
+26938,15,Phường,765
+26941,02,Phường,765
+26944,01,Phường,765
+26947,03,Phường,765
+26950,17,Phường,765
+26953,21,Phường,765
+26956,22,Phường,765
+26959,19,Phường,765
+26962,28,Phường,765
+26965,02,Phường,766
+26968,04,Phường,766
+26971,12,Phường,766
+26974,13,Phường,766
+26977,01,Phường,766
+26980,03,Phường,766
+26983,11,Phường,766
+26986,07,Phường,766
+26989,05,Phường,766
+26992,10,Phường,766
+26995,06,Phường,766
+26998,08,Phường,766
+27001,09,Phường,766
+27004,14,Phường,766
+27007,15,Phường,766
+27010,Tân Sơn Nhì,Phường,767
+27013,Tây Thạnh,Phường,767
+27016,Sơn Kỳ,Phường,767
+27019,Tân Quý,Phường,767
+27022,Tân Thành,Phường,767
+27025,Phú Thọ Hòa,Phường,767
+27028,Phú Thạnh,Phường,767
+27031,Phú Trung,Phường,767
+27034,Hòa Thạnh,Phường,767
+27037,Hiệp Tân,Phường,767
+27040,Tân Thới Hòa,Phường,767
+27043,04,Phường,768
+27046,05,Phường,768
+27049,09,Phường,768
+27052,07,Phường,768
+27055,03,Phường,768
+27058,01,Phường,768
+27061,02,Phường,768
+27064,08,Phường,768
+27067,15,Phường,768
+27070,10,Phường,768
+27073,11,Phường,768
+27076,17,Phường,768
+27079,14,Phường,768
+27082,12,Phường,768
+27085,13,Phường,768
+27088,Thảo Điền,Phường,769
+27091,An Phú,Phường,769
+27094,Bình An,Phường,769
+27097,Bình Trưng Đông,Phường,769
+27100,Bình Trưng Tây,Phường,769
+27103,Bình Khánh,Phường,769
+27106,An Khánh,Phường,769
+27109,Cát Lái,Phường,769
+27112,Thạnh Mỹ Lợi,Phường,769
+27115,An Lợi Đông,Phường,769
+27118,Thủ Thiêm,Phường,769
+27121,08,Phường,770
+27124,07,Phường,770
+27127,14,Phường,770
+27130,12,Phường,770
+27133,11,Phường,770
+27136,13,Phường,770
+27139,06,Phường,770
+27142,09,Phường,770
+27145,10,Phường,770
+27148,04,Phường,770
+27151,05,Phường,770
+27154,03,Phường,770
+27157,02,Phường,770
+27160,01,Phường,770
+27163,15,Phường,771
+27166,13,Phường,771
+27169,14,Phường,771
+27172,12,Phường,771
+27175,11,Phường,771
+27178,10,Phường,771
+27181,09,Phường,771
+27184,01,Phường,771
+27187,08,Phường,771
+27190,02,Phường,771
+27193,04,Phường,771
+27196,07,Phường,771
+27199,05,Phường,771
+27202,06,Phường,771
+27205,03,Phường,771
+27208,15,Phường,772
+27211,05,Phường,772
+27214,14,Phường,772
+27217,11,Phường,772
+27220,03,Phường,772
+27223,10,Phường,772
+27226,13,Phường,772
+27229,08,Phường,772
+27232,09,Phường,772
+27235,12,Phường,772
+27238,07,Phường,772
+27241,06,Phường,772
+27244,04,Phường,772
+27247,01,Phường,772
+27250,02,Phường,772
+27253,16,Phường,772
+27256,12,Phường,773
+27259,13,Phường,773
+27262,09,Phường,773
+27265,06,Phường,773
+27268,08,Phường,773
+27271,10,Phường,773
+27274,05,Phường,773
+27277,18,Phường,773
+27280,14,Phường,773
+27283,04,Phường,773
+27286,03,Phường,773
+27289,16,Phường,773
+27292,02,Phường,773
+27295,15,Phường,773
+27298,01,Phường,773
+27301,04,Phường,774
+27304,09,Phường,774
+27307,03,Phường,774
+27310,12,Phường,774
+27313,02,Phường,774
+27316,08,Phường,774
+27319,15,Phường,774
+27322,07,Phường,774
+27325,01,Phường,774
+27328,11,Phường,774
+27331,14,Phường,774
+27334,05,Phường,774
+27337,06,Phường,774
+27340,10,Phường,774
+27343,13,Phường,774
+27346,14,Phường,775
+27349,13,Phường,775
+27352,09,Phường,775
+27355,06,Phường,775
+27358,12,Phường,775
+27361,05,Phường,775
+27364,11,Phường,775
+27367,02,Phường,775
+27370,01,Phường,775
+27373,04,Phường,775
+27376,08,Phường,775
+27379,03,Phường,775
+27382,07,Phường,775
+27385,10,Phường,775
+27388,08,Phường,776
+27391,02,Phường,776
+27394,01,Phường,776
+27397,03,Phường,776
+27400,11,Phường,776
+27403,09,Phường,776
+27406,10,Phường,776
+27409,04,Phường,776
+27412,13,Phường,776
+27415,12,Phường,776
+27418,05,Phường,776
+27421,14,Phường,776
+27424,06,Phường,776
+27427,15,Phường,776
+27430,16,Phường,776
+27433,07,Phường,776
+27436,Bình Hưng Hòa,Phường,777
+27439,Bình Hưng Hoà A,Phường,777
+27442,Bình Hưng Hoà B,Phường,777
+27445,Bình Trị Đông,Phường,777
+27448,Bình Trị Đông A,Phường,777
+27451,Bình Trị Đông B,Phường,777
+27454,Tân Tạo,Phường,777
+27457,Tân Tạo A,Phường,777
+27460, An Lạc,Phường,777
+27463,An Lạc A,Phường,777
+27466,Tân Thuận Đông,Phường,778
+27469,Tân Thuận Tây,Phường,778
+27472,Tân Kiểng,Phường,778
+27475,Tân Hưng,Phường,778
+27478,Bình Thuận,Phường,778
+27481,Tân Quy,Phường,778
+27484,Phú Thuận,Phường,778
+27487,Tân Phú,Phường,778
+27490,Tân Phong,Phường,778
+27493,Phú Mỹ,Phường,778
+27499,Phú Mỹ Hưng,Xã,783
+27502,An Phú,Xã,783
+27505,Trung Lập Thượng,Xã,783
+27508,An Nhơn Tây,Xã,783
+27511,Nhuận Đức,Xã,783
+27514,Phạm Văn Cội,Xã,783
+27517,Phú Hòa Đông,Xã,783
+27520,Trung Lập Hạ,Xã,783
+27523,Trung An,Xã,783
+27526,Phước Thạnh,Xã,783
+27529,Phước Hiệp,Xã,783
+27532,Tân An Hội,Xã,783
+27535,Phước Vĩnh An,Xã,783
+27538,Thái Mỹ,Xã,783
+27541,Tân Thạnh Tây,Xã,783
+27544,Hòa Phú,Xã,783
+27547,Tân Thạnh Đông,Xã,783
+27550,Bình Mỹ,Xã,783
+27553,Tân Phú Trung,Xã,783
+27556,Tân Thông Hội,Xã,783
+27562,Tân Hiệp,Xã,784
+27565,Nhị Bình,Xã,784
+27568,Đông Thạnh,Xã,784
+27571,Tân Thới Nhì,Xã,784
+27574,Thới Tam Thôn,Xã,784
+27577,Xuân Thới Sơn,Xã,784
+27580,Tân Xuân,Xã,784
+27583,Xuân Thới Đông,Xã,784
+27586,Trung Chánh,Xã,784
+27589,Xuân Thới Thượng,Xã,784
+27592,Bà Điểm,Xã,784
+27598,Phạm Văn Hai,Xã,785
+27601,Vĩnh Lộc A,Xã,785
+27604,Vĩnh Lộc B,Xã,785
+27607,Bình Lợi,Xã,785
+27610,Lê Minh Xuân,Xã,785
+27613,Tân Nhựt,Xã,785
+27616,Tân Kiên,Xã,785
+27619,Bình Hưng,Xã,785
+27622,Phong Phú,Xã,785
+27625,An Phú Tây,Xã,785
+27628,Hưng Long,Xã,785
+27631,Đa Phước,Xã,785
+27634,Tân Quý Tây,Xã,785
+27637,Bình Chánh,Xã,785
+27640,Quy Đức,Xã,785
+27646,Phước Kiển,Xã,786
+27649,Phước Lộc,Xã,786
+27652,Nhơn Đức,Xã,786
+27655,Phú Xuân,Xã,786
+27658,Long Thới,Xã,786
+27661,Hiệp Phước,Xã,786
+27667,Bình Khánh,Xã,787
+27670,Tam Thôn Hiệp,Xã,787
+27673,An Thới Đông,Xã,787
+27676,Thạnh An,Xã,787
+27679,Long Hòa,Xã,787
+27682,Lý Nhơn,Xã,787

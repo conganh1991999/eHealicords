@@ -1,12 +1,15 @@
 {
-    "email": "anh.nguyeniotbycse@hcmut.edu.vn",
-    "password": "123456admin"
+    "email": "admin@gmail.com",
+    "password": "admin"
 },
 {
-    "email": "trancaovan1999@gmail.com",
-    "password": "vantran123456"
+    "email": "subadpk2@gmail.com",
+    "password": "subadpk"
 },
 {
-    "email": "anhnc2@yds.com.vn",
-    "password": "anhncyds123"
+    "email": "subadpk1@gmail.com",
+    "password": "subadpk"
+},
+{
+    cac account bac si pass deu la: admin
 }
