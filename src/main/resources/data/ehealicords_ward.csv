@@ -195,6 +195,19 @@
 586,Kim Lan,Xã,18
 589,Văn Đức,Xã,18
 592,Cầu Diễn,Phường,19
+595,Thượng Cát,Phường,21
+598,Liên Mạc,Phường,21
+601,Đông Ngạc,Phường,21
+602,Đức Thắng,Phường,21
+604,Thụy Phương,Phường,21
+607,Tây Tựu,Phường,21
+610,Xuân Đỉnh,Phường,21
+611,Xuân Tảo,Phường,21
+613,Minh Khai,Phường,21
+616,Cổ Nhuế 1,Phường,21
+617,Cổ Nhuế 2,Phường,21
+619,Phú Diễn,Phường,21
+620,Phúc Diễn,Phường,21
 622,Xuân Phương,Phường,19
 623,Phương Canh,Phường,19
 625,Mỹ Đình 1,Phường,19
@@ -219,19 +232,10 @@
 679,Đại áng,Xã,20
 682,Liên Ninh,Xã,20
 685,Đông Mỹ,Xã,20
-595,Thượng Cát,Phường,21
-598,Liên Mạc,Phường,21
-601,Đông Ngạc,Phường,21
-602,Đức Thắng,Phường,21
-604,Thụy Phương,Phường,21
-607,Tây Tựu,Phường,21
-610,Xuân Đỉnh,Phường,21
-611,Xuân Tảo,Phường,21
-613,Minh Khai,Phường,21
-616,Cổ Nhuế 1,Phường,21
-617,Cổ Nhuế 2,Phường,21
-619,Phú Diễn,Phường,21
-620,Phúc Diễn,Phường,21
+4927,Yên Trung,Xã,276
+4930,Yên Bình,Xã,276
+4936,Tiến Xuân,Xã,276
+4939,Đông Xuân,Xã,275
 8974,Đại Thịnh,Xã,250
 8977,Kim Hoa,Xã,250
 8980,Thạch Đà,Xã,250
@@ -262,9 +266,6 @@
 9565,Kiến Hưng,Phường,268
 9568,Phú Lãm,Phường,268
 9571,Phú Lương,Phường,268
-9886,Dương Nội,Phường,268
-10117,Đồng Mai,Phường,268
-10123,Biên Giang,Phường,268
 9574,Lê Lợi,Phường,269
 9577,Phú Thịnh,Phường,269
 9580,Ngô Quyền,Phường,269
@@ -364,9 +365,9 @@
 9877,An Khánh,Xã,274
 9880,An Thượng,Xã,274
 9883,Vân Côn,Xã,274
+9886,Dương Nội,Phường,268
 9889,La Phù,Xã,274
 9892,Đông La,Xã,274
-4939,Đông Xuân,Xã,275
 9898,Sài Sơn,Xã,275
 9901,Phượng Cách,Xã,275
 9904,Yên Sơn,Xã,275
@@ -386,9 +387,6 @@
 9946,Tân Hòa,Xã,275
 9949,Hòa Thạch,Xã,275
 9952,Đông Yên,Xã,275
-4927,Yên Trung,Xã,276
-4930,Yên Bình,Xã,276
-4936,Tiến Xuân,Xã,276
 9958,Đại Đồng,Xã,276
 9961,Cẩm Yên,Xã,276
 9964,Lại Thượng,Xã,276
@@ -438,7 +436,9 @@
 10105,Đồng Lạc,Xã,277
 10108,Hòa Chính,Xã,277
 10111,Phú Nam An,Xã,277
+10117,Đồng Mai,Phường,268
 10120,Cự Khê,Xã,278
+10123,Biên Giang,Phường,268
 10126,Bích Hòa,Xã,278
 10129,Mỹ Hưng,Xã,278
 10132,Cao Viên,Xã,278
