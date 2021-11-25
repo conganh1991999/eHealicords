@@ -7,7 +7,6 @@ import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.request.PrescriptionCreationRequest;
 import com.anhnc2.ehealicords.data.response.PrescriptionResponse;
 import com.anhnc2.ehealicords.exception.AppException;
-import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.ExHistoryRepository;
 import com.anhnc2.ehealicords.repository.PrescriptionRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -159,7 +157,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescriptionRepository.save(prescription);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -167,22 +165,22 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     private String saveBriefFile(Long patientId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        String fileKey =
+        return // fileKey =
                 String.join(
                         "/",
                         PRESCRIPTION_KEY_PREFIX,
                         "patient", patientId.toString(),
                         FileUtil.appendCurrentTimeMillisToName(
-                                filename == null ? PRESCRIPTION_KEY_PREFIX : filename
+                                (filename == null || filename.isEmpty()) ? PRESCRIPTION_KEY_PREFIX : filename
                         )
                 );
 
-        try {
-            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
-            return fileKey;
-        } catch (IOException e) {
-            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-        }
+//        try {
+//            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
+//            return fileKey;
+//        } catch (IOException e) {
+//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
+//        }
     }
 
     @Override
