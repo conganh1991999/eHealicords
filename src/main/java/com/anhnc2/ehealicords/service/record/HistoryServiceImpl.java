@@ -1,6 +1,5 @@
 package com.anhnc2.ehealicords.service.record;
 
-import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.AnamnesisEntity;
 import com.anhnc2.ehealicords.data.entity.BirthStatusEntity;
 import com.anhnc2.ehealicords.data.entity.ClinicalEntity;
@@ -10,13 +9,13 @@ import com.anhnc2.ehealicords.data.entity.PrescriptionEntity;
 import com.anhnc2.ehealicords.data.entity.RiskFactorsEntity;
 import com.anhnc2.ehealicords.data.entity.SpecialistEntity;
 import com.anhnc2.ehealicords.data.entity.SubclinicalEntity;
+import com.anhnc2.ehealicords.data.entity.SubclinicalTypeEntity;
 import com.anhnc2.ehealicords.data.entity.SurgeryHistoryEntity;
 import com.anhnc2.ehealicords.data.request.ExHistoryCreationRequest;
 import com.anhnc2.ehealicords.data.request.ExHistoryUpdateRequest;
 import com.anhnc2.ehealicords.data.response.ExHistoryBriefResponse;
 import com.anhnc2.ehealicords.data.response.ExHistoryResponse;
 import com.anhnc2.ehealicords.exception.AppException;
-import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.AnamnesisRepository;
 import com.anhnc2.ehealicords.repository.BirthStatusRepository;
 import com.anhnc2.ehealicords.repository.BranchRepository;
@@ -28,6 +27,7 @@ import com.anhnc2.ehealicords.repository.PrescriptionRepository;
 import com.anhnc2.ehealicords.repository.RiskFactorsRepository;
 import com.anhnc2.ehealicords.repository.SpecialistRepository;
 import com.anhnc2.ehealicords.repository.SubclinicalRepository;
+import com.anhnc2.ehealicords.repository.SubclinicalTypeRepository;
 import com.anhnc2.ehealicords.repository.SurgeryHistoryRepository;
 import com.anhnc2.ehealicords.service.external.StorageService;
 import com.anhnc2.ehealicords.service.specialist.SpecialistService;
@@ -36,7 +36,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +55,7 @@ public class HistoryServiceImpl implements HistoryService {
     private final SpecialistRepository specialistRepository;
     private final ClinicalRepository clinicalRepository;
     private final SubclinicalRepository subclinicalRepository;
+    private final SubclinicalTypeRepository subclinicalTypeRepository;
     private final DiagAndConclusionRepository diagAndConclusionRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final PatientRepository patientRepository;
@@ -158,17 +159,40 @@ public class HistoryServiceImpl implements HistoryService {
         response.setConsultation(diagAndConclusionEntity == null ? "Chưa ghi nhận" : diagAndConclusionEntity.getConsultation());
 
         List<SubclinicalEntity> subclinicalEntities = subclinicalRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
+
+        List<String> subclinicals = new ArrayList<>();
+        List<String> subclinicalTypes = new ArrayList<>();
+        List<Integer> numberOfResultFiles = new ArrayList<>();
+        List<Integer> numberOfImages = new ArrayList<>();
+
         if (subclinicalEntities != null) {
             for (SubclinicalEntity entity : subclinicalEntities) {
-                response.setSubclinicalBriefs("");
+                SubclinicalTypeEntity type = subclinicalTypeRepository.getById(entity.getSubclinicalTypeId());
+                subclinicals.add(type.getName() + ": " + entity.getSubclinicalBrief());
+                subclinicalTypes.add(type.getName());
+                numberOfResultFiles.add((entity.getBriefFileUrl() == null || entity.getBriefFileUrl().isEmpty()) ? 0 : 1);
+                numberOfImages.add(entity.getListImageKeys() != null ? entity.getListImageKeys().split(",").length : 0);
             }
         }
 
-        List<PrescriptionEntity> prescriptionEntities = prescriptionRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        response.setNoPres(prescriptionEntities.size());
-        response.setTotal(
-                response.getNoXq() + response.getNoCt() + response.getNoSa() + response.getNoXn() + response.getNoOt() + response.getNoPres()
-        );
+        int sum1 = 0;
+        for (Integer n : numberOfResultFiles) {
+            sum1 += n;
+        }
+
+        int sum2 = 0;
+        for (Integer n : numberOfImages) {
+            sum2 += n;
+        }
+
+        subclinicalTypes.add("Tổng");
+        numberOfResultFiles.add(sum1);
+        numberOfImages.add(sum2);
+
+        response.setSubclinicalBriefs(subclinicals);
+        response.setListSubclinical(subclinicalTypes);
+        response.setNumberOfResultFiles(numberOfResultFiles);
+        response.setNumberOfImages(numberOfImages);
 
         ExHistoryEntity ex = exHistoryRepository.getById(historyId);
         response.setStartDate(ex.getStartDate());
@@ -198,7 +222,7 @@ public class HistoryServiceImpl implements HistoryService {
         exHistoryRepository.save(exHistoryEntity);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -206,7 +230,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     private String saveBriefFile(Long patientId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        String fileKey =
+        return //fileKey =
                 String.join(
                         "/",
                         EX_HISTORY_KEY_PREFIX,
@@ -216,12 +240,12 @@ public class HistoryServiceImpl implements HistoryService {
                         )
                 );
 
-        try {
-            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
-            return fileKey;
-        } catch (IOException e) {
-            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-        }
+//        try {
+//            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
+//            return fileKey;
+//        } catch (IOException e) {
+//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
+//        }
     }
 
     @Override
