@@ -11,6 +11,7 @@ public class SubclinicalResponse {
     private Long patientId;
     private Long historyId;
     private Long subclinicalTypeId;
+    private String subclinicalTypeName;
     private String subclinicalBrief;
     private String listImageKeys;
     private String briefFileUrl;

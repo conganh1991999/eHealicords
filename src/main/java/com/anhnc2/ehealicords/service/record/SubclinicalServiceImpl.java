@@ -1,18 +1,16 @@
 package com.anhnc2.ehealicords.service.record;
 
-import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.SubclinicalEntity;
 import com.anhnc2.ehealicords.data.request.SubclinicalCreationRequest;
 import com.anhnc2.ehealicords.data.response.SubclinicalResponse;
-import com.anhnc2.ehealicords.exception.RegisterException;
 import com.anhnc2.ehealicords.repository.SubclinicalRepository;
+import com.anhnc2.ehealicords.repository.SubclinicalTypeRepository;
 import com.anhnc2.ehealicords.service.external.StorageService;
 import com.anhnc2.ehealicords.util.FileUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +22,7 @@ public class SubclinicalServiceImpl implements SubclinicalService {
     private static final String SUBCLINICAL_PREFIX = "subclinical";
 
     private final SubclinicalRepository subclinicalRepository;
+    private final SubclinicalTypeRepository subclinicalTypeRepository;
 
     private final StorageService storageService;
 
@@ -35,7 +34,10 @@ public class SubclinicalServiceImpl implements SubclinicalService {
             return new ArrayList<>();
         }
 
-        return entities.stream().map(SubclinicalResponse::new).collect(Collectors.toList());
+        List<SubclinicalResponse> responses = entities.stream().map(SubclinicalResponse::new).collect(Collectors.toList());
+        responses.forEach(r -> r.setSubclinicalTypeName(subclinicalTypeRepository.getById(r.getSubclinicalTypeId()).getName()));
+
+        return responses;
     }
 
     @Override
@@ -71,28 +73,30 @@ public class SubclinicalServiceImpl implements SubclinicalService {
 
         SubclinicalEntity newEntity = subclinicalRepository.saveAndFlush(entity);
 
-        return new SubclinicalResponse(newEntity);
+        SubclinicalResponse response = new SubclinicalResponse(newEntity);
+        response.setSubclinicalTypeName(subclinicalTypeRepository.getById(response.getSubclinicalTypeId()).getName());
+
+        return response;
     }
 
     private String saveFile(Long patientId, Long historyId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        String avatarKey =
+        return // avatarKey =
                 String.join(
                         "/",
                         SUBCLINICAL_PREFIX,
                         "patient", patientId.toString(),
                         "history", historyId.toString(),
                         FileUtil.appendCurrentTimeMillisToName(
-                                filename == null ? SUBCLINICAL_PREFIX : filename
+                                (filename == null || filename.isEmpty()) ? SUBCLINICAL_PREFIX : filename
                         )
                 );
-
-        try {
-            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
-            return avatarKey;
-        } catch (IOException e) {
-            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-        }
+//        try {
+//            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
+//            return avatarKey;
+//        } catch (IOException e) {
+//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
+//        }
     }
 
     @Override
@@ -102,11 +106,11 @@ public class SubclinicalServiceImpl implements SubclinicalService {
         if (entity.getListImageKeys() != null) {
             final String[] split = entity.getListImageKeys().split(",");
             for (String s : split) {
-                storageService.delete(s);
+                // storageService.delete(s);
             }
         }
         if (entity.getBriefFileUrl() != null) {
-            storageService.delete(entity.getBriefFileUrl());
+            // storageService.delete(entity.getBriefFileUrl());
         }
         subclinicalRepository.deleteById(subclinicalDetailsId);
     }
