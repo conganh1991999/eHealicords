@@ -257,28 +257,44 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public void deleteExaminationHistory(Long patientId, Long historyId) {
         List<AnamnesisEntity> anamnesisEntities = anamnesisRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        anamnesisEntities.stream().map(AnamnesisEntity::getId).forEach(anamnesisRepository::deleteById);
+        if (anamnesisEntities != null) {
+            anamnesisEntities.stream().map(AnamnesisEntity::getId).forEach(anamnesisRepository::deleteById);
+        }
 
         List<BirthStatusEntity> birthStatusEntities = birthStatusRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        birthStatusEntities.stream().map(BirthStatusEntity::getId).forEach(birthStatusRepository::deleteById);
+        if (birthStatusEntities != null) {
+            birthStatusEntities.stream().map(BirthStatusEntity::getId).forEach(birthStatusRepository::deleteById);
+        }
 
         ClinicalEntity clinicalEntity = clinicalRepository.findByPatientIdAndHistoryId(patientId, historyId);
-        clinicalRepository.deleteById(clinicalEntity.getId());
+        if (clinicalEntity != null) {
+            clinicalRepository.deleteById(clinicalEntity.getId());
+        }
 
         DiagAndConclusionEntity diagAndConclusionEntity = diagAndConclusionRepository.findByPatientIdAndHistoryId(patientId, historyId);
-        diagAndConclusionRepository.deleteById(diagAndConclusionEntity.getId());
+        if (diagAndConclusionEntity != null) {
+            diagAndConclusionRepository.deleteById(diagAndConclusionEntity.getId());
+        }
 
         List<PrescriptionEntity> prescriptionEntities = prescriptionRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        prescriptionEntities.stream().map(PrescriptionEntity::getId).forEach(prescriptionService::deletePrescription);
+        if (prescriptionEntities != null) {
+            prescriptionEntities.stream().map(PrescriptionEntity::getId).forEach(prescriptionService::deletePrescription);
+        }
 
         List<RiskFactorsEntity> riskFactorsEntities = riskFactorsRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        riskFactorsEntities.stream().map(RiskFactorsEntity::getId).forEach(riskFactorsRepository::deleteById);
+        if (riskFactorsEntities != null) {
+            riskFactorsEntities.stream().map(RiskFactorsEntity::getId).forEach(riskFactorsRepository::deleteById);
+        }
 
         List<SubclinicalEntity> subclinicalEntities = subclinicalRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        subclinicalEntities.stream().map(SubclinicalEntity::getId).forEach(subclinicalService::delete);
+        if (subclinicalEntities != null) {
+            subclinicalEntities.stream().map(SubclinicalEntity::getId).forEach(subclinicalService::delete);
+        }
 
         List<SurgeryHistoryEntity> surgeryHistoryEntities = surgeryHistoryRepository.findAllByPatientIdAndHistoryId(patientId, historyId);
-        surgeryHistoryEntities.stream().map(SurgeryHistoryEntity::getId).forEach(surgeryHistoryRepository::deleteById);
+        if (surgeryHistoryEntities != null) {
+            surgeryHistoryEntities.stream().map(SurgeryHistoryEntity::getId).forEach(surgeryHistoryRepository::deleteById);
+        }
 
         ExHistoryEntity exHistoryEntity = exHistoryRepository.getById(historyId);
 
