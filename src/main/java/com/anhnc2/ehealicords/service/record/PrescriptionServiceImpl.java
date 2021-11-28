@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -157,7 +158,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescriptionRepository.save(prescription);
 
         if (oldKey != null) {
-            // storageService.delete(oldKey);
+            storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -165,7 +166,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     private String saveBriefFile(Long patientId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        return // fileKey =
+        String fileKey =
                 String.join(
                         "/",
                         PRESCRIPTION_KEY_PREFIX,
@@ -175,12 +176,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         )
                 );
 
-//        try {
-//            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
-//            return fileKey;
-//        } catch (IOException e) {
-//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-//        }
+        try {
+            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
+            return fileKey;
+        } catch (IOException e) {
+            throw new AppException(StatusCode.FILE_SAVED_FAIL);
+        }
     }
 
     @Override

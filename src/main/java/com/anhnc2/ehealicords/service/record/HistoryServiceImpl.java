@@ -1,5 +1,6 @@
 package com.anhnc2.ehealicords.service.record;
 
+import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.AnamnesisEntity;
 import com.anhnc2.ehealicords.data.entity.BirthStatusEntity;
 import com.anhnc2.ehealicords.data.entity.ClinicalEntity;
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -222,7 +224,7 @@ public class HistoryServiceImpl implements HistoryService {
         exHistoryRepository.save(exHistoryEntity);
 
         if (oldKey != null) {
-            // storageService.delete(oldKey);
+            storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -230,7 +232,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     private String saveBriefFile(Long patientId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        return //fileKey =
+        String fileKey =
                 String.join(
                         "/",
                         EX_HISTORY_KEY_PREFIX,
@@ -240,12 +242,12 @@ public class HistoryServiceImpl implements HistoryService {
                         )
                 );
 
-//        try {
-//            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
-//            return fileKey;
-//        } catch (IOException e) {
-//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-//        }
+        try {
+            storageService.put(fileKey, FileUtil.convertMultipartFileToFile(briefFile));
+            return fileKey;
+        } catch (IOException e) {
+            throw new AppException(StatusCode.FILE_SAVED_FAIL);
+        }
     }
 
     @Override

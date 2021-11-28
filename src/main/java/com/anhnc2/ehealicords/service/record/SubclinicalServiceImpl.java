@@ -1,8 +1,10 @@
 package com.anhnc2.ehealicords.service.record;
 
+import com.anhnc2.ehealicords.constant.StatusCode;
 import com.anhnc2.ehealicords.data.entity.SubclinicalEntity;
 import com.anhnc2.ehealicords.data.request.SubclinicalCreationRequest;
 import com.anhnc2.ehealicords.data.response.SubclinicalResponse;
+import com.anhnc2.ehealicords.exception.AppException;
 import com.anhnc2.ehealicords.repository.SubclinicalRepository;
 import com.anhnc2.ehealicords.repository.SubclinicalTypeRepository;
 import com.anhnc2.ehealicords.service.external.StorageService;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,8 +52,10 @@ public class SubclinicalServiceImpl implements SubclinicalService {
         entity.setSubclinicalTypeId(request.getSubclinicalTypeId());
         entity.setSubclinicalBrief(request.getSubclinicalBrief());
 
-        String briefFileKey = saveFile(request.getPatientId(), request.getHistoryId(), request.getBriefFile());
-        entity.setBriefFileUrl(briefFileKey);
+        if (request.getBriefFile() != null) {
+            String briefFileKey = saveFile(request.getPatientId(), request.getHistoryId(), request.getBriefFile());
+            entity.setBriefFileUrl(briefFileKey);
+        }
 
         List<MultipartFile> images = new ArrayList<>();
         images.add(request.getFile1());
@@ -81,7 +86,7 @@ public class SubclinicalServiceImpl implements SubclinicalService {
 
     private String saveFile(Long patientId, Long historyId, MultipartFile briefFile) {
         String filename = briefFile.getOriginalFilename();
-        return // avatarKey =
+        String avatarKey =
                 String.join(
                         "/",
                         SUBCLINICAL_PREFIX,
@@ -91,26 +96,26 @@ public class SubclinicalServiceImpl implements SubclinicalService {
                                 (filename == null || filename.isEmpty()) ? SUBCLINICAL_PREFIX : filename
                         )
                 );
-//        try {
-//            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
-//            return avatarKey;
-//        } catch (IOException e) {
-//            throw new RegisterException(StatusCode.FILE_SAVED_FAIL);
-//        }
+        try {
+            storageService.put(avatarKey, FileUtil.convertMultipartFileToFile(briefFile));
+            return avatarKey;
+        } catch (IOException e) {
+            throw new AppException(StatusCode.FILE_SAVED_FAIL);
+        }
     }
 
     @Override
     public void delete(Long subclinicalDetailsId) {
         SubclinicalEntity entity = subclinicalRepository.getById(subclinicalDetailsId);
 
-        if (entity.getListImageKeys() != null) {
+        if (entity.getListImageKeys() != null && !entity.getListImageKeys().isEmpty()) {
             final String[] split = entity.getListImageKeys().split(",");
             for (String s : split) {
-                // storageService.delete(s);
+                storageService.delete(s);
             }
         }
         if (entity.getBriefFileUrl() != null) {
-            // storageService.delete(entity.getBriefFileUrl());
+            storageService.delete(entity.getBriefFileUrl());
         }
         subclinicalRepository.deleteById(subclinicalDetailsId);
     }
