@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +51,9 @@ public class BusinessHoursEntity {
     @JsonGetter("days")
     @Enumerated(EnumType.ORDINAL)
     public List<Integer> getListOfDays() {
+        if (this.days == null || this.days.isEmpty()) {
+            return new ArrayList<>();
+        }
         return Arrays.stream(this.days.split(","))
                 .map(day -> DayOfWeek.valueOf(day).getValue())
                 .collect(Collectors.toList());
