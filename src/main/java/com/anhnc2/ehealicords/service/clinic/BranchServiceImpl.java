@@ -119,7 +119,7 @@ public class BranchServiceImpl implements BranchService {
         businessHoursOfBranch.setAfternoonClose(branchRequest.getAfternoonClose());
         businessHoursOfBranch.setEveningOpen(branchRequest.getEveningOpen());
         businessHoursOfBranch.setEveningClose(branchRequest.getEveningClose());
-        businessHoursOfBranch.setDays(
+        businessHoursOfBranch.setDays(branchRequest.getDays() == null ? null :
                 branchRequest.getDays().stream()
                         .map(day -> DayOfWeek.of(day).name())
                         .collect(Collectors.joining(","))
