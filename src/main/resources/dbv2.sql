@@ -257,11 +257,11 @@ CREATE TABLE examination_history(
                                     brief_file_url varchar(500)
 );
 
-ALTER TABLE examination_history ADD CONSTRAINT unique(start_date, end_date);
 ALTER TABLE examination_history ADD FOREIGN KEY(branch_id) REFERENCES branch(id);
 ALTER TABLE examination_history ADD FOREIGN KEY(patient_id) REFERENCES patient(id);
 ALTER TABLE examination_history ADD FOREIGN KEY(ex_doctor_id) REFERENCES specialist(id);
 ALTER TABLE examination_history ADD FOREIGN KEY(re_doctor_id) REFERENCES specialist(id);
+ALTER TABLE examination_history ADD CONSTRAINT unique(start_date, end_date, patient_id);
 
 CREATE TABLE clinical_details (
                                   id bigint not null primary key auto_increment,

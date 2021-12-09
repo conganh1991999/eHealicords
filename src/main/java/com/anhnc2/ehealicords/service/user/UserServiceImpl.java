@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
         String avatarKey = currentUserDTODTO.getAvatarKey();
 
         if (avatarKey != null) {
-            storageService.delete(avatarKey);
+            // storageService.delete(avatarKey);
         }
 
         userRepository.updateAvatarKey(userId, key);

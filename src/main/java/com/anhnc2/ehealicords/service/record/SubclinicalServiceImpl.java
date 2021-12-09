@@ -111,11 +111,11 @@ public class SubclinicalServiceImpl implements SubclinicalService {
         if (entity.getListImageKeys() != null && !entity.getListImageKeys().isEmpty()) {
             final String[] split = entity.getListImageKeys().split(",");
             for (String s : split) {
-                storageService.delete(s);
+                // storageService.delete(s);
             }
         }
         if (entity.getBriefFileUrl() != null) {
-            storageService.delete(entity.getBriefFileUrl());
+            // storageService.delete(entity.getBriefFileUrl());
         }
         subclinicalRepository.deleteById(subclinicalDetailsId);
     }

@@ -224,7 +224,7 @@ public class HistoryServiceImpl implements HistoryService {
         exHistoryRepository.save(exHistoryEntity);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -303,7 +303,7 @@ public class HistoryServiceImpl implements HistoryService {
         String fileKey = exHistoryEntity.getBriefFileUrl();
 
         if (fileKey != null) {
-            storageService.delete(fileKey);
+            // storageService.delete(fileKey);
         }
 
         exHistoryRepository.deleteById(exHistoryEntity.getId());

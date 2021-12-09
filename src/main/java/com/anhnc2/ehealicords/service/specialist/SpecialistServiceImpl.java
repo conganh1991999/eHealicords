@@ -191,7 +191,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         specialistRepository.save(specialist);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
     }
 
@@ -208,7 +208,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         specialistRepository.save(specialist);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
 
         return newKey == null ? null : newKey.substring(newKey.lastIndexOf("/") + 1);

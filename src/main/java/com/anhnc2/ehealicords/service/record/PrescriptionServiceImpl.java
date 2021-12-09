@@ -158,7 +158,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescriptionRepository.save(prescription);
 
         if (oldKey != null) {
-            storageService.delete(oldKey);
+            // storageService.delete(oldKey);
         }
 
         return newKey == null ? "null" : newKey;
@@ -195,7 +195,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         String avtKey = prescriptionRepository.getById(presId).getBriefFileUrl();
 
         if (avtKey != null) {
-            storageService.delete(avtKey);
+            // storageService.delete(avtKey);
         }
 
         prescriptionRepository.deleteById(presId);
