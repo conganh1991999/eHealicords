@@ -203,10 +203,10 @@ public class HistoryServiceImpl implements HistoryService {
         response.setStatus(ex.getStatus());
         response.setBriefFileUrl(ex.getBriefFileUrl());
 
-        response.setPatientName(patientRepository.getById(ex.getPatientId()).getFullName());
-        response.setBranchName(branchRepository.getById(ex.getBranchId()).getName());
-        response.setExDoctorName(specialistRepository.getById(ex.getExDoctorId()).getFullName());
-        response.setReDoctorName(specialistRepository.getById(ex.getReDoctorId()).getFullName());
+        response.setPatientName(ex.getPatientId() == null ? "" : patientRepository.getById(ex.getPatientId()).getFullName());
+        response.setBranchName(ex.getBranchId() == null ? "" : branchRepository.getById(ex.getBranchId()).getName());
+        response.setExDoctorName(ex.getExDoctorId() == null ? "" : specialistRepository.getById(ex.getExDoctorId()).getFullName());
+        response.setReDoctorName(ex.getReDoctorId() == null ? "" : specialistRepository.getById(ex.getReDoctorId()).getFullName());
 
         return response;
     }
