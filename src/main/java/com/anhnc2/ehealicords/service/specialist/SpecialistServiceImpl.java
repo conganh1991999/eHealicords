@@ -85,7 +85,7 @@ public class SpecialistServiceImpl implements SpecialistService {
 
         String newAvatarKey;
 
-        if (avatarKey != null && !avatarKey.trim().isEmpty()) {
+        if (avatarKey != null && !avatarKey.equals("null") && !avatarKey.trim().isEmpty()) {
             newAvatarKey = avatarKey;
         } else if (avatar != null) {
             newAvatarKey = saveAvatarFile(avatar);
@@ -236,6 +236,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 
     @Override
     public void deleteSpecialist(Long specialistId) {
+        specialistRepository.deleteById(specialistId);
+        // DELETE staff roles
         // DELETE staff
         // DELETE avatar
         // DELETE specialist
@@ -251,7 +253,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         return specialistRepository.findByStaffId(staffService.getCurrentStaff().getId());
     }
 
-    //    @Override
+//    @Override
 //    public PaginationResponse<List<SpecialistResponse>> getAllSpecialistsOfBranch(Integer branchId, Integer page, Integer pageSize) {
 //        PageRequest pageRequest = PageRequest.of(page, pageSize);
 //        Page<SpecialistEntity> doctors = specialistRepository.findAllByBranchId(branchId, pageRequest);
