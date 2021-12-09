@@ -139,7 +139,7 @@ public class SpecialistServiceImpl implements SpecialistService {
         specialist.setDateOfBirth(specialistUpdateRequest.getDateOfBirth());
         specialist.setDateOfStartingWork(specialistUpdateRequest.getDateOfStartingWork());
         specialist.setGender(specialistUpdateRequest.getGender());
-        specialist.setSpecialistType(specialistUpdateRequest.getSpecialistType());
+        // specialist.setSpecialistType(specialistUpdateRequest.getSpecialistType());
         specialist.setAcademicRank(specialistUpdateRequest.getAcademicRank());
         specialist.setDegree(specialistUpdateRequest.getDegree());
         specialist.setDegreeOfSpecialist(specialistUpdateRequest.getDegreeOfSpecialist());
