@@ -384,7 +384,7 @@ CREATE TABLE prescription(
                              performed_specialist_id bigint,
                              supplied_specialist_id bigint,
                              prescription_status varchar(20) not null,
-                             content varchar(1000),
+                             content varchar(4000),
                              brief_file_url varchar(500)
 );
 
