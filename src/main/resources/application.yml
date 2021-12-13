@@ -12,10 +12,10 @@ spring:
     show-sql: true
     open-in-view: true
   datasource:
-    url: jdbc:mysql://localhost:3306/ehealicords?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true
-    # url: jdbc:mysql://heydoctor.chfxeyho7yn8.ap-southeast-1.rds.amazonaws.com:3306/heydoctor_new?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false
-    username: root
-    password: root
+    # url: jdbc:mysql://localhost:3306/ehealicords_v2?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://ehelidb.c22egtitunlk.ap-southeast-1.rds.amazonaws.com:3306/ehealicords_v2?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false
+    username: admin
+    password: fromBKU2017
     # password: Zxcvb,12345
     hikari:
       max-lifetime: 1800000
