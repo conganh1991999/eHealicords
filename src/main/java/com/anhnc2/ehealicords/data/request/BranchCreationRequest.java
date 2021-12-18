@@ -1,9 +1,9 @@
 package com.anhnc2.ehealicords.data.request;
 
-import java.time.LocalTime;
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -26,17 +26,17 @@ public class BranchCreationRequest {
 
     private Integer wardId;
 
-    private LocalTime morningOpen;
+    private String morningOpen;
 
-    private LocalTime morningClose;
+    private String morningClose;
 
-    private LocalTime afternoonOpen;
+    private String afternoonOpen;
 
-    private LocalTime afternoonClose;
+    private String afternoonClose;
 
-    private LocalTime eveningOpen;
+    private String eveningOpen;
 
-    private LocalTime eveningClose;
+    private String eveningClose;
 
     private List<Integer> days;
 }

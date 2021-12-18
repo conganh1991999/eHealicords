@@ -117,9 +117,9 @@ public class SpecialistApi {
     }
 
     @PreAuthorize("hasRole('DOCTOR')")
-    @PutMapping("/my-avatar/update-av")
-    public HttpResponse<Object> updateAvatar(@RequestBody MultipartFile avatar) {
-        String avatarName = specialistService.updateAvatar(avatar);
+    @PutMapping("/{id}/update-av")
+    public HttpResponse<Object> updateAvatar(@PathVariable("id") Long specialistId, @RequestBody MultipartFile avatar) {
+        String avatarName = specialistService.updateAvatar(specialistId, avatar);
         return HttpResponseImpl.builder()
                 .code(StatusCode.SUCCESS)
                 .data(avatarName)

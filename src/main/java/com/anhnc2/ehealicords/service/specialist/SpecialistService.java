@@ -28,7 +28,7 @@ public interface SpecialistService {
 
     void updateAvatar(String key);
 
-    String updateAvatar(MultipartFile avatar);
+    String updateAvatar(Long specialistId, MultipartFile avatar);
 
     void deleteSpecialist(Long specialistId);
 

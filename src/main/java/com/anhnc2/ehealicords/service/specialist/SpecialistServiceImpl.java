@@ -196,9 +196,8 @@ public class SpecialistServiceImpl implements SpecialistService {
     }
 
     @Override
-    public String updateAvatar(MultipartFile avatar) {
-        SpecialistEntity specialist
-                = specialistRepository.findByStaffId(userService.getCurrentUserId());
+    public String updateAvatar(Long specialistId, MultipartFile avatar) {
+        SpecialistEntity specialist = specialistRepository.getById(specialistId);
 
         String oldKey = specialist.getAvatarKey();
 

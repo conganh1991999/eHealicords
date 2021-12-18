@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,12 @@ public class BranchServiceImpl implements BranchService {
     public BranchResponse createBranch(BranchCreationRequest branchRequest) {
         BusinessHoursEntity businessHours =
                 BusinessHoursEntity.builder()
-                        .morningOpen(branchRequest.getMorningOpen())
-                        .morningClose(branchRequest.getMorningClose())
-                        .afternoonOpen(branchRequest.getAfternoonOpen())
-                        .afternoonClose(branchRequest.getAfternoonClose())
-                        .eveningOpen(branchRequest.getEveningOpen())
-                        .eveningClose(branchRequest.getEveningClose())
+                        .morningOpen(getTimeFromString(branchRequest.getMorningOpen()))
+                        .morningClose(getTimeFromString(branchRequest.getMorningClose()))
+                        .afternoonOpen(getTimeFromString(branchRequest.getAfternoonOpen()))
+                        .afternoonClose(getTimeFromString(branchRequest.getAfternoonClose()))
+                        .eveningOpen(getTimeFromString(branchRequest.getEveningOpen()))
+                        .eveningClose(getTimeFromString(branchRequest.getEveningClose()))
                         .days(
                                 branchRequest.getDays().stream()
                                         .map(day -> DayOfWeek.of(day).name())
@@ -113,12 +114,12 @@ public class BranchServiceImpl implements BranchService {
         current.setFullAddress(branchRequest.getFullAddress());
 
         // Update business hours
-        businessHoursOfBranch.setMorningOpen(branchRequest.getMorningOpen());
-        businessHoursOfBranch.setMorningClose(branchRequest.getMorningClose());
-        businessHoursOfBranch.setAfternoonOpen(branchRequest.getAfternoonOpen());
-        businessHoursOfBranch.setAfternoonClose(branchRequest.getAfternoonClose());
-        businessHoursOfBranch.setEveningOpen(branchRequest.getEveningOpen());
-        businessHoursOfBranch.setEveningClose(branchRequest.getEveningClose());
+        businessHoursOfBranch.setMorningOpen(getTimeFromString(branchRequest.getMorningOpen()));
+        businessHoursOfBranch.setMorningClose(getTimeFromString(branchRequest.getMorningClose()));
+        businessHoursOfBranch.setAfternoonOpen(getTimeFromString(branchRequest.getAfternoonOpen()));
+        businessHoursOfBranch.setAfternoonClose(getTimeFromString(branchRequest.getAfternoonClose()));
+        businessHoursOfBranch.setEveningOpen(getTimeFromString(branchRequest.getEveningOpen()));
+        businessHoursOfBranch.setEveningClose(getTimeFromString(branchRequest.getEveningClose()));
         businessHoursOfBranch.setDays(branchRequest.getDays() == null ? null :
                 branchRequest.getDays().stream()
                         .map(day -> DayOfWeek.of(day).name())
@@ -126,6 +127,13 @@ public class BranchServiceImpl implements BranchService {
         );
 
         branchRepository.saveAndFlush(current);
+    }
+
+    private LocalTime getTimeFromString(String time) {
+        if (time == null || time.isEmpty() || time.equals("undefined")) {
+            return null;
+        }
+        return LocalTime.parse(time);
     }
 
 }
