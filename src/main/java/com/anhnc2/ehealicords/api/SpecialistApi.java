@@ -117,7 +117,7 @@ public class SpecialistApi {
     }
 
     @PreAuthorize("hasRole('SUB_ADMIN')")
-    @PutMapping("/{id}/update-av")
+    @PutMapping(value = "/{id}/update-av", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public HttpResponse<Object> updateAvatar(@PathVariable("id") Long specialistId, @RequestBody MultipartFile avatar) {
         String avatarName = specialistService.updateAvatar(specialistId, avatar);
         return HttpResponseImpl.builder()
