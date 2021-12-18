@@ -116,7 +116,7 @@ public class SpecialistApi {
                 .build();
     }
 
-    @PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasRole('SUB_ADMIN')")
     @PutMapping("/{id}/update-av")
     public HttpResponse<Object> updateAvatar(@PathVariable("id") Long specialistId, @RequestBody MultipartFile avatar) {
         String avatarName = specialistService.updateAvatar(specialistId, avatar);
