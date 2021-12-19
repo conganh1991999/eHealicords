@@ -130,7 +130,7 @@ public class BranchServiceImpl implements BranchService {
     }
 
     private LocalTime getTimeFromString(String time) {
-        if (time == null || time.isEmpty() || time.equals("undefined")) {
+        if (time == null || time.equals("null") || time.isEmpty() || time.equals("undefined")) {
             return null;
         }
         return LocalTime.parse(time);
